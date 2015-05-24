@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/hillStarter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/trailStarter"
+        android:layout_marginTop="25dp"
+        android:text="Hill Running Gear" />
+
+    <Button
+        android:id="@+id/trailStarter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/placeholder"
+        android:layout_marginTop="142dp"
+        android:text="Trail Running Gear" />
+
+    <Button
+        android:id="@+id/roadStarter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/placeholder"
+        android:layout_marginTop="66dp"
+        android:text="Road Running Gear" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/placeholder"
+        android:gravity="center"
+        android:text="Please choose your starting equipment"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:text="Place holder"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+</RelativeLayout>

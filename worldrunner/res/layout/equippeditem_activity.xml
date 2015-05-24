@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical">
+
+    <TextView 
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/equippedView"
+        android:text="Equipment"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" 
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/equippedView"
+        android:id="@+id/equipmentTable"
+        >
+	    <ImageView
+	        android:id="@+id/Equipment1"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+	
+	    <ImageView
+	        android:id="@+id/Equipment2"
+	        android:layout_marginLeft="10dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+	
+	    <ImageView
+	        android:id="@+id/Equipment3"
+	        android:layout_marginLeft="10dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+	
+	    <ImageView
+	        android:id="@+id/Equipment4"
+	        android:layout_marginLeft="10dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+	
+	    <ImageView
+	        android:id="@+id/Equipment5"
+	        android:layout_marginLeft="10dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+	</LinearLayout>
+	<TextView android:id="@+id/equippedSticker"
+	    android:text="Sticker"
+	    android:layout_marginTop="40dp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:layout_below="@+id/equipmentTable"/>
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/equippedSticker"
+        android:id="@+id/stickerTable">
+        <ImageView
+	        android:id="@+id/Sticker1"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+		<ImageView
+	        android:id="@+id/Sticker2"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+		<ImageView
+	        android:id="@+id/Sticker3"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+		<ImageView
+	        android:id="@+id/Sticker4"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+		<ImageView
+	        android:id="@+id/Sticker5"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/colorworld" />
+    </LinearLayout>
+</RelativeLayout>
