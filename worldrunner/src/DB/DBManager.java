@@ -230,6 +230,10 @@ public class DBManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
+	/**
+	 * A stub that generates a list of monsters that can be encountered in the game
+	 * @return a list of monsters the list index + 1 = monsterId
+	 */
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		list.add(new Monster(1, 2000, 150, 125, 100, 0.0));
@@ -246,6 +250,12 @@ public class DBManager extends SQLiteOpenHelper {
 	 * CITY MAPPINGs
 	 * 
 	 */
+	
+	/**
+	 * Stub that setup the initial mapping cities to their routes
+	 * @return a SparseArray that contains all of the mapping of cities and their cities
+	 * 		   in the form of cityId -> List of routes that belong to the city
+	 */
 	public SparseArray<ArrayList<Integer>> getCityRoutes() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> city1Route = new ArrayList<Integer>();
@@ -258,6 +268,11 @@ public class DBManager extends SQLiteOpenHelper {
 		return map;
 	}
 	
+	/**
+	 * Stub that setup the initial mapping of cities to their dungeons
+	 * @return a SparseArray that contains all of the mapping of cities to their dungeons
+	 * 		   in the form of cityId ->list of dungeons
+	 */
 	public SparseArray<ArrayList<Integer>> getCityDungeons() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> city1Dungeon = new ArrayList<Integer>();
@@ -276,6 +291,11 @@ public class DBManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
+	/**
+	 * Stub that setup the initial mapping of monsters to their routes
+	 * @return a SparseArray that contains all of the mapping of monsters to their routes
+	 * 		   in the form of routeId -> list of monsters
+	 */
 	public SparseArray<ArrayList<Integer>> getRouteMonsters() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> route1Monsters = new ArrayList<Integer>();
@@ -287,6 +307,11 @@ public class DBManager extends SQLiteOpenHelper {
 		return map;
 	}
 	   
+	/**
+	 * Stub that setup the initial mapping of monsters to their dungeons
+	 * @return a SparseArray that contains all of the mapping of monsters to their dungeons
+	 * 		   in the form of dungeonId -> list of monsters
+	 */
 	public SparseArray<ArrayList<Integer>> getDungeonMonsters() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> dungeon1Monsters = new ArrayList<Integer>();

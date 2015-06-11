@@ -7,6 +7,7 @@ import java.util.List;
 
 
 
+
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.Equipment;
@@ -18,7 +19,7 @@ import Items.EquipSticker;
 import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
-import Items.Adapters.ViewSticker;
+import Items.ViewSticker;
 import Races.Result;
 import android.annotation.SuppressLint;
 import android.app.Activity;

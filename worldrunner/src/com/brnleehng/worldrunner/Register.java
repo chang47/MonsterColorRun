@@ -39,7 +39,7 @@ public class Register extends Activity {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         if(sp.contains(ID) && sp.contains(NAME)){
-            Intent goHome = new Intent(Register.this, Run.class);
+            Intent goHome = new Intent(Register.this, FreeRun.class);
             Register.this.startActivity(goHome);
         }
 

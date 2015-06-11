@@ -1,8 +1,9 @@
-package Items.Adapters;
+package Items;
 
 import java.util.ArrayList;
 
 import DB.Model.Sticker;
+import Items.Adapters.StickerAdapter;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

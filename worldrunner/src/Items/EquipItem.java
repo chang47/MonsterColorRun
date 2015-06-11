@@ -58,11 +58,11 @@ public class EquipItem extends Fragment {
 		equipment5 = (ImageView) view.findViewById(R.id.Equipment5);
 		
 		// Sets default empty
-		equipment1.setImageResource(R.drawable.ic_plusone_small_off_client);
-		equipment2.setImageResource(R.drawable.ic_plusone_small_off_client);
-		equipment3.setImageResource(R.drawable.ic_plusone_small_off_client);
-		equipment4.setImageResource(R.drawable.ic_plusone_small_off_client);
-		equipment5.setImageResource(R.drawable.ic_plusone_small_off_client);
+		equipment1.setImageResource(R.drawable.colorworld);
+		equipment2.setImageResource(R.drawable.colorworld);
+		equipment3.setImageResource(R.drawable.colorworld);
+		equipment4.setImageResource(R.drawable.colorworld);
+		equipment5.setImageResource(R.drawable.colorworld);
 		
 		// setup stickers
 		sticker1 = (ImageView) view.findViewById(R.id.Sticker1);
@@ -72,11 +72,11 @@ public class EquipItem extends Fragment {
 		sticker5 = (ImageView) view.findViewById(R.id.Sticker5);
 		
 		// sets default empty sticker
-		sticker1.setImageResource(R.drawable.ic_plusone_small_off_client);
-		sticker2.setImageResource(R.drawable.ic_plusone_small_off_client);
-		sticker3.setImageResource(R.drawable.ic_plusone_small_off_client);
-		sticker4.setImageResource(R.drawable.ic_plusone_small_off_client);
-		sticker5.setImageResource(R.drawable.ic_plusone_small_off_client);
+		sticker1.setImageResource(R.drawable.colorworld);
+		sticker2.setImageResource(R.drawable.colorworld);
+		sticker3.setImageResource(R.drawable.colorworld);
+		sticker4.setImageResource(R.drawable.colorworld);
+		sticker5.setImageResource(R.drawable.colorworld);
 		
 		// initializes arrays
 		equipmentMapping = new ArrayList<Equipment>();
@@ -127,7 +127,7 @@ public class EquipItem extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				// calls the hub to change equipment on sloat 1
+				// calls the hub to change equipment on slot 1
 				Hub.equipEquipment(1, equipmentMapping.get(0));
 			}
 		});

@@ -31,8 +31,6 @@ import android.widget.Toast;
 
 import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;

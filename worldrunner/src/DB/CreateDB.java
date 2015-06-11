@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import com.brnleehng.worldrunner.R;
-import com.google.android.gms.plus.model.people.Person;
 
 import DB.Model.Player;
 import android.app.Fragment;

@@ -3,8 +3,6 @@ package DB;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.internal.pl;
-
 import DB.Model.Player;
 import android.content.ContentValues;
 import android.database.Cursor;
