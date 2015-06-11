@@ -234,6 +234,8 @@ public class DBManager extends SQLiteOpenHelper {
 	 * A stub that generates a list of monsters that can be encountered in the game
 	 * @return a list of monsters the list index + 1 = monsterId
 	 */
+	
+	//id,hp,attack,defense,speed,capture
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		list.add(new Monster(1, 2000, 150, 125, 100, 0.0));
