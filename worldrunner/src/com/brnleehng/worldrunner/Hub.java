@@ -8,9 +8,11 @@ import java.util.List;
 
 
 
+
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.Equipment;
+import DB.Model.Monster;
 import DB.Model.Player;
 import DB.Model.Sticker;
 import Items.EquipEquipment;
@@ -57,6 +59,9 @@ public class Hub extends Activity {
 	public static int currentStickerPosition;
 	// current location usually stored in the player model?
 	private static int currentCity;
+	public static ArrayList<Monster> monsterList;
+	public static ArrayList<Monster> partyList;
+	
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -84,6 +89,8 @@ public class Hub extends Activity {
 		equippedEquipments = db.getEquippedEquipment();
 		equippedStickers = db.getEquippedStickers();
 		currentCity = 1;
+		monsterList = db.getMonsters();
+		partyList = db.getParty();
 		db.close();
 		currentEquipment = null;
 		currentCategory = 0;

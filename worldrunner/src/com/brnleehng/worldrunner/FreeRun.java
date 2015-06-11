@@ -94,6 +94,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         monsterName = (TextView) view.findViewById(R.id.monsterName);
         monsterHealth = (ProgressBar) view.findViewById(R.id.monsterProgress);
         
+        //Hub.partyList
+        
         btnStop = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
