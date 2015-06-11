@@ -76,11 +76,11 @@ public class DBManager extends SQLiteOpenHelper {
 	
 	public ArrayList<Monster> getParty() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, 2000, 150, 125, 100, 0.0));
-		list.add(new Monster(2, 2000, 125, 100, 150, 0.0));
-		list.add(new Monster(3, 2000, 100, 150, 125, 0.0));
-		list.add(new Monster(4, 1000, 100, 100, 100, 50.0));
-		list.add(new Monster(5, 800, 120, 50, 130, 50.0));
+		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0));
 		return list;
 	}
 	
@@ -248,12 +248,12 @@ public class DBManager extends SQLiteOpenHelper {
 	//id,hp,attack,defense,speed,capture
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, 2000, 150, 125, 100, 0.0));
-		list.add(new Monster(2, 2000, 125, 100, 150, 0.0));
-		list.add(new Monster(3, 2000, 100, 150, 125, 0.0));
-		list.add(new Monster(4, 1000, 100, 100, 100, 50.0));
-		list.add(new Monster(5, 800, 120, 50, 130, 50.0));
-		list.add(new Monster(6, 1500, 70, 130, 70, 50.0));
+		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0));
+		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0));
 		return list;
 	}
 	
