@@ -74,6 +74,16 @@ public class DBManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
+	public ArrayList<Monster> getParty() {
+		ArrayList<Monster> list = new ArrayList<Monster>();
+		list.add(new Monster(1, 2000, 150, 125, 100, 0.0));
+		list.add(new Monster(2, 2000, 125, 100, 150, 0.0));
+		list.add(new Monster(3, 2000, 100, 150, 125, 0.0));
+		list.add(new Monster(4, 1000, 100, 100, 100, 50.0));
+		list.add(new Monster(5, 800, 120, 50, 130, 50.0));
+		return list;
+	}
+	
 	public List<Player> getPlayer() {
 		SQLiteDatabase db2 = this.getWritableDatabase();
 		return PlayerManager.getPlayer(db2);

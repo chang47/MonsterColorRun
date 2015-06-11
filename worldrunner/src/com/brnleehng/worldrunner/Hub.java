@@ -60,6 +60,8 @@ public class Hub extends Activity {
 	// current location usually stored in the player model?
 	private static int currentCity;
 	public static ArrayList<Monster> monsterList;
+	public static ArrayList<Monster> partyList;
+	
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -88,6 +90,7 @@ public class Hub extends Activity {
 		equippedStickers = db.getEquippedStickers();
 		currentCity = 1;
 		monsterList = db.getMonsters();
+		partyList = db.getParty();
 		db.close();
 		currentEquipment = null;
 		currentCategory = 0;
