@@ -87,7 +87,10 @@ public class Hub extends Activity {
 		equipmentList = db.getEquipments();
 		stickerList = db.getStickers();
 		equippedEquipments = db.getEquippedEquipment();
-		equippedStickers = db.getEquippedStickers();
+		
+		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
+		//equippedStickers = db.getEquippedStickers();
+		equippedStickers = db.getFakeEquippedParty();
 		currentCity = 1;
 		monsterList = db.getMonsters();
 		partyList = db.getParty();

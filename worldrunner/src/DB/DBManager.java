@@ -14,6 +14,7 @@ import java.util.List;
 
 
 
+
 import DB.Model.City;
 import DB.Model.Dungeon;
 import DB.Model.Equipment;
@@ -182,6 +183,23 @@ public class DBManager extends SQLiteOpenHelper {
 	public ArrayList<Sticker> getUnequipedStickers() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return StickerManager.getUnequppedStickers(db);
+	}
+	
+	
+	/**
+	 * int pstid, int pid, int sid, String name, int color,
+			int current_level, int current_exp, int current_speed,
+			int current_reach, int spaid, int saaid, int evolve, int equipped, int position,
+			int hp, int attack, int defense, int speed, double capture
+	 */
+	public ArrayList<Sticker> getFakeEquippedParty() {
+		ArrayList<Sticker> list = new ArrayList<Sticker>();
+		list.add(new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2000, 150, 125, 100, 0.0));
+		list.add(new Sticker(2, 1, 101, "Rose Deer", 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2000, 125, 100, 150, 0.0));
+		list.add(new Sticker(3, 1, 102, "Fire Martin", 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2000, 100, 150, 125, 0.0));
+		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0));
+		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0));
+		return list;
 	}
 	
 	/**

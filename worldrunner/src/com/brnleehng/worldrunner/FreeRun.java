@@ -58,8 +58,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
-    //private ArrayList<Sticker> found;
-    private ArrayList<Monster> found;
+    private ArrayList<Sticker> found;
+    //private ArrayList<Monster> found;
     
    
     private long startTime;
@@ -121,8 +121,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         distance = 0;
         coins = 0;
         db = new DBManager(getActivity().getApplicationContext());
-        // found = new ArrayList<Sticker>();
-        found = new ArrayList<Monster>();
+        found = new ArrayList<Sticker>();
+        //found = new ArrayList<Monster>();
         
         // ignore, will be added once you can add friends 
         powerStep = 5 * FRIEND1 * FRIEND2 * FRIEND3 * FRIEND4 * FRIEND5;
@@ -172,7 +172,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
                 // FreeRun.checkRun(); this class is the different variation?
                 if (monsterProgress < currentProgress) {
                 	list.add("got " + monster.name + "!");
-                	found.add(monster);
+                	// TODO convert a monster to a sticker
+                	//found.add(monster);
                 	generateMonster();
                 }
             }
