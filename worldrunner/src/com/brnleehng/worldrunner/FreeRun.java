@@ -3,9 +3,15 @@ package com.brnleehng.worldrunner;
 import DB.DBManager;
 import DB.Model.Monster;
 import DB.Model.Sticker;
+import Model.BattleMonster;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.AvoidXfermode.Mode;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -54,7 +60,13 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private ListView listView;
     private TextView monsterName;
     private ProgressBar monsterHealth;
+    private ProgressBar partyHealth1;
+    private ProgressBar partyHealth2;
+    private ProgressBar partyHealth3;
+    private ProgressBar partyHealth4;
+    private ProgressBar partyHealth5;
     private Button btnStop;
+    private Button btnLog;
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
@@ -86,22 +98,32 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     //private Sticker monster;
     
     // the current monster
-    private Monster monster;
-    private double monsterProgress;
-    private double currentProgress;
+    private BattleMonster monster = null;
+
+    
+    //The Party
+    private BattleMonster party1,party2,party3,party4,party5 = null;
+
     
     // list of messages that are used to display the progress
     // made in the game. You just add it into an adapter and it'll do everything for you
-    private List<String> list; 
+    //private List<String> list; 
     private ArrayAdapter<String> adapter;
     private Handler mHandler = new Handler();
     
+    //
+    public ArrayList<Monster> monsterList;
+    public ArrayList<Monster> partyList;
+    
+    public Dialog showLog;
+    
+  
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.ingame_activity, container, false);
-        
+		
         // setup intitial objects
         startTime = SystemClock.elapsedRealtime();
         tvDistance = (TextView) view.findViewById(R.id.tvDistance);
@@ -110,10 +132,20 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         tvCoin = (TextView) view.findViewById(R.id.tvCoin);
         listView = (ListView) view.findViewById(R.id.item_list);
         monsterName = (TextView) view.findViewById(R.id.monsterName);
-        monsterHealth = (ProgressBar) view.findViewById(R.id.monsterProgress);
-        
+        monsterHealth = (ProgressBar) view.findViewById(R.id.enemyProgress);
+        partyHealth1 = (ProgressBar) view.findViewById(R.id.monsterProgress1);
+        partyHealth2 = (ProgressBar) view.findViewById(R.id.monsterProgress2);
+        partyHealth3 = (ProgressBar) view.findViewById(R.id.monsterProgress3);
+        partyHealth4 = (ProgressBar) view.findViewById(R.id.monsterProgress4);
+        partyHealth5 = (ProgressBar) view.findViewById(R.id.monsterProgress5);
+        monsterList = Hub.monsterList;
+        partyList = Hub.partyList;
+        //monsterHealth.getProgressDrawable().setColorFilter(Color.RED,);
+        //Need to set the mode in order to change the color.
+        Log.d("size of party list", "" + partyList.size());
         //Hub.partyList
         
+        btnLog = (Button) view.findViewById(R.id.btnLog);
         btnStop = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
@@ -129,9 +161,18 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 
         // Initializes first monster encounter
         generateMonster();
+        generateParty();
         
         // Once you're done with your run you can save all of the
         // new monsters that you've caught. Ignore for now
+		btnLog.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						RunLogDialog newFragment = new RunLogDialog();
+						newFragment.show(getFragmentManager(), "Run Log");
+					}
+				});
 /*        btnStop.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -142,11 +183,15 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 			}
 		});
   */      
+        
+        /* TODO add back after 
         list = new ArrayList<String>();
         
         adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
+        */
+        
         
         // setup the timer that just displays passage of time
         // every second it checks to see if the monster is dead.
@@ -168,10 +213,18 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
                 
                 // user passes in the dungeon type that would all inherit the
                 // methods with just varied difficulties
-                monsterHealth.setProgress((int) (currentProgress / monsterProgress * 100));
+                monsterHealth.setProgress((int) (monster.currentHp / monster.monster.hp * 100));
+                partyHealth1.setProgress((int) (party1.currentHp / party1.monster.hp * 100));
+                partyHealth2.setProgress((int) (party2.currentHp / party2.monster.hp * 100));
+                partyHealth3.setProgress((int) (party3.currentHp / party3.monster.hp * 100));
+                partyHealth4.setProgress((int) (party4.currentHp / party4.monster.hp * 100));
+                partyHealth5.setProgress((int) (party5.currentHp / party5.monster.hp * 100));
                 // FreeRun.checkRun(); this class is the different variation?
-                if (monsterProgress < currentProgress) {
-                	list.add("got " + monster.name + "!");
+                if (monster.currentHp <= 0) {
+                	// TODO change to not only check when the monster is dead but you
+                	// also need to check the probability of catching it before you add it
+                	// into the list of found monsters
+                	//list.add("got " + monster.name + "!");
                 	// TODO convert a monster to a sticker
                 	//found.add(monster);
                 	generateMonster();
@@ -205,29 +258,25 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     	
     	// don't need this anymore, you'll change the progress bar to be the enemies hp
     	//monsterProgress = monster.current_speed + monster.current_reach;
-    	//currentProgress = 0;
-    	monsterName.setText(monster.name);
+    	monster = new BattleMonster(monsterList.get(0), monsterList.get(0).hp, 1000 / monsterList.get(0).speed);
     	//startProgressBar();
     }
-    
-    // Ignore
-    private void startProgressBar() {
-    	new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while (monsterProgress > currentProgress) {
-					mHandler.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							monsterHealth.setProgress((int) (currentProgress / monsterProgress * 100));
-						}
-					});
-				}
-				
-			}
-		}).start();;
+    private void generateParty() {
+    	if (partyList.get(0) != null) {
+    		party1 = new BattleMonster(partyList.get(0), partyList.get(0).hp, 1000 / partyList.get(0).speed);
+    	}
+    	if (partyList.get(1) != null) {
+    		party2 = new BattleMonster(partyList.get(1), partyList.get(1).hp, 1000 / partyList.get(1).speed);
+    	}
+    	if (partyList.get(2) != null) {
+    		party3 = new BattleMonster(partyList.get(2), partyList.get(2).hp, 1000 / partyList.get(2).speed);
+    	}
+    	if (partyList.get(3) != null) {
+    		party4 = new BattleMonster(partyList.get(3), partyList.get(3).hp, 1000 / partyList.get(3).speed);
+    	}
+    	if (partyList.get(4) != null) {
+    		party5 = new BattleMonster(partyList.get(4), partyList.get(4).hp, 1000 / partyList.get(4).speed);
+    	}
     }
     
     @Override
@@ -268,11 +317,47 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
             coins++;
         }
     	steps++;
-    	currentProgress += powerStep;
+    	//currentProgress += powerStep;
     	distance = (steps * .91) / 1000;
         tvDistance.setText("Distance: " + distance);
         tvPace.setText("Steps: " + steps);
         tvCoin.setText("Coins: " + coins);
+        
+        if (steps % monster.currentStep == 0)
+        {
+            party1.currentHp -= (monster.monster.attack - party1.monster.defense);
+            party2.currentHp -= (monster.monster.attack - party2.monster.defense);
+            party3.currentHp -= (monster.monster.attack - party3.monster.defense);
+            party4.currentHp -= (monster.monster.attack - party4.monster.defense);
+            party5.currentHp -= (monster.monster.attack - party5.monster.defense);
+            
+        }
+        if (steps % party1.currentStep == 0)
+        {
+        	monster.currentHp -= (party1.monster.attack - monster.monster.defense);
+        	Log.d("1 attacks", "monster health at " + monster.currentHp);
+        	
+        }
+        if (steps % party2.currentStep == 0)
+        {
+        	monster.currentHp -= (party2.monster.attack - monster.monster.defense);
+        	Log.d("2 attacks", "monster health at " + monster.currentHp);
+        }
+        if (steps % party3.currentStep == 0)
+        {
+        	monster.currentHp -= (party3.monster.attack - monster.monster.defense);
+        	Log.d("3 attacks", "monster health at " + monster.currentHp);
+        }
+        if (steps % party4.currentStep == 0)
+        {
+        	monster.currentHp -= (party4.monster.attack - monster.monster.defense);
+        	Log.d("4 attacks", "monster health at " + monster.currentHp);
+        }
+        if (steps % party5.currentStep == 0)
+        {
+            monster.currentHp -= (party5.monster.attack - monster.monster.defense);
+        	Log.d("5 attacks", "monster health at " + monster.currentHp);
+        }
     }
     
 }
