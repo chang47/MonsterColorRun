@@ -21,6 +21,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.renderscript.Sampler.Value;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -169,7 +170,21 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 					
 					@Override
 					public void onClick(View v) {
+						
+						ArrayList<String> list = new ArrayList<String>();
+						list.add("I got hit for 10 points");
+						list.add("I ran 5 miles");
+						list.add("I did 50 steps");
+						list.add("My babbit died");
+						list.add("I found a lolipop on the floor. It was delciious");
+						Bundle bundle = new Bundle();
+						bundle.putStringArrayList("Log", list);
+						
+						
 						RunLogDialog newFragment = new RunLogDialog();
+						
+						newFragment.setArguments(bundle);
+						
 						newFragment.show(getFragmentManager(), "Run Log");
 					}
 				});
@@ -183,14 +198,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 			}
 		});
   */      
-        
-        /* TODO add back after 
-        list = new ArrayList<String>();
-        
-        adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
-        */
+       
         
         
         // setup the timer that just displays passage of time
