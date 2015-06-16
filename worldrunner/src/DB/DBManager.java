@@ -16,6 +16,12 @@ import java.util.List;
 
 
 
+
+
+
+import Abilities.Ability;
+import Abilities.DamageAbility;
+import Abilities.SupportAbility;
 import DB.Model.City;
 import DB.Model.Dungeon;
 import DB.Model.Equipment;
@@ -79,11 +85,11 @@ public class DBManager extends SQLiteOpenHelper {
 	
 	public ArrayList<Monster> getParty() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2));
-		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3));
-		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1));
-		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2));
-		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
+		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
 		return list;
 	}
 	
@@ -199,7 +205,6 @@ public class DBManager extends SQLiteOpenHelper {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
 		list.add(new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2000, 150, 125, 100, 0.0));
 		list.add(new Sticker(2, 1, 101, "Rose Deer", 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2000, 125, 100, 150, 0.0));
-		list.add(new Sticker(3, 1, 102, "Fire Martin", 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2000, 100, 150, 125, 0.0));
 		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0));
 		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0));
 		return list;
@@ -269,12 +274,13 @@ public class DBManager extends SQLiteOpenHelper {
 	//id,hp,attack,defense,speed,capture
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2));
-		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3));
-		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1));
-		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2));
-		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2));
-		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3));
+		
+		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
+		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
 		return list;
 	}
 	

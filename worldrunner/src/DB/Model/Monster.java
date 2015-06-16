@@ -1,5 +1,7 @@
 package DB.Model;
 
+import Abilities.Ability;
+
 // The enemy that are encountered and can be caught
 // Different stats from their sticker form
 public class Monster {
@@ -11,8 +13,9 @@ public class Monster {
 	public int speed;
 	public double capture;
 	public int element;
+	public Ability ability;
 	
-	public Monster(int id, String name, int hp, int attack, int defense, int speed, double capture, int element) {
+	public Monster(int id, String name, int hp, int attack, int defense, int speed, double capture, int element, Ability ability) {
 		this.id = id;
 		this.name = name;
 		this.hp = hp;
@@ -26,5 +29,6 @@ public class Monster {
 		//2 = Grass
 		//3 = Light
 		//4 = Dark
+		this.ability = ability;
 	}
 }

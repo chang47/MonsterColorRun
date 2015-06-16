@@ -9,7 +9,16 @@ import Model.BattleMonster;
 
 public class BattleHelper {
 	public static int Attack(BattleMonster attacker, BattleMonster defender) {
-		int damage = 0;
+		int damage = attacker.monster.attack;
+		int defense = defender.monster.defense;
+		
+		if (attacker.buffs.containsKey(1)) {
+			damage *= attacker.buffs.get(1).modifier;
+		}
+		
+		if (defender.buffs.containsKey(2)) {
+			defense *= defender.buffs.get(2).modifier;
+		}
 		
 		if ((attacker.monster.element == 1  && defender.monster.element == 3)    || 
 				(attacker.monster.element == 2 && defender.monster.element == 1) ||
@@ -17,17 +26,18 @@ public class BattleHelper {
 				(attacker.monster.element == 4 && defender.monster.element == 5) ||
 				(attacker.monster.element == 5 && defender.monster.element == 4)) {
 			//If the attacker is strong vs. the defender
-			damage = (attacker.monster.attack * 2) - defender.monster.defense;
+			damage = (damage * 2) - defense;
 			
 		} else if ((attacker.monster.element == 3  && defender.monster.element == 1)    || 
 				(attacker.monster.element == 1 && defender.monster.element == 2) ||
 				(attacker.monster.element == 2 && defender.monster.element == 3)) {
 			//If the defender is strong vs. the attacker
-			damage = (attacker.monster.attack / 2) - defender.monster.defense;
+			damage = (damage / 2) - defense;
 		} else {
 			//If there is no strength/weakness
-			damage = attacker.monster.attack - defender.monster.defense;
+			damage = damage - defense;
 		}
+		
 		
 		//If the damage is less than 0, set it to 0.
 		if (damage < 1) {
@@ -44,13 +54,10 @@ public class BattleHelper {
 		int largestIndex = 0;
 		
 		for (int a = 1; a < party.size(); a++) {
-
-	        Log.d("Comparing ",largest + " with " + tempSize);
 			
 			tempSize = (double)(party.get(a).monster.hp/BattleHelper.Attack(enemy, party.get(a)));
 			
 			if (largest > tempSize) {
-		        Log.d("Replacing ", largest + " with " + tempSize);
 				largest = tempSize;
 				largestIndex = a;
 			}
