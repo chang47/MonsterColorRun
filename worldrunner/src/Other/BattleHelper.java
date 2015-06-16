@@ -17,6 +17,7 @@ public class BattleHelper {
 		}
 		
 		if (defender.buffs.containsKey(2)) {
+			//NOTE: Does not work for some reason. Troubleshoot it later.
 			defense *= defender.buffs.get(2).modifier;
 		}
 		

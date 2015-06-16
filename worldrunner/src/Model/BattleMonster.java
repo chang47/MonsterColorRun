@@ -21,6 +21,7 @@ public class BattleMonster {
 	}
 	
 	public void RecalculateSpeed(int currentStep) {
+		//Is not actually called
 		if (buffs.containsKey(3)) {
 			this.currentStep = (int) (1000.0 / ((double) monster.speed * buffs.get(3).modifier));
 		} else {

@@ -381,7 +381,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         			buff.duration--;
         			//partyBattleList.get(i).buffs.get(iterator).duration--;
         			//Check if above code actually decreases
-        			if (buff.duration == 0) {
+        			if (buff.duration <= 0) {
         				Log.d("removed attribute", "" + iterator);
         				iterator.remove();
         				//partyBattleList.get(i).buffs.remove(iterator);
