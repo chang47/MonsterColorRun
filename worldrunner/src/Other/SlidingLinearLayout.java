@@ -1,6 +1,5 @@
 package Other;
 
-import android.R.fraction;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;

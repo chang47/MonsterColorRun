@@ -59,7 +59,7 @@ public class SplashPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "clicked on the screen", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(getApplicationContext(), Register.class);
+				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				startActivity(intent);
 			}
 		});
