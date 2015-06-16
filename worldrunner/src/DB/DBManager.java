@@ -15,6 +15,7 @@ import java.util.List;
 
 
 
+
 import DB.Model.City;
 import DB.Model.Dungeon;
 import DB.Model.Equipment;
@@ -22,6 +23,7 @@ import DB.Model.Monster;
 import DB.Model.Player;
 import DB.Model.Route;
 import DB.Model.Sticker;
+import Model.BattleMonster;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -77,13 +79,14 @@ public class DBManager extends SQLiteOpenHelper {
 	
 	public ArrayList<Monster> getParty() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0));
-		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0));
-		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0));
-		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0));
-		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0));
+		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2));
 		return list;
 	}
+	
 	
 	public List<Player> getPlayer() {
 		SQLiteDatabase db2 = this.getWritableDatabase();
@@ -266,12 +269,12 @@ public class DBManager extends SQLiteOpenHelper {
 	//id,hp,attack,defense,speed,capture
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
-		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0));
-		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0));
-		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0));
-		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0));
-		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0));
-		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0));
+		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2));
+		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3));
+		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1));
+		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2));
+		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2));
+		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3));
 		return list;
 	}
 	

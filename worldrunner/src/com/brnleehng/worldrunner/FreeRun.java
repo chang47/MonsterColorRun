@@ -4,6 +4,7 @@ import DB.DBManager;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import Model.BattleMonster;
+import Other.BattleHelper;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -83,6 +84,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private double distance;
     private int coins;
     private double powerStep;
+    private int enemyAttack;
     
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
@@ -104,6 +106,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     
     //The Party
     private BattleMonster party1,party2,party3,party4,party5 = null;
+    
+    //For logging purposes
+	private ArrayList<String> list = new ArrayList<String>();
 
     
     // list of messages that are used to display the progress
@@ -115,6 +120,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     //
     public ArrayList<Monster> monsterList;
     public ArrayList<Monster> partyList;
+    public ArrayList<BattleMonster> partyBattleList;
     
     public Dialog showLog;
     
@@ -141,6 +147,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         partyHealth5 = (ProgressBar) view.findViewById(R.id.monsterProgress5);
         monsterList = Hub.monsterList;
         partyList = Hub.partyList;
+        partyBattleList = new ArrayList<BattleMonster>();
         //monsterHealth.getProgressDrawable().setColorFilter(Color.RED,);
         //Need to set the mode in order to change the color.
         Log.d("size of party list", "" + partyList.size());
@@ -171,12 +178,6 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 					@Override
 					public void onClick(View v) {
 						
-						ArrayList<String> list = new ArrayList<String>();
-						list.add("I got hit for 10 points");
-						list.add("I ran 5 miles");
-						list.add("I did 50 steps");
-						list.add("My babbit died");
-						list.add("I found a lolipop on the floor. It was delciious");
 						Bundle bundle = new Bundle();
 						bundle.putStringArrayList("Log", list);
 						
@@ -272,18 +273,23 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private void generateParty() {
     	if (partyList.get(0) != null) {
     		party1 = new BattleMonster(partyList.get(0), partyList.get(0).hp, 1000 / partyList.get(0).speed);
+    		partyBattleList.add(party1);
     	}
     	if (partyList.get(1) != null) {
     		party2 = new BattleMonster(partyList.get(1), partyList.get(1).hp, 1000 / partyList.get(1).speed);
+    		partyBattleList.add(party2);
     	}
     	if (partyList.get(2) != null) {
     		party3 = new BattleMonster(partyList.get(2), partyList.get(2).hp, 1000 / partyList.get(2).speed);
+    		partyBattleList.add(party3);
     	}
     	if (partyList.get(3) != null) {
     		party4 = new BattleMonster(partyList.get(3), partyList.get(3).hp, 1000 / partyList.get(3).speed);
+    		partyBattleList.add(party4);
     	}
     	if (partyList.get(4) != null) {
     		party5 = new BattleMonster(partyList.get(4), partyList.get(4).hp, 1000 / partyList.get(4).speed);
+    		partyBattleList.add(party5);
     	}
     }
     
@@ -333,38 +339,37 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         
         if (steps % monster.currentStep == 0)
         {
-            party1.currentHp -= (monster.monster.attack - party1.monster.defense);
-            party2.currentHp -= (monster.monster.attack - party2.monster.defense);
-            party3.currentHp -= (monster.monster.attack - party3.monster.defense);
-            party4.currentHp -= (monster.monster.attack - party4.monster.defense);
-            party5.currentHp -= (monster.monster.attack - party5.monster.defense);
-            
+        	enemyAttack = BattleHelper.AIAttack(monster, partyBattleList);
+        	
+        	partyBattleList.get(enemyAttack).currentHp -= BattleHelper.Attack(monster, partyBattleList.get(enemyAttack));
+        	
+            list.add("Enemy " + monster.monster.name + " Attacks " + partyBattleList.get(enemyAttack).monster.name + " For " + 
+            BattleHelper.Attack(monster,partyBattleList.get(enemyAttack)));
         }
         if (steps % party1.currentStep == 0)
         {
-        	monster.currentHp -= (party1.monster.attack - monster.monster.defense);
-        	Log.d("1 attacks", "monster health at " + monster.currentHp);
-        	
+        	monster.currentHp -= BattleHelper.Attack(party1,monster);
+            list.add(party1.monster.name + " Attacks " + monster.monster.name + " For " + BattleHelper.Attack(party1,monster) + "!");
         }
         if (steps % party2.currentStep == 0)
         {
-        	monster.currentHp -= (party2.monster.attack - monster.monster.defense);
-        	Log.d("2 attacks", "monster health at " + monster.currentHp);
+        	monster.currentHp -= BattleHelper.Attack(party2,monster);
+            list.add(party2.monster.name + " Attacks " + monster.monster.name + " For " + BattleHelper.Attack(party2,monster) + "!");
         }
         if (steps % party3.currentStep == 0)
         {
-        	monster.currentHp -= (party3.monster.attack - monster.monster.defense);
-        	Log.d("3 attacks", "monster health at " + monster.currentHp);
+        	monster.currentHp -= BattleHelper.Attack(party3, monster);
+            list.add(party3.monster.name + " Attacks " + monster.monster.name + " For " + BattleHelper.Attack(party3,monster) + "!");
         }
         if (steps % party4.currentStep == 0)
         {
-        	monster.currentHp -= (party4.monster.attack - monster.monster.defense);
-        	Log.d("4 attacks", "monster health at " + monster.currentHp);
+        	monster.currentHp -= BattleHelper.Attack(party4,monster);
+            list.add(party4.monster.name + " Attacks " + monster.monster.name + " For " + BattleHelper.Attack(party4,monster) + "!");
         }
         if (steps % party5.currentStep == 0)
         {
-            monster.currentHp -= (party5.monster.attack - monster.monster.defense);
-        	Log.d("5 attacks", "monster health at " + monster.currentHp);
+            monster.currentHp -= BattleHelper.Attack(party5,monster);
+            list.add(party5.monster.name + " Attacks " + monster.monster.name + " For " + BattleHelper.Attack(party5,monster) + "!");
         }
     }
     

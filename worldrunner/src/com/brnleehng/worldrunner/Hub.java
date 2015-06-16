@@ -9,6 +9,7 @@ import java.util.List;
 
 
 
+
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.Equipment;
@@ -22,6 +23,7 @@ import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
 import Items.ViewSticker;
+import Model.BattleMonster;
 import Races.Result;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -61,6 +63,7 @@ public class Hub extends Activity {
 	private static int currentCity;
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
+	public static ArrayList<BattleMonster> partyBattleList;
 	
 	
 	//private static FragmentTransaction ft;
@@ -94,6 +97,7 @@ public class Hub extends Activity {
 		currentCity = 1;
 		monsterList = db.getMonsters();
 		partyList = db.getParty();
+		//partyBattleList = db.getParty();
 		db.close();
 		currentEquipment = null;
 		currentCategory = 0;
