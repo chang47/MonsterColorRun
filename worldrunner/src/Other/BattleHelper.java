@@ -11,14 +11,19 @@ public class BattleHelper {
 	public static int Attack(BattleMonster attacker, BattleMonster defender) {
 		int damage = attacker.monster.attack;
 		int defense = defender.monster.defense;
+
+		Log.d("Damage", "Damage: " + attacker.monster.name + " And has a attack of " + damage);
+		Log.d("Defense", "Defender: " + defender.monster.name + " And has a defense of " + defense);
 		
 		if (attacker.buffs.containsKey(1)) {
 			damage *= attacker.buffs.get(1).modifier;
+			Log.d("Damage", "Calculated: " + damage);
 		}
 		
 		if (defender.buffs.containsKey(2)) {
-			//NOTE: Does not work for some reason. Troubleshoot it later.
+			//NOTE: Does not work for some reason. Troubleshoot it later.;
 			defense *= defender.buffs.get(2).modifier;
+			Log.d("Defense", "Calculated: " + defense);
 		}
 		
 		if ((attacker.monster.element == 1  && defender.monster.element == 3)    || 
@@ -38,6 +43,10 @@ public class BattleHelper {
 			//If there is no strength/weakness
 			damage = damage - defense;
 		}
+
+
+		Log.d("Damage", "Attacker: " + attacker.monster.name + " has a total damage of " + damage);
+		Log.d("Defense", "Defender: " + defender.monster.name + " has a defense of " + defense);
 		
 		
 		//If the damage is less than 0, set it to 0.
@@ -55,12 +64,14 @@ public class BattleHelper {
 		int largestIndex = 0;
 		
 		for (int a = 1; a < party.size(); a++) {
-			
-			tempSize = (double)(party.get(a).monster.hp/BattleHelper.Attack(enemy, party.get(a)));
-			
-			if (largest > tempSize) {
-				largest = tempSize;
-				largestIndex = a;
+			if (party.get(a).currentHp > 0	) {
+				
+				tempSize = (double)(party.get(a).monster.hp/BattleHelper.Attack(enemy, party.get(a)));
+				
+				if (largest > tempSize) {
+					largest = tempSize;
+					largestIndex = a;
+				}
 			}
 		}
 
