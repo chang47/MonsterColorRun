@@ -11,7 +11,7 @@ public class City {
 	public int cityId;
 	public String cityName;
 	public ArrayList<Route> routes;
-	//public ArrayList<Dungeon> dungeons;
+	public ArrayList<Dungeon> dungeons;
 	//public Boss boss;
 	
 	public City(int id, String name) {

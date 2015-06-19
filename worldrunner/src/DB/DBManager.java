@@ -327,13 +327,23 @@ public class DBManager extends SQLiteOpenHelper {
 	 * @return a SparseArray that contains all of the mapping of cities to their dungeons
 	 * 		   in the form of cityId ->list of dungeons
 	 */
-	public SparseArray<ArrayList<Integer>> getCityDungeons() {
-		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
-		ArrayList<Integer> city1Dungeon = new ArrayList<Integer>();
-		// maps to route ID path so we can get more info from the route class
-		city1Dungeon.add(1);
-		ArrayList<Integer> city2Dungeon = new ArrayList<Integer>();
-		city2Dungeon.add(2);
+	public SparseArray<ArrayList<Dungeon>> getCityDungeons() {
+		SparseArray<ArrayList<Dungeon>> map = new SparseArray<ArrayList<Dungeon>>();
+		ArrayList<Dungeon> city1Dungeon = new ArrayList<Dungeon>();
+		ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
+		
+		// maps dungeons to their monsters, would have to loop through
+		// the mapping to add the dungeon
+		// getDungeonMonster()
+		dungeons.get(0).monsters.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
+		dungeons.get(0).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+		dungeons.get(1).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
+		dungeons.get(1).monsters.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
+		// maps from city to dungeon id 
+		// similar to routes, need to get a mapping from the actual db
+		city1Dungeon.add(dungeons.get(0));
+		ArrayList<Dungeon> city2Dungeon = new ArrayList<Dungeon>();
+		city2Dungeon.add(dungeons.get(1));
 		map.put(1, city1Dungeon);
 		map.put(2, city2Dungeon);
 		return map;

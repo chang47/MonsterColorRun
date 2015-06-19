@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.City;
+import DB.Model.Dungeon;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
@@ -57,7 +59,7 @@ public class Hub extends Activity {
 	// the position of the sticker that the character selected to be replaced in equip
 	public static int currentStickerPosition;
 	// current location usually stored in the player model?
-	private static int currentCity;
+	private static City currentCity;
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
 	public static ArrayList<City> cities;
@@ -91,16 +93,18 @@ public class Hub extends Activity {
 		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
 		//equippedStickers = db.getEquippedStickers();
 		equippedStickers = db.getFakeEquippedParty();
-		currentCity = 1;
 		monsterList = db.getMonsters();
 		partyList = db.getParty();
 		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
+		SparseArray<ArrayList<Dungeon>> cityDungeonList = db.getCityDungeons();
 		cities = db.getCities();
 		Iterator<City> iter = cities.iterator();
 		while (iter.hasNext()) {
 			City city = iter.next();
 			city.routes = cityRouteList.get(city.cityId);
+			city.dungeons = cityDungeonList.get(city.cityId);
 		}
+		currentCity = cities.get(0);
 		db.close();
 		currentEquipment = null;
 		currentCategory = 0;
@@ -161,11 +165,11 @@ public class Hub extends Activity {
     	equippedEquipments = equipments;
     }
     
-    public static int getCurrentCity() {
+    public static City getCurrentCity() {
     	return currentCity;
     }
     
-    public static void setCurrentCity(int newCity) {
+    public static void setCurrentCity(City newCity) {
     	currentCity = newCity;
     }
     
@@ -328,11 +332,18 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, townHub).commit();
 	}
 	
+	/**
+	 * Selects the new route to run towards
+	 * @param newCity - the city that the user is trying to run to.
+	 */
 	public static void changeCity(int newCity) {
-		setCurrentCity(newCity);
+		//@TODO check if you need to subtract 1
+		setCurrentCity(cities.get(newCity - 1));
+		
+		// Needs to be changed to 
 		selectFriend();
 	}
-	
+	 
 	
 	
 	/**

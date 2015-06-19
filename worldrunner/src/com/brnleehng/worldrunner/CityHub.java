@@ -2,6 +2,7 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 
+import DB.Model.City;
 import DB.Model.MapGraph;
 import DB.Model.Route;
 import android.app.Fragment;
@@ -26,7 +27,7 @@ public class CityHub extends Fragment {
 		View view = inflater.inflate(R.layout.townhub_activity, container, false);
 		
 		// receives the current city ID
-		int currentCityID = Hub.getCurrentCity();
+		City currentCityID = Hub.getCurrentCity();
 		Log.d("current city", "" + currentCityID);
 		TextView cityName = (TextView) view.findViewById(R.id.currentCity);
 		cityName.setText("Welcome to: " + currentCityID);

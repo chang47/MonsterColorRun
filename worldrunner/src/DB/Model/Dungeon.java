@@ -1,11 +1,14 @@
 package DB.Model;
 
+import java.util.ArrayList;
+
 // Dungeons are locations in cities that offer
 // unique specific monsters that can be grinded and captured.
 public class Dungeon {
 	public int dungeonId;
 	public String dungeonName;
 	public int cityId;
+	public ArrayList<Monster> monsters;
 	
 	public Dungeon() { }
 	
@@ -13,5 +16,6 @@ public class Dungeon {
 		this.dungeonId = id;
 		this.dungeonName = name;
 		this.cityId = city;
+		monsters = new ArrayList<Monster>();
 	}
 }
