@@ -1,5 +1,7 @@
 package DB.Model;
 
+import java.util.ArrayList;
+
 // Paths between cities that players can take to 
 // fight and grind monsters and reach different locations
 public class Route {
@@ -7,7 +9,7 @@ public class Route {
 	public String routeName;
 	public int from;
 	public int to;
-	//public ArrayList<Monster> monsters;
+	public ArrayList<Monster> monsters;
 	
 	public Route(int routeId, String routeName, int from, int to) {
 		this.routeId = routeId;

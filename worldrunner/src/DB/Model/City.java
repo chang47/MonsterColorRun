@@ -17,7 +17,7 @@ public class City {
 	public City(int id, String name) {
 		cityId = id;
 		cityName = name;
-		routes = new ArrayList<Route> ();
+		this.routes = new ArrayList<Route>();
 	}
 	
 }

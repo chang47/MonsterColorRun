@@ -2,7 +2,12 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+
+
+
+
 
 
 
@@ -11,9 +16,11 @@ import java.util.List;
 
 import DB.CreateDB;
 import DB.DBManager;
+import DB.Model.City;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
+import DB.Model.Route;
 import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
@@ -28,6 +35,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.SparseArray;
 
 /**
  * Central Hub activity that manages everything the user does in
@@ -61,6 +69,7 @@ public class Hub extends Activity {
 	private static int currentCity;
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
+	public static ArrayList<City> cities;
 	
 	
 	//private static FragmentTransaction ft;
@@ -94,6 +103,13 @@ public class Hub extends Activity {
 		currentCity = 1;
 		monsterList = db.getMonsters();
 		partyList = db.getParty();
+		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
+		cities = db.getCities();
+		Iterator<City> iter = cities.iterator();
+		while (iter.hasNext()) {
+			City city = iter.next();
+			city.routes = cityRouteList.get(city.cityId);
+		}
 		db.close();
 		currentEquipment = null;
 		currentCategory = 0;

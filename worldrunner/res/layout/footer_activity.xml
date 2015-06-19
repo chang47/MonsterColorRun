@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginLeft="4dp"
+        android:layout_weight="1"
         android:text="Race" />
 
     <Button
@@ -17,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:text="Items" />
 
     <Button
@@ -24,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:text="Store" />
 
     <Button
@@ -31,18 +34,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:text="Friends" />
     <Button
         android:id="@+id/menuDB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:text="DB" />
     <Button
         android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:text="City" />
 
 </LinearLayout>

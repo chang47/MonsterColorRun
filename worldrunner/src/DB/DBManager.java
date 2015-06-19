@@ -284,15 +284,29 @@ public class DBManager extends SQLiteOpenHelper {
 	/**
 	 * Stub that setup the initial mapping cities to their routes
 	 * @return a SparseArray that contains all of the mapping of cities and their cities
-	 * 		   in the form of cityId -> List of routes that belong to the city
+	 * 		   in the form of cityId -> List of routes id that belong to the city
 	 */
-	public SparseArray<ArrayList<Integer>> getCityRoutes() {
-		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
-		ArrayList<Integer> city1Route = new ArrayList<Integer>();
+	public SparseArray<ArrayList<Route>> getCityRoutes() {
+		ArrayList<Route> routes = getRoutes();
+		SparseArray<ArrayList<Route>> map = new SparseArray<ArrayList<Route>>();
+		ArrayList<Route> city1Route = new ArrayList<Route>();
 		// maps to route ID path so we can get more info from the route class
-		city1Route.add(1);
-		ArrayList<Integer> city2Route = new ArrayList<Integer>();
-		city2Route.add(2);
+		
+		// TODO note that we would need to get the mapping from the RouteManager
+		// TODO also get the routing of monsters to the routes
+		// and then loop through them and put the appropriate routes
+		
+		// adds the monsters in
+		
+		// TODO get the monster routing mapping
+		// 
+		//getRouteMonsters()
+		for (int i = 0; i < routes.size(); i++) {
+			routes.get(i);
+		}
+		city1Route.add(routes.get(0));
+		ArrayList<Route> city2Route = new ArrayList<Route>();
+		city2Route.add(routes.get(1));
 		map.put(1, city1Route);
 		map.put(2, city2Route);
 		return map;
