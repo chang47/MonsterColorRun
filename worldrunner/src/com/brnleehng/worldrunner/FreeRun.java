@@ -15,8 +15,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -28,17 +30,23 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.renderscript.Sampler.Value;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.Inflater;
 
 /**
  * Created by Brian on 3/20/2015.
@@ -76,6 +85,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private ProgressBar partyHealth5;
     private Button btnStop;
     private Button btnLog;
+    private LinearLayout enemyPartyLayout;
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
@@ -128,11 +138,14 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     public ArrayList<Monster> monsterList;
     public ArrayList<Monster> partyList;
     public ArrayList<BattleMonster> partyBattleList;
+    public ArrayList<BattleMonster> monsterBattleList;
     
     public Dialog showLog;
     
     public int partyMonsters;
     public int deadMonsters;
+    
+	int amount = (int) ((Math.random() * 3.0) + 1);
     
   
     @Override
@@ -158,7 +171,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         monsterList = Hub.monsterList;
         partyList = Hub.partyList;
         partyBattleList = new ArrayList<BattleMonster>();
+        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
         deadMonsters = 0;
+        amount = (int) ((Math.random() * 3.0) + 1);
         //monsterHealth.getProgressDrawable().setColorFilter(Color.RED,);
         //Need to set the mode in order to change the color.
         Log.d("size of party list", "" + partyList.size());
@@ -267,6 +282,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     // use your list of monster to generate a new monster to fight
     private void generateMonster() {
     	double chance = Math.random() * 1.0;
+    	amount = (int) ((Math.random() * 3.0) + 1);
+    	
+		enemyPartyLayout.removeAllViews();
     	/** Replace to randomly generate from your list of monsters in a good style
     	 * HINT you'll probably need to use the size of the list of monsters somehow to
     	 * select a random index of yourlist
@@ -280,7 +298,54 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     	
     	// don't need this anymore, you'll change the progress bar to be the enemies hp
     	//monsterProgress = monster.current_speed + monster.current_reach;
-    	monster = new BattleMonster(monsterList.get(0), monsterList.get(0).hp, 1000 / monsterList.get(0).speed);
+		for (int l=0;l<amount;l++) {
+			RelativeLayout relLayout = new RelativeLayout(getActivity());
+			
+    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+    		relLayout.setLayoutParams(linLayoutParam);
+			
+    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		
+    		// asigned id for enemy ui
+    		TextView txt = new TextView(getActivity());
+    		txt.setId((l + 1));
+    		ImageView imgView = new ImageView(getActivity());
+    		imgView.setId((l + 1) * 10 );
+    		ProgressBar progBar = new ProgressBar(getActivity());
+    		progBar.setId((l + 1) * 100);
+    		
+    		
+    		imgView.setBackgroundResource(R.drawable.ic_launcher);
+    		
+    		txt.setText("text");
+    		txt.setTextColor(Color.RED);
+    		txt.setGravity(Gravity.CENTER);
+
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
+    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
+
+    		txt.setLayoutParams(relLayoutParamTxt);
+    		imgView.setLayoutParams(relLayoutParamImg);
+    		progBar.setLayoutParams(relLayoutParamProg);
+    		
+    		
+    		relLayout.addView(txt);
+    		relLayout.addView(imgView);
+    		relLayout.addView(progBar);
+
+    		
+    		enemyPartyLayout.addView(relLayout);
+    		
+		}
+    	
+    	 //for (int m=0;m<amount;m++) {
+    		//While might work better here, but depends on how the effectiveness of that.
+    	   	monster = new BattleMonster(monsterList.get(0), monsterList.get(0).hp, 1000 / monsterList.get(0).speed);
+    	 	//monsterBattleList.add(monster);
+    	 //}
+    	 
     	//startProgressBar();
     }
     private void generateParty() {
@@ -414,6 +479,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        		monster.currentHp -= damage;
 	        		list.add(partyBattleList.get(i).monster.name + " Attacks " + monster.monster.name + " For " + damage + "!");
 	        		
+	        		if (monster.currentHp <= 0) {
+		        		list.add(partyBattleList.get(i).monster.name + "has been defeated!");
+	        			generateMonster();
+	        		}
+	        		
 	        		Iterator iterator = partyBattleList.get(i).buffs.entrySet().iterator();
 	        		// decrease buff of monsters
 	        		while (iterator.hasNext()) {
@@ -452,6 +522,12 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        			monster.currentHp -= damage;
 	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + 
 	            				" For " + damage + "!");
+	            		
+
+		        		if (monster.currentHp <= 0) {
+			        		list.add(partyBattleList.get(i).monster.name + "has been defeated!");
+		        			generateMonster();
+		        		}
 	        		} else if (partyBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
 	        			SupportAbility support = (SupportAbility)partyBattleList.get(i).monster.ability;
 	        	        for (int b = 0; b < partyBattleList.size(); b++) {

@@ -62,6 +62,39 @@
         </TextView>
     
     </LinearLayout>
+   <LinearLayout
+        android:id="@+id/enemyParty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+ 
+        <RelativeLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1">
+			<ImageView 
+			    android:id="@+id/test22"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/ic_launcher"
+			    android:layout_centerHorizontal="true"/>
+			<ProgressBar 
+			    android:id="@+id/testbar2"
+			    android:layout_height="wrap_content"
+			    android:layout_width="wrap_content"
+			    style="@android:style/Widget.ProgressBar.Horizontal"
+			    android:layout_centerHorizontal="true"
+			    android:layout_below="@+id/test22"/>
+            
+            
+        </RelativeLayout>
+      
+
+      
+        
+        
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/monster"
