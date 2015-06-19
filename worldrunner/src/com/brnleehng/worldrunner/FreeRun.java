@@ -1,9 +1,14 @@
 package com.brnleehng.worldrunner;
 
+import Abilities.Ability;
+import Abilities.Buff;
+import Abilities.DamageAbility;
+import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import Model.BattleMonster;
+import Other.BattleHelper;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -21,6 +26,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.renderscript.Sampler.Value;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +47,10 @@ import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Created by Brian on 3/20/2015.
@@ -82,6 +91,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private double distance;
     private int coins;
     private double powerStep;
+    private int enemyAttack;
     
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
@@ -103,6 +113,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     
     //The Party
     private BattleMonster party1,party2,party3,party4,party5 = null;
+    
+    //For logging purposes
+	private ArrayList<String> list = new ArrayList<String>();
 
     
     // list of messages that are used to display the progress
@@ -114,8 +127,12 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     //
     public ArrayList<Monster> monsterList;
     public ArrayList<Monster> partyList;
+    public ArrayList<BattleMonster> partyBattleList;
     
     public Dialog showLog;
+    
+    public int partyMonsters;
+    public int deadMonsters;
     
   
     @Override
@@ -140,6 +157,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         partyHealth5 = (ProgressBar) view.findViewById(R.id.monsterProgress5);
         monsterList = Hub.monsterList;
         partyList = Hub.partyList;
+        partyBattleList = new ArrayList<BattleMonster>();
+        deadMonsters = 0;
         //monsterHealth.getProgressDrawable().setColorFilter(Color.RED,);
         //Need to set the mode in order to change the color.
         Log.d("size of party list", "" + partyList.size());
@@ -163,13 +182,23 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         generateMonster();
         generateParty();
         
+        partyMonsters = partyBattleList.size();
+        
         // Once you're done with your run you can save all of the
         // new monsters that you've caught. Ignore for now
 		btnLog.setOnClickListener(new View.OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
+						
+						Bundle bundle = new Bundle();
+						bundle.putStringArrayList("Log", list);
+						
+						
 						RunLogDialog newFragment = new RunLogDialog();
+						
+						newFragment.setArguments(bundle);
+						
 						newFragment.show(getFragmentManager(), "Run Log");
 					}
 				});
@@ -183,14 +212,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 			}
 		});
   */      
-        
-        /* TODO add back after 
-        list = new ArrayList<String>();
-        
-        adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
-        */
+       
         
         
         // setup the timer that just displays passage of time
@@ -264,18 +286,23 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private void generateParty() {
     	if (partyList.get(0) != null) {
     		party1 = new BattleMonster(partyList.get(0), partyList.get(0).hp, 1000 / partyList.get(0).speed);
+    		partyBattleList.add(party1);
     	}
     	if (partyList.get(1) != null) {
     		party2 = new BattleMonster(partyList.get(1), partyList.get(1).hp, 1000 / partyList.get(1).speed);
+    		partyBattleList.add(party2);
     	}
     	if (partyList.get(2) != null) {
     		party3 = new BattleMonster(partyList.get(2), partyList.get(2).hp, 1000 / partyList.get(2).speed);
+    		partyBattleList.add(party3);
     	}
     	if (partyList.get(3) != null) {
     		party4 = new BattleMonster(partyList.get(3), partyList.get(3).hp, 1000 / partyList.get(3).speed);
+    		partyBattleList.add(party4);
     	}
     	if (partyList.get(4) != null) {
     		party5 = new BattleMonster(partyList.get(4), partyList.get(4).hp, 1000 / partyList.get(4).speed);
+    		partyBattleList.add(party5);
     	}
     }
     
@@ -303,6 +330,12 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     	
     }
+    
+    public void reviveParty(int size) {
+    	for (int i = 0; i < size; i++) {
+    		partyBattleList.get(i).currentHp = partyBattleList.get(i).monster.hp;
+    	}
+    }
 
     /**
      * Detects whenever a step occurs. Combat and distance travelled are calculated here
@@ -323,40 +356,123 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         tvPace.setText("Steps: " + steps);
         tvCoin.setText("Coins: " + coins);
         
-        if (steps % monster.currentStep == 0)
-        {
-            party1.currentHp -= (monster.monster.attack - party1.monster.defense);
-            party2.currentHp -= (monster.monster.attack - party2.monster.defense);
-            party3.currentHp -= (monster.monster.attack - party3.monster.defense);
-            party4.currentHp -= (monster.monster.attack - party4.monster.defense);
-            party5.currentHp -= (monster.monster.attack - party5.monster.defense);
-            
-        }
-        if (steps % party1.currentStep == 0)
-        {
-        	monster.currentHp -= (party1.monster.attack - monster.monster.defense);
-        	Log.d("1 attacks", "monster health at " + monster.currentHp);
+        // mosnter turn
+        if (steps % monster.currentStep == 0) {
+        	enemyAttack = BattleHelper.AIAttack(monster, partyBattleList);
         	
+        	partyBattleList.get(enemyAttack).currentHp -= BattleHelper.Attack(monster, partyBattleList.get(enemyAttack));
+        	
+            list.add("Enemy " + monster.monster.name + " Attacks " + partyBattleList.get(enemyAttack).monster.name + " For " + 
+            BattleHelper.Attack(monster,partyBattleList.get(enemyAttack)));
+
+			if (partyBattleList.get(enemyAttack).currentHp <= 0) {
+				
+				deadMonsters++;
+				
+				if (deadMonsters >= partyMonsters) {
+					//Entire Party is dead, resurrect them and change monsters
+					reviveParty(partyBattleList.size());
+					
+					generateMonster();
+					return;
+				}
+			}
         }
-        if (steps % party2.currentStep == 0)
-        {
-        	monster.currentHp -= (party2.monster.attack - monster.monster.defense);
-        	Log.d("2 attacks", "monster health at " + monster.currentHp);
+        
+        // monster uses their ability
+        if (steps % monster.monster.ability.steps == 0) {
+        	enemyAttack = BattleHelper.AIAttack(monster, partyBattleList);
+			double damage = monster.monster.ability.activateAbility();
+			
+			partyBattleList.get(enemyAttack).currentHp -= damage;
+			
+			
+    		list.add("Enemy " + monster.monster.name + " Used Ability " +  monster.monster.ability.name
+			+" On " + partyBattleList.get(enemyAttack).monster.name + " For " + damage + "!");
+    		
+
+			if (partyBattleList.get(enemyAttack).currentHp <= 0) {
+				
+				deadMonsters++;
+				
+				if (deadMonsters >= partyMonsters) {
+					//Entire Party is dead, resurrect them and change monsters
+					reviveParty(partyBattleList.size());
+
+					generateMonster();
+					return;
+				}
+			}
         }
-        if (steps % party3.currentStep == 0)
-        {
-        	monster.currentHp -= (party3.monster.attack - monster.monster.defense);
-        	Log.d("3 attacks", "monster health at " + monster.currentHp);
-        }
-        if (steps % party4.currentStep == 0)
-        {
-        	monster.currentHp -= (party4.monster.attack - monster.monster.defense);
-        	Log.d("4 attacks", "monster health at " + monster.currentHp);
-        }
-        if (steps % party5.currentStep == 0)
-        {
-            monster.currentHp -= (party5.monster.attack - monster.monster.defense);
-        	Log.d("5 attacks", "monster health at " + monster.currentHp);
+        
+        // user party attacks
+        for (int i = 0; i < partyBattleList.size(); i++) {
+        	if (partyBattleList.get(i).currentHp > 0) {
+	        	if (steps % partyBattleList.get(i).currentStep == 0) {
+	        		Log.d("Speed","Current step speed for " + partyBattleList.get(i).monster.name + " is " + partyBattleList.get(i).currentStep);
+	        		double damage = BattleHelper.Attack(partyBattleList.get(i), monster);
+	        		monster.currentHp -= damage;
+	        		list.add(partyBattleList.get(i).monster.name + " Attacks " + monster.monster.name + " For " + damage + "!");
+	        		
+	        		Iterator iterator = partyBattleList.get(i).buffs.entrySet().iterator();
+	        		// decrease buff of monsters
+	        		while (iterator.hasNext()) {
+	        			Map.Entry<Integer, Buff> pair = (Entry<Integer, Buff>) iterator.next();
+	        			int attribute = pair.getKey();
+	        			Buff buff = pair.getValue();
+	        			//Log.d("buff with duration at: ", "" + buff.duration);
+	        			buff.duration--;
+	        			Log.d("duration", "" + partyBattleList.get(i).monster.name + " buff " + buff.name + " has duration " + buff.duration);
+	        			//partyBattleList.get(i).buffs.get(iterator).duration--;
+	        			//Check if above code actually decreases
+	        			if (buff.duration <= 0) {
+	        				//Log.d("removed attribute", "" + iterator);
+	        				// partyBattleList.get(b).buffs.get(3).duration
+	        				iterator.remove();
+	        				
+	        				// important to be after, becauase recalculate checks for the attribute key
+	        				if (attribute == 3) {
+	        					partyBattleList.get(i).RecalculateSpeed();
+	        	        		Log.d("Speed","New Speed Calculated (Buff Removed): " + partyBattleList.get(i).currentStep);
+	        				}
+	        				//partyBattleList.get(i).buffs.remove(iterator);
+	        			}
+	        		}
+	        	}
+        	
+	        	
+	        	// check monster status
+	        	//Log.d("buff size", ""+ partyBattleList.get(0).buffs.size());
+	        	
+	        	
+	        	// checks for user's party's ability
+	        	if (steps % partyBattleList.get(i).monster.ability.steps == 0) { 
+	        		if (partyBattleList.get(i).monster.ability.getClass() == DamageAbility.class) {
+	        			double damage = partyBattleList.get(i).monster.ability.activateAbility();
+	        			monster.currentHp -= damage;
+	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + 
+	            				" For " + damage + "!");
+	        		} else if (partyBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
+	        			SupportAbility support = (SupportAbility)partyBattleList.get(i).monster.ability;
+	        	        for (int b = 0; b < partyBattleList.size(); b++) {
+	        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
+	        	        	BattleMonster monster = partyBattleList.get(b);
+	        	        	partyBattleList.get(b).buffs.put(support.attribute, newBuff);
+	/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
+	            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
+	            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
+	            	        		+ " " + partyBattleList.get(4));*/
+	            	        		
+	            	        
+	        	        	if (support.attribute == 3) {
+	        	        		partyBattleList.get(b).RecalculateSpeed();
+	        	        		Log.d("Speed","New Speed Calculated for : " + partyBattleList.get(b).monster.name + " is " + partyBattleList.get(b).currentStep + " duration is: " + partyBattleList.get(b).buffs.get(3).duration);
+	            	        }
+	        	        }
+	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + "!");
+	        		}
+	        	}
+        	}
         }
     }
     

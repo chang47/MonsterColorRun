@@ -4,16 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-
-
-
-
-
-
-
-
-
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.City;
@@ -29,6 +19,7 @@ import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
 import Items.ViewSticker;
+import Model.BattleMonster;
 import Races.Result;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -70,7 +61,7 @@ public class Hub extends Activity {
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
 	public static ArrayList<City> cities;
-	
+	public static ArrayList<BattleMonster> partyBattleList;
 	
 	//private static FragmentTransaction ft;
 	@Override
