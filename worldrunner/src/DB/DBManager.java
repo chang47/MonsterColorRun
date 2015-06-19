@@ -308,10 +308,11 @@ public class DBManager extends SQLiteOpenHelper {
 		// adds the monsters in
 		
 		// TODO get the monster routing mapping
-		// 
-		//getRouteMonsters()
+		// getRouteMonsters()
 		for (int i = 0; i < routes.size(); i++) {
-			routes.get(i);
+			routes.get(i).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+			routes.get(i).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
+			routes.get(i).monsters.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
 		}
 		city1Route.add(routes.get(0));
 		ArrayList<Route> city2Route = new ArrayList<Route>();
