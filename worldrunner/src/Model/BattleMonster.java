@@ -20,8 +20,10 @@ public class BattleMonster {
 		buffs = new HashMap<Integer, Buff>();
 	}
 	
+	/**
+	 * Recalculates the speed for monsters in response to buffs (Or the removal of buffs)
+	 */
 	public void RecalculateSpeed() {
-		//Is not actually called
 		if (buffs.containsKey(3)) {
 			this.currentStep = (int) (1000.0 / ((double) monster.speed * buffs.get(3).modifier));
 		} else {
