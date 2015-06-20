@@ -7,7 +7,18 @@ import android.R.integer;
 import android.util.Log;
 import Model.BattleMonster;
 
+/**
+ * A class that offers helpful methods for monsters to fight
+ * each other
+ */
 public class BattleHelper {
+
+	/**
+	 * Decides damage dealt from one target or another
+	 * @param attacker who is attacking
+	 * @param defender who is defending
+	 * @return how much damage is done
+	 */
 	public static int Attack(BattleMonster attacker, BattleMonster defender) {
 		int damage = attacker.monster.attack;
 		int defense = defender.monster.defense;
@@ -57,8 +68,15 @@ public class BattleHelper {
 		return damage; 
 	}
 	
+	/**
+	 * Decides which target from the list if being attacked
+	 * @param enemy Who is attacking
+	 * @param party The list of people who are attacking
+	 * @return The index the monster that is going to be attacked is at
+	 */
 	public static int AIAttack(BattleMonster enemy,ArrayList<BattleMonster> party)
 	{
+		//Sets the AI of what monsters attack
 		double largest = (double)(party.get(0).monster.hp/BattleHelper.Attack(enemy, party.get(0)));
 		double tempSize = 0;
 		int largestIndex = 0;
