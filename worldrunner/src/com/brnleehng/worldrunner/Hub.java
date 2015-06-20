@@ -97,15 +97,15 @@ public class Hub extends Activity {
 		equippedStickers = db.getFakeEquippedParty();
 		monsterList = db.getMonsters();
 		partyList = db.getParty();
+		
+		// creates the list of cities
 		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
-		Log.d("route", "made route");
 		SparseArray<ArrayList<Dungeon>> cityDungeonList = db.getCityDungeons();
-		Log.d("dungeon", "made dungeon");
 		cities = db.getCities();
-		Log.d("city size", "" + cities.size());
-		Log.d("city", "made city");
 		Iterator<City> iter = cities.iterator();
 		
+		// probably in the future create the monster content in the routes and dungeons when you do
+		// a db call
 		while (iter.hasNext()) {
 			City city = iter.next();
 			city.routes = cityRouteList.get(city.cityId);

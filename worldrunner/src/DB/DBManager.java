@@ -309,6 +309,7 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		// TODO get the monster routing mapping
 		// getRouteMonsters()
+		// future, probably empty or doesn't exist and just get the list from db call
 		for (int i = 0; i < routes.size(); i++) {
 			routes.get(i).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
 			routes.get(i).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
@@ -335,6 +336,8 @@ public class DBManager extends SQLiteOpenHelper {
 		// maps dungeons to their monsters, would have to loop through
 		// the mapping to add the dungeon
 		// getDungeonMonster()
+		
+		// future, probably empty or doesn't exist and just get the list from db call
 		dungeons.get(0).monsters.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
 		dungeons.get(0).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
 		dungeons.get(1).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
