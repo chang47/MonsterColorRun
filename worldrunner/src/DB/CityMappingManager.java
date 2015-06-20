@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-
+//@TODO double check if correct and if you even need this anymore
 public class CityMappingManager {
 	private static final String TABLE_CITY_TO_DUNGEON = "city_to_dungeon";
 	private static final String CITY_ID = "city_id";
@@ -35,17 +35,18 @@ public class CityMappingManager {
 		createInitialDungeon(db, 2, 2);
 	}
 	
+	// double check if this correct
 	private static void createInitialRoute(SQLiteDatabase db, int city, int route) {
 		ContentValues values = new ContentValues();
-		values.put(CITY_ID, 1);
-		values.put(ROUTE_ID, 2);
+		values.put(CITY_ID, city);
+		values.put(ROUTE_ID, route);
 		db.insert(TABLE_CITY_TO_ROUTE, null, values);
 	}
 	
 	private static void createInitialDungeon(SQLiteDatabase db, int city, int dungeon) {
 		ContentValues values = new ContentValues();
-		values.put(CITY_ID, 1);
-		values.put(DUNGEON_ID, 2);
+		values.put(CITY_ID, city);
+		values.put(DUNGEON_ID, dungeon);
 		db.insert(TABLE_CITY_TO_DUNGEON, null, values);
 	}
 	

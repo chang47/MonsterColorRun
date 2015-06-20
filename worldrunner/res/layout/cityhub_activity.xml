@@ -25,21 +25,21 @@
      </LinearLayout>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/moveBut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/cityContainer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:text="Dungeon" />
+        android:layout_marginTop="29dp"
+        android:text="Moveout" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/dungeonBut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="Moveout" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/moveBut"
+        android:layout_marginTop="18dp"
+        android:text="Dungeon" />
 
 </RelativeLayout>

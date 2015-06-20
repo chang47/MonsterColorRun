@@ -10,8 +10,7 @@ public class Dungeon {
 	public int cityId;
 	public ArrayList<Monster> monsters;
 	
-	public Dungeon() { }
-	
+	// empty constructors are evil!!!!
 	public Dungeon(int id, String name, int city) {
 		this.dungeonId = id;
 		this.dungeonName = name;

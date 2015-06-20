@@ -18,6 +18,7 @@ public class City {
 		cityId = id;
 		cityName = name;
 		this.routes = new ArrayList<Route>();
+		this.dungeons = new ArrayList<Dungeon>();
 	}
 	
 }

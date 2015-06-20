@@ -16,7 +16,6 @@ public class Route {
 		this.routeName = routeName;
 		this.from = from;
 		this.to = to;
+		monsters = new ArrayList<Monster>();
 	}
-	
-	public Route() { } 
 }

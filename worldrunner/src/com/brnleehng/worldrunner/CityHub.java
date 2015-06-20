@@ -20,21 +20,43 @@ import android.widget.TextView;
 
 public class CityHub extends Fragment {
 	public SparseArray<ArrayList<Route>> cityRoutes;
+	private Button dungeon;
+	private Button move;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		View view = inflater.inflate(R.layout.townhub_activity, container, false);
-		
+		View view = inflater.inflate(R.layout.cityhub_activity, container, false);
+		dungeon = (Button) view.findViewById(R.id.dungeonBut);
+		move = (Button) view.findViewById(R.id.moveBut);
 		// receives the current city ID
-		City currentCityID = Hub.getCurrentCity();
-		Log.d("current city", "" + currentCityID);
+		City currentCity = Hub.currentCity;
+		Log.d("current city", "" + currentCity.cityName);
 		TextView cityName = (TextView) view.findViewById(R.id.currentCity);
-		cityName.setText("Welcome to: " + currentCityID);
+		cityName.setText("Welcome to: " + currentCity.cityName);
 		
 		// finds the nearest city to travel to
 		// TODO crashes probably MapGraph not used anymore
 		//ArrayList<Integer> cityList = MapGraph.nearbyCities(currentCityID);
+		
+		// moves to screen with multiple dungeons
+		dungeon.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Hub.selectDungeons();
+			}
+		});
+		
+		// moves to screen with multiple routes to city
+		move.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Hub.selectRoute();
+			}
+		});
 		/**
 		LinearLayout layout = (LinearLayout) view.findViewById(R.id.cityContainer);
 		for (int i : cityList) {

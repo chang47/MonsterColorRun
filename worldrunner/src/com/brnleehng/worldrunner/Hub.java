@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import Abilities.SupportAbility;
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.City;
@@ -28,6 +29,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 
 /**
@@ -59,7 +61,7 @@ public class Hub extends Activity {
 	// the position of the sticker that the character selected to be replaced in equip
 	public static int currentStickerPosition;
 	// current location usually stored in the player model?
-	private static City currentCity;
+	public static City currentCity;
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
 	public static ArrayList<City> cities;
@@ -96,9 +98,14 @@ public class Hub extends Activity {
 		monsterList = db.getMonsters();
 		partyList = db.getParty();
 		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
+		Log.d("route", "made route");
 		SparseArray<ArrayList<Dungeon>> cityDungeonList = db.getCityDungeons();
+		Log.d("dungeon", "made dungeon");
 		cities = db.getCities();
+		Log.d("city size", "" + cities.size());
+		Log.d("city", "made city");
 		Iterator<City> iter = cities.iterator();
+		
 		while (iter.hasNext()) {
 			City city = iter.next();
 			city.routes = cityRouteList.get(city.cityId);
@@ -332,11 +339,31 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, townHub).commit();
 	}
 	
+	public static void selectDungeons() {
+		FragmentTransaction ft = setFT();
+		CityDungeon townDungeon = new CityDungeon();
+		ft.replace(R.id.hub, townDungeon).commit();
+	}
+	
+	public static void selectRoute() {
+		FragmentTransaction ft = setFT();
+		CityRoute townRoute = new CityRoute();
+		ft.replace(R.id.hub, townRoute).commit();
+	}
+	
+	public static void startDungeonRun(Dungeon dungeon) {
+		// to be filled
+	}
+	
+	public static void startRouteRun(Route route) {
+		// to be filled
+	}
+	
 	/**
 	 * Selects the new route to run towards
 	 * @param newCity - the city that the user is trying to run to.
 	 */
-	public static void changeCity(int newCity) {
+	public static void moveCity(int newCity) {
 		//@TODO check if you need to subtract 1
 		setCurrentCity(cities.get(newCity - 1));
 		

@@ -1,5 +1,6 @@
 package com.brnleehng.worldrunner;
 
+import DB.DBManager;
 import android.R.anim;
 import android.app.Activity;
 import android.content.Intent;
@@ -59,6 +60,8 @@ public class SplashPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "clicked on the screen", Toast.LENGTH_SHORT).show();
+				DBManager db = new DBManager(getApplicationContext());
+				db.close();
 				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				startActivity(intent);
 			}

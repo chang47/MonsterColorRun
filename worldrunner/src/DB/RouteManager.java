@@ -43,11 +43,11 @@ public class RouteManager {
 		Cursor cursor = db.rawQuery(select, null);
 		if (cursor.moveToFirst()) {
 			do {
-				Route route = new Route();
-				route.routeId = cursor.getInt(0);
-				route.routeName = cursor.getString(1);
-				route.from = cursor.getInt(2);
-				route.to = cursor.getInt(3);
+				int routeId = cursor.getInt(0);
+				String routeName = cursor.getString(1);
+				int from = cursor.getInt(2);
+				int to = cursor.getInt(3);
+				Route route = new Route(routeId, routeName, from, to);
 				list.add(route);
 			} while (cursor.moveToNext());
 		}

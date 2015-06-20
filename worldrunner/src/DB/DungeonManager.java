@@ -41,10 +41,10 @@ public class DungeonManager {
 		Cursor cursor = db.rawQuery(select, null);
 		if (cursor.moveToFirst()) {
 			do {
-				Dungeon dungeon= new Dungeon();
-				dungeon.dungeonId = cursor.getInt(0);
-				dungeon.dungeonName = cursor.getString(1);
-				dungeon.cityId = cursor.getInt(2);
+				int dungeonId = cursor.getInt(0);
+				String dungeonName = cursor.getString(1);
+				int cityId = cursor.getInt(2);
+				Dungeon dungeon= new Dungeon(dungeonId, dungeonName, cityId);
 				list.add(dungeon);
 			} while (cursor.moveToNext());
 		}

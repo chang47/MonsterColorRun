@@ -13,12 +13,13 @@ public class MonsterManager {
 	public static void create(SQLiteDatabase db) {
 		String CREATE_DUNGEON_MOSNTER_TABLE = "CREATE TABLE " + TABLE_DUNGEON_MONSTER + "("
                 + DUNGEON_ID + " INTEGER," + MONSTER_ID + " INTEGER," +
-				"PRIMARY KEY (" + DUNGEON_ID + "," + MONSTER_ID + ")";
+				"PRIMARY KEY (" + DUNGEON_ID + "," + MONSTER_ID + "))";
 		db.execSQL(CREATE_DUNGEON_MOSNTER_TABLE);
 		String CREATE_ROUTE_MONSTER_TABLE = "CREATE TABLE " + TABLE_ROUTE_MONSTER + "("
                 + ROUTE_ID + " INTEGER," + MONSTER_ID + " INTEGER," +
-				"PRIMARY KEY (" + ROUTE_ID + "," + MONSTER_ID + ")";
+				"PRIMARY KEY (" + ROUTE_ID + "," + MONSTER_ID + "))";
 		db.execSQL(CREATE_ROUTE_MONSTER_TABLE);
+		
 		/*
 		createInitialRoute(db, 1, 2);
 		createInitialRoute(db, 2, 1);

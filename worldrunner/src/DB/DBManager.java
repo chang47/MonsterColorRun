@@ -60,7 +60,7 @@ public class DBManager extends SQLiteOpenHelper {
 		RouteManager.create(db);
 		DungeonManager.create(db);
 		CityMappingManager.create(db);
-		MonsterManager.drop(db);
+		MonsterManager.create(db);
 	}
 
 	@Override
@@ -330,7 +330,7 @@ public class DBManager extends SQLiteOpenHelper {
 	public SparseArray<ArrayList<Dungeon>> getCityDungeons() {
 		SparseArray<ArrayList<Dungeon>> map = new SparseArray<ArrayList<Dungeon>>();
 		ArrayList<Dungeon> city1Dungeon = new ArrayList<Dungeon>();
-		ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
+		ArrayList<Dungeon> dungeons = getDungeons();
 		
 		// maps dungeons to their monsters, would have to loop through
 		// the mapping to add the dungeon
