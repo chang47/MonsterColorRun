@@ -3,6 +3,7 @@ package com.brnleehng.worldrunner;
 import DB.Model.City;
 import DB.Model.Dungeon;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ public class CityDungeon extends Fragment {
 	public City city;
 	public LinearLayout layout;
 	
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.citydungeon_activity, container, false);
@@ -23,7 +25,7 @@ public class CityDungeon extends Fragment {
 		
 		
 		// lists dungeons
-		for (Dungeon dungeon : city.dungeons) {
+		for (final Dungeon dungeon : city.dungeons) {
 			Button button = new Button(getActivity());
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			button.setText(dungeon.dungeonName);
@@ -31,7 +33,7 @@ public class CityDungeon extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					
+					Hub.startDungeonRun(dungeon);
 				}
 			});
 			

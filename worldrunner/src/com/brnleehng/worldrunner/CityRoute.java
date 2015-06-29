@@ -23,7 +23,7 @@ public class CityRoute extends Fragment{
 		city = Hub.getCurrentCity();
 		
 		// lists dungeons
-		for (Route route : city.routes) {
+		for (final Route route : city.routes) {
 			Button button = new Button(getActivity());
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			button.setText(route.routeName);
@@ -31,7 +31,7 @@ public class CityRoute extends Fragment{
 				
 				@Override
 				public void onClick(View v) {
-					
+					Hub.startRouteRun(route);
 				}
 			});
 			

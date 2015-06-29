@@ -1,5 +1,7 @@
 package DB.Model;
 
+import Abilities.Ability;
+
 // Stickers are the main fighting force that you the user has
 // to fight with other peopl
 public class Sticker {
@@ -22,11 +24,13 @@ public class Sticker {
 	public int defense;
 	public int speed;
 	public double capture;
+	public int element;
+	public Ability ability;
 	
 	public Sticker(int pstid, int pid, int sid, String name, int color,
 			int current_level, int current_exp, int current_speed,
 			int current_reach, int spaid, int saaid, int evolve, int equipped, int position,
-			int hp, int attack, int defense, int speed, double capture) {
+			int hp, int attack, int defense, int speed, double capture, int element, Ability ability) {
 		super();
 		this.pstid = pstid;
 		this.pid = pid;
@@ -47,6 +51,8 @@ public class Sticker {
 		this.defense = defense;
 		this.speed = speed;
 		this.capture = capture;
+		this.element = element;
+		this.ability = ability;
 	}
 	
 	public Sticker() { }

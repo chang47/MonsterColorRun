@@ -1,6 +1,10 @@
 package com.brnleehng.worldrunner;
 
-import Abilities.Ability;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import Abilities.Buff;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
@@ -9,62 +13,38 @@ import DB.Model.Monster;
 import DB.Model.Sticker;
 import Model.BattleMonster;
 import Other.BattleHelper;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.renderscript.Sampler.Value;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.Inflater;
-
-/**
- * Created by Brian on 3/20/2015.
- */
-public class FreeRun extends Fragment implements SensorEventListener, StepListener{
+public class DungeonRun extends Fragment implements SensorEventListener, StepListener{
 	// setup the step detectors
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -361,7 +341,10 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		
     		enemyPartyLayout.addView(relLayout);
     		
-       	   	monster = new BattleMonster(monsterList.get(l), monsterList.get(l).hp, 1000 / monsterList.get(l).speed);
+    		int monsterGen = (int) (Math.random() * Hub.currentDungeon.monsters.size());
+    		
+       	   	monster = new BattleMonster(Hub.currentDungeon.monsters.get(monsterGen), 
+       	   			Hub.currentDungeon.monsters.get(monsterGen).hp, 1000 / Hub.currentDungeon.monsters.get(monsterGen).speed);
        	 	monsterBattleList.add(monster);
     		
 		}
@@ -547,7 +530,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         							monsterBattleList.get(partyAttack).monster.ability));
         				}
         				
-	        			if (deadEnemies == amount) {
+	        			if (deadEnemies >= amount) {
 		        			generateMonster();
 	        			}
 	        		}
@@ -593,12 +576,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + 
 	            				" For " + damage + "!");
 	            		
-	            		
 	            		//Checks if all enemies are dead
 		        		if (monsterBattleList.get(partyAttack).currentHp <= 0) {
 			        		list.add(partyBattleList.get(i).monster.name + "has been defeated!");
 			        		deadEnemies++;
-			        		
+
 	        				if ((double) ((Math.random() * 100) + 1) > monsterBattleList.get(partyAttack).monster.capture) {
 	        					
 	        					list.add(monsterBattleList.get(partyAttack).monster.name + " has been captured!");
@@ -610,7 +592,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        							monsterBattleList.get(partyAttack).monster.ability));
 	        				}
 	        				
-		        			if (deadEnemies == amount) {
+		        			if (deadEnemies >= amount) {
 			        			generateMonster();
 		        			}
 		        		}

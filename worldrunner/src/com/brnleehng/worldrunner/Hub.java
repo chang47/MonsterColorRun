@@ -67,6 +67,9 @@ public class Hub extends Activity {
 	public static ArrayList<City> cities;
 	public static ArrayList<BattleMonster> partyBattleList;
 	
+	public static Route currentRoute;
+	public static Dungeon currentDungeon;
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -353,10 +356,26 @@ public class Hub extends Activity {
 	
 	public static void startDungeonRun(Dungeon dungeon) {
 		// to be filled
+		FragmentTransaction ft = setFT();
+		DungeonRun dunRun = new DungeonRun();
+		currentDungeon = dungeon;
+		ft.remove(header);
+		ft.remove(footer);
+		ft.replace(R.id.hub, dunRun).commit();
 	}
 	
 	public static void startRouteRun(Route route) {
-		// to be filled
+		// to be filledetFT();
+		FragmentTransaction ft = setFT();
+		CityRun cityRun = new CityRun();
+		currentRoute = route;
+		ft.remove(header);
+		ft.remove(footer);
+		ft.replace(R.id.hub, cityRun).commit();
+	}
+	
+	public static void addSticker(Sticker monsterSticker) {
+		stickerList.add(monsterSticker);
 	}
 	
 	/**
@@ -368,7 +387,7 @@ public class Hub extends Activity {
 		setCurrentCity(cities.get(newCity - 1));
 		
 		// Needs to be changed to 
-		selectFriend();
+		cityHub();
 	}
 	 
 	

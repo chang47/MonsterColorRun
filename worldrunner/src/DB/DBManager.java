@@ -203,10 +203,10 @@ public class DBManager extends SQLiteOpenHelper {
 	 */
 	public ArrayList<Sticker> getFakeEquippedParty() {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
-		list.add(new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2000, 150, 125, 100, 0.0));
-		list.add(new Sticker(2, 1, 101, "Rose Deer", 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2000, 125, 100, 150, 0.0));
-		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0));
-		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0));
+		list.add(new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2000, 150, 125, 100, 0.0,2,new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
+		list.add(new Sticker(2, 1, 101, "Rose Deer", 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
+		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
 		return list;
 	}
 	

@@ -3,6 +3,7 @@ package DB;
 import java.util.ArrayList;
 import java.util.List;
 
+import Abilities.DamageAbility;
 import DB.Model.Equipment;
 import DB.Model.Sticker;
 import android.content.ContentValues;
@@ -47,7 +48,8 @@ public class StickerManager {
                 HP + " INTEGER," + ATTACK + " INTEGER," + DEFENSE + " INTEGER, " + SPEED + " INTEGER," 
                 + CAPTURE + " REAL" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
-        createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0));
+        createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
+        		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
 	}
 	
 	/**
