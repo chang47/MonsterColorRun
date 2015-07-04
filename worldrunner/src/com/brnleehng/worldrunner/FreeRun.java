@@ -85,6 +85,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private ProgressBar partyHealth5;
     private Button btnStop;
     private Button btnLog;
+    private Button btnExitLog;
     private LinearLayout enemyPartyLayout;
     
     // list of stickers that were found, temporarily changed to be a list
@@ -192,6 +193,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         //Hub.partyList
         
         btnLog = (Button) view.findViewById(R.id.btnLog);
+        btnExitLog = (Button) view.findViewById(R.id.exitButton);
         btnStop = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
@@ -218,17 +220,20 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 					@Override
 					public void onClick(View v) {
 						
+						
 						Bundle bundle = new Bundle();
 						bundle.putStringArrayList("Log", list);
 						
 						
 						RunLogDialog newFragment = new RunLogDialog();
 						
+						
 						newFragment.setArguments(bundle);
 						
 						newFragment.show(getFragmentManager(), "Run Log");
 					}
 				});
+		
 /*        btnStop.setOnClickListener(new OnClickListener() {
 			
 			@Override

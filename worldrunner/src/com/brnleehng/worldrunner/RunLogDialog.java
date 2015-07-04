@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class RunLogDialog extends DialogFragment {
@@ -32,6 +33,17 @@ public class RunLogDialog extends DialogFragment {
                 android.R.layout.simple_list_item_1, list);
         ListView listView = (ListView) view.findViewById(R.id.RunLogList);
         listView.setAdapter(adapter);
+        
+        Button exitButton = (Button) view.findViewById(R.id.exitButton);
+        
+        exitButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dismiss();
+			}
+        	
+        });
 		
 		return view;
 	}
@@ -44,5 +56,6 @@ public class RunLogDialog extends DialogFragment {
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		return dialog;
 	}
+
 
 }
