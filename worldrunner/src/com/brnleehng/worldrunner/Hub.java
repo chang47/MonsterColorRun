@@ -87,19 +87,9 @@ public class Hub extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hub_activity);
 		
-		// Sets up all of the user's data  
 		db = new DBManager(getApplicationContext());
-		List<Player> playerList = db.getPlayer();
-		player = playerList.get(0);
-		equipmentList = db.getEquipments();
-		stickerList = db.getStickers();
-		equippedEquipments = db.getEquippedEquipment();
+		createChanges();
 		
-		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
-		//equippedStickers = db.getEquippedStickers();
-		equippedStickers = db.getFakeEquippedParty();
-		monsterList = db.getMonsters();
-		partyList = db.getParty();
 		
 		// creates the list of cities
 		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
@@ -115,7 +105,7 @@ public class Hub extends Activity {
 			city.dungeons = cityDungeonList.get(city.cityId);
 		}
 		currentCity = cities.get(0);
-		db.close();
+		// db.close(); // necessary to close the db?
 		currentEquipment = null;
 		currentCategory = 0;
 		currentSticker = null;
@@ -140,7 +130,28 @@ public class Hub extends Activity {
 			ft.commit();
 		}
 	}
+	
+	/**
+	 * Used to re-create/update the user database so that users
+	 * can see changes when they are made
+	 */
+	public static void createChanges() {
+		// Sets up all of the user's data  
+		List<Player> playerList = db.getPlayer();
+		player = playerList.get(0);
+		equipmentList = db.getEquipments();
+		stickerList = db.getStickers();
+		equippedEquipments = db.getEquippedEquipment();
+		
+		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
+		//equippedStickers = db.getEquippedStickers();
+		equippedStickers = db.getFakeEquippedParty();
+		monsterList = db.getMonsters();
+		partyList = db.getParty();
+	}
 
+	
+	
 	@Override
 	public void onResume() {
 		super.onResume();

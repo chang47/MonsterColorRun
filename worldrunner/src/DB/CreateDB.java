@@ -26,6 +26,7 @@ public class CreateDB extends Fragment {
 		TextView tv = (TextView) view.findViewById(R.id.dbView);
 		tv.setText("pid:" + player.getPid() + " username " + player.getUsername() + " fname " + player.getFname() + " lname " + player.getLname()
 				+ " level " + player.getLevel());
+		// because the onCreate doesn't get called for the fragment we would have to manually reset the whole thing
 		return view;
 	}  
 }
