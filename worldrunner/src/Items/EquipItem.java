@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,12 +33,15 @@ public class EquipItem extends Fragment {
 	private ImageView equipment3;
 	private ImageView equipment4;
 	private ImageView equipment5;
+	private ImageView[] equipmentViews;
 	
 	private ImageView sticker1;
 	private ImageView sticker2;
 	private ImageView sticker3;
 	private ImageView sticker4;
 	private ImageView sticker5;
+	private ImageView[] stickerViews;
+	private Button equipStickerButton;
 	
 	/**
 	 * The method that's called to create a View
@@ -48,7 +52,12 @@ public class EquipItem extends Fragment {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.equippeditem_activity, container, false);
 		equippedEquipment = Hub.getEquippedEquipment();
-		equippedSticker = Hub.equippedStickers;
+		
+		// TODO Needs to be changed to equipped sticker, this is a temp because
+		// Justin is using the original
+		equippedSticker = Hub.tempEquippedSticker;
+		//equippedSticker = Hub.equippedStickers;
+		
 		
 		// setup equipments
 		equipment1 = (ImageView) view.findViewById(R.id.Equipment1);
@@ -57,6 +66,12 @@ public class EquipItem extends Fragment {
 		equipment4 = (ImageView) view.findViewById(R.id.Equipment4);
 		equipment5 = (ImageView) view.findViewById(R.id.Equipment5);
 		
+/*		equipmentViews[0] = (ImageView) view.findViewById(R.id.Equipment1);
+		equipmentViews[1] = (ImageView) view.findViewById(R.id.Equipment2);
+		equipmentViews[2] = (ImageView) view.findViewById(R.id.Equipment3);
+		equipmentViews[3] = (ImageView) view.findViewById(R.id.Equipment4);
+		equipmentViews[4] = (ImageView) view.findViewById(R.id.Equipment5);
+		*/
 		// Sets default empty
 		equipment1.setImageResource(R.drawable.colorworld);
 		equipment2.setImageResource(R.drawable.colorworld);
@@ -65,22 +80,31 @@ public class EquipItem extends Fragment {
 		equipment5.setImageResource(R.drawable.colorworld);
 		
 		// setup stickers
-		sticker1 = (ImageView) view.findViewById(R.id.Sticker1);
+	/*	sticker1 = (ImageView) view.findViewById(R.id.Sticker1);
 		sticker2 = (ImageView) view.findViewById(R.id.Sticker2);
 		sticker3 = (ImageView) view.findViewById(R.id.Sticker3);
 		sticker4 = (ImageView) view.findViewById(R.id.Sticker4);
 		sticker5 = (ImageView) view.findViewById(R.id.Sticker5);
+		*/
+		stickerViews[0] = (ImageView) view.findViewById(R.id.Sticker1);
+		stickerViews[1] = (ImageView) view.findViewById(R.id.Sticker2);
+		stickerViews[2] = (ImageView) view.findViewById(R.id.Sticker3);
+		stickerViews[3] = (ImageView) view.findViewById(R.id.Sticker4);
+		stickerViews[4] = (ImageView) view.findViewById(R.id.Sticker5);
+				
 		
 		// sets default empty sticker
-		sticker1.setImageResource(R.drawable.colorworld);
+/*		sticker1.setImageResource(R.drawable.colorworld);
 		sticker2.setImageResource(R.drawable.colorworld);
 		sticker3.setImageResource(R.drawable.colorworld);
 		sticker4.setImageResource(R.drawable.colorworld);
-		sticker5.setImageResource(R.drawable.colorworld);
+		sticker5.setImageResource(R.drawable.colorworld);*/
 		
 		// initializes arrays
 		equipmentMapping = new ArrayList<Equipment>();
-		stickerMapping = new ArrayList<Sticker>();
+		//stickerMapping = new ArrayList<Sticker>();
+		
+		//equipStickerButton = (Button) view.findViewById(R.id.equipStickerButton);
 		
 		// adds in starting values to the array
 		for (int i = 0; i < 5; i++) {
@@ -105,7 +129,7 @@ public class EquipItem extends Fragment {
 		}
 		
 		// adds the stickers to their appropriate location
-		for (Sticker sticker : equippedSticker) {
+	/*	for (Sticker sticker : equippedSticker) {
 			Log.d("error with length", "" + sticker.position + " " + sticker.name);
 			
 			stickerMapping.set(sticker.position - 1, sticker);
@@ -120,6 +144,10 @@ public class EquipItem extends Fragment {
 			} else {
 				sticker5.setImageResource(R.drawable.ic_launcher);
 			}
+		}*/
+		
+		for (int i = 0; i < equippedSticker.size(); i++) {
+			stickerViews[i].setImageResource(R.drawable.ic_launcher);
 		}
 		
 		
@@ -163,8 +191,19 @@ public class EquipItem extends Fragment {
 				Hub.equipEquipment(5, equipmentMapping.get(4));
 			}
 		});
+/*		
+		equipStickerButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Hub.equipNewSticker();	
+			}
+		});
 		
-		sticker1.setOnClickListener(new OnClickListener() {
+		*/
+	
+	// no listeners for the pictures. You can see them, but you go somewhere else to select them
+		stickerViews[0].setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -173,7 +212,7 @@ public class EquipItem extends Fragment {
 			}
 		});
 		
-		sticker2.setOnClickListener(new OnClickListener() {
+		stickerViews[1].setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -181,7 +220,7 @@ public class EquipItem extends Fragment {
 			}
 		});
 		
-		sticker3.setOnClickListener(new OnClickListener() {
+		stickerViews[2].setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -189,7 +228,7 @@ public class EquipItem extends Fragment {
 			}
 		});
 		
-		sticker4.setOnClickListener(new OnClickListener() {
+		stickerViews[3].setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -197,7 +236,7 @@ public class EquipItem extends Fragment {
 			}
 		});
 		
-		sticker5.setOnClickListener(new OnClickListener() {
+		stickerViews[4].setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

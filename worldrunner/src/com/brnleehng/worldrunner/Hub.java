@@ -18,6 +18,7 @@ import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
+import Items.EquipStickers;
 import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
@@ -69,6 +70,8 @@ public class Hub extends Activity {
 	
 	public static Route currentRoute;
 	public static Dungeon currentDungeon;
+	
+	public static ArrayList<Sticker> tempEquippedSticker;
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -142,6 +145,10 @@ public class Hub extends Activity {
 		equipmentList = db.getEquipments();
 		stickerList = db.getStickers();
 		equippedEquipments = db.getEquippedEquipment();
+		
+		// @TODO the real one is the one being used below with mock data
+		// this is just for testing
+		tempEquippedSticker = db.getEquippedStickers();
 		
 		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
 		//equippedStickers = db.getEquippedStickers();
@@ -344,6 +351,12 @@ public class Hub extends Activity {
 		currentSticker = sticker;
 		FragmentTransaction ft = setFT();
 		EquipSticker equip = new EquipSticker();
+		ft.replace(R.id.hub, equip).commit();
+	}
+	
+	public static void equipNewSticker() {
+		FragmentTransaction ft = setFT();
+		EquipStickers equip = new EquipStickers();
 		ft.replace(R.id.hub, equip).commit();
 	}
 	

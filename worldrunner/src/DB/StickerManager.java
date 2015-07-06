@@ -212,11 +212,20 @@ public class StickerManager {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
 		String select = "SELECT * FROM " + TABLE_STICKER + " WHERE " + EQUIPPED + "=1";
 		Cursor cursor = db.rawQuery(select, null);
+		Sticker[] stickers = new Sticker[5];
 		if (cursor.moveToFirst()) {
 			do {
 				Sticker sticker = createSticker(cursor);
-				list.add(sticker);
+				stickers[sticker.position - 1] = sticker;
 			} while (cursor.moveToNext());
+		}
+		// orders the stickers
+		for (int i = 0; i < stickers.length; i++) {
+			if (stickers[i] == null) {
+				list.add(null);
+			} else {
+				list.add(stickers[i]);
+			}
 		}
 		return list;
 	}
