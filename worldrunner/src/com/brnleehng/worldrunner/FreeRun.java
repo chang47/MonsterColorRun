@@ -83,9 +83,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private ProgressBar partyHealth3;
     private ProgressBar partyHealth4;
     private ProgressBar partyHealth5;
-    private Button btnStop;
     private Button btnLog;
     private Button btnExitLog;
+    private Button stopMission;
     private LinearLayout enemyPartyLayout;
     
     // list of stickers that were found, temporarily changed to be a list
@@ -155,6 +155,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     
     //Sets amount of enemies
 	int amount;
+	
+	double captureRate;
     
   
     @Override
@@ -182,6 +184,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         partyList = Hub.partyList;
         partyBattleList = new ArrayList<BattleMonster>();
         monsterBattleList = new ArrayList<BattleMonster>();
+        //Sets it so it has a limit
         progBarList = new ArrayList<ProgressBar>();
         enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
         deadMonsters = 0;
@@ -194,7 +197,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         
         btnLog = (Button) view.findViewById(R.id.btnLog);
         btnExitLog = (Button) view.findViewById(R.id.exitButton);
-        btnStop = (Button) view.findViewById(R.id.stopMission);
+        stopMission = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
         steps = 0;
@@ -233,6 +236,19 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 						newFragment.show(getFragmentManager(), "Run Log");
 					}
 				});
+		
+
+		
+		stopMission.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				db.addStickers(found);
+				found.clear();
+				Hub.backToCity();
+			}
+		});
 		
 /*        btnStop.setOnClickListener(new OnClickListener() {
 			
@@ -303,6 +319,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     // The function to create a new random monster
     // use your list of monster to generate a new monster to fight
     private void generateMonster() {
+   	 	
     	deadEnemies = 0;
     	double chance = Math.random() * 1.0;
     	amount = (int) ((Math.random() * 3.0) + 1);
@@ -357,6 +374,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		progBar.setLayoutParams(relLayoutParamProg);
     		
     		
+    		
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
     		relLayout.addView(progBar);
@@ -367,8 +385,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		enemyPartyLayout.addView(relLayout);
     		
        	   	monster = new BattleMonster(monsterList.get(l), monsterList.get(l).hp, 1000 / monsterList.get(l).speed);
-       	 	monsterBattleList.add(monster);
-    		
+       	   	//Is the first few on the list of applicable encounters, because 
+       	 	//monsterBattleList.add(monster);
+       	 	monsterBattleList.add(l, monster);
+
+    		txt.setText(monster.monster.name);
 		}
     	
     	//While might work better here, but depends on how the effectiveness of that.
@@ -538,12 +559,19 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        		list.add(partyBattleList.get(i).monster.name + " Attacks " + monsterBattleList.get(partyAttack).monster.name + " For " + damage + "!");
 
 	        		if (monsterBattleList.get(partyAttack).currentHp <= 0) {
-		        		list.add(partyBattleList.get(i).monster.name + "has been defeated!");
+		        		list.add(monsterBattleList.get(partyAttack).monster.name + " has been defeated!");
+		        		
+    					Log.d("Defeated", ""+monsterBattleList.get(partyAttack).monster.name + "has been defeated");
+    					
 		        		deadEnemies++;
+		        		
+		        		captureRate = (double) ((Math.random() * 100) + 1);
 
-        				if ((double) ((Math.random() * 100) + 1) > monsterBattleList.get(partyAttack).monster.capture) {
+        				if (captureRate >= monsterBattleList.get(partyAttack).monster.capture) {
         					
         					list.add(monsterBattleList.get(partyAttack).monster.name + " has been captured!");
+        					
+        					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
         					
         					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,0,0,
         							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
@@ -552,7 +580,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         							monsterBattleList.get(partyAttack).monster.ability));
         				}
         				
-	        			if (deadEnemies == amount) {
+	        			if (deadEnemies >= amount) {
 		        			generateMonster();
 	        			}
 	        		}
@@ -601,12 +629,16 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	            		
 	            		//Checks if all enemies are dead
 		        		if (monsterBattleList.get(partyAttack).currentHp <= 0) {
-			        		list.add(partyBattleList.get(i).monster.name + "has been defeated!");
+			        		list.add(monsterBattleList.get(partyAttack).monster.name + " has been defeated!");
 			        		deadEnemies++;
 			        		
-	        				if ((double) ((Math.random() * 100) + 1) > monsterBattleList.get(partyAttack).monster.capture) {
+			        		captureRate = (double) ((Math.random() * 100) + 1);
+			        		
+	        				if (captureRate > monsterBattleList.get(partyAttack).monster.capture) {
 	        					
 	        					list.add(monsterBattleList.get(partyAttack).monster.name + " has been captured!");
+	        					
+	        					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
 	        					
 	        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,0,0,
 	        							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
@@ -615,7 +647,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        							monsterBattleList.get(partyAttack).monster.ability));
 	        				}
 	        				
-		        			if (deadEnemies == amount) {
+		        			if (deadEnemies >= amount) {
 			        			generateMonster();
 		        			}
 		        		}

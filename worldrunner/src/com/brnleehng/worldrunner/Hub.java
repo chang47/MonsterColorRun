@@ -300,7 +300,7 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, result).commit();
 	}
 	
-	public static void backToRace() {
+	public static void backToCity() {
 		FragmentTransaction ft = setFT();
 		Race race = new Race();
 		ft.replace(R.id.header, header);
@@ -376,6 +376,7 @@ public class Hub extends Activity {
 	
 	public static void addSticker(Sticker monsterSticker) {
 		stickerList.add(monsterSticker);
+		db.addSticker(monsterSticker);
 	}
 	
 	/**

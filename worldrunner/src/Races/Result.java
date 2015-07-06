@@ -23,7 +23,7 @@ public class Result extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				Hub.backToRace();
+				Hub.backToCity();
 				
 			}
 		});

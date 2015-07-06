@@ -63,8 +63,8 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
     private ProgressBar partyHealth3;
     private ProgressBar partyHealth4;
     private ProgressBar partyHealth5;
-    private Button btnStop;
     private Button btnLog;
+    private Button stopMission;
     private LinearLayout enemyPartyLayout;
     
     // list of stickers that were found, temporarily changed to be a list
@@ -172,7 +172,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         //Hub.partyList
         
         btnLog = (Button) view.findViewById(R.id.btnLog);
-        btnStop = (Button) view.findViewById(R.id.stopMission);
+        stopMission = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
         steps = 0;
@@ -209,6 +209,18 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
 						newFragment.show(getFragmentManager(), "Run Log");
 					}
 				});
+		
+		stopMission.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				db.addStickers(found);
+				found.clear();
+				Hub.backToCity();
+			}
+		});
+		
 /*        btnStop.setOnClickListener(new OnClickListener() {
 			
 			@Override

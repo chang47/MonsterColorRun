@@ -227,6 +227,11 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 					found.clear();
 					Hub.moveCity(Hub.currentRoute.to);
 				}
+				else {
+					db.addStickers(found);
+					found.clear();
+					Hub.backToCity();
+				}
 			}
 		});      
        
