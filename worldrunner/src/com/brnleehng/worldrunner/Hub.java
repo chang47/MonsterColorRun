@@ -42,7 +42,7 @@ public class Hub extends Activity {
 	//Access to the game's DB
 	private static DBManager db;	
 	// stores all of the players information
-	private static Player player;
+	public static Player player;
 	// contains all of the player's equipments
 	private static ArrayList<Equipment> equipmentList;
 	// contains all of the player's stickers
