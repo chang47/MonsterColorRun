@@ -57,7 +57,8 @@ public class EquipItem extends Fragment {
 		// Justin is using the original
 		equippedSticker = Hub.tempEquippedSticker;
 		//equippedSticker = Hub.equippedStickers;
-		
+		stickerViews = new ImageView[5];
+		equipmentViews = new ImageView[5];
 		
 		// setup equipments
 		equipment1 = (ImageView) view.findViewById(R.id.Equipment1);
@@ -109,7 +110,7 @@ public class EquipItem extends Fragment {
 		// adds in starting values to the array
 		for (int i = 0; i < 5; i++) {
 			equipmentMapping.add(null);
-			stickerMapping.add(null);
+			//stickerMapping.add(null);
 		}
 		
 		// adds the equipment to their appropriate location
@@ -145,9 +146,11 @@ public class EquipItem extends Fragment {
 				sticker5.setImageResource(R.drawable.ic_launcher);
 			}
 		}*/
-		
+		Log.d("size of equipped stickers", "" + equippedSticker.size());
 		for (int i = 0; i < equippedSticker.size(); i++) {
-			stickerViews[i].setImageResource(R.drawable.ic_launcher);
+			if (equippedSticker.get(i) != null) {
+				stickerViews[i].setImageResource(R.drawable.ic_launcher);
+			}
 		}
 		
 		
@@ -203,6 +206,25 @@ public class EquipItem extends Fragment {
 		*/
 	
 	// no listeners for the pictures. You can see them, but you go somewhere else to select them
+		for (int i = 0; i < stickerViews.length; i++) {
+			final int temp = i;
+			stickerViews[i].setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Hub.equipSticker(temp + 1, equippedSticker.get(temp));
+				}
+			});
+		}
+		
+		for (int i = 0; i < equippedSticker.size(); i++) {
+			if (equippedSticker.get(i) != null) {
+				Log.d("equipped sticker", "" + i + " " + equippedSticker.get(i).name);
+			} else {
+				Log.d("equipped sticker", i + " empty");
+			}
+		}
+		/**
 		stickerViews[0].setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -243,7 +265,7 @@ public class EquipItem extends Fragment {
 				Hub.equipSticker(5, stickerMapping.get(4));
 			}
 		});
-
+*/
 		return view;
 	}
 }

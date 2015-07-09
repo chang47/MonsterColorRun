@@ -73,6 +73,8 @@ public class Hub extends Activity {
 	
 	public static ArrayList<Sticker> tempEquippedSticker;
 	
+	public static Sticker viewSticker;
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -112,6 +114,7 @@ public class Hub extends Activity {
 		currentEquipment = null;
 		currentCategory = 0;
 		currentSticker = null;
+		viewSticker = null;
 		currentStickerPosition = 0;
 		if (equippedEquipments.size() != 0) {
 			Collections.sort(equippedEquipments);
@@ -412,6 +415,10 @@ public class Hub extends Activity {
 		
 		// Needs to be changed to 
 		cityHub();
+	}
+	
+	public static void viewSticker(Sticker sticker) {
+		viewSticker = sticker;
 	}
 	 
 	
