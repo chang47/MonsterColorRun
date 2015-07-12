@@ -6,6 +6,7 @@ import DB.DBManager;
 import DB.Model.Equipment;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
+import com.brnleehng.worldrunner.RunLogDialog;
+import com.brnleehng.worldrunner.ViewStickerDialog;
 
 /**
  * Fragment to equip stickers. Very similar to EquipEquipment
@@ -102,6 +105,12 @@ public class EquipSticker extends Fragment {
 					int position, long id) {
 				if (adapter.getItem(position) != null) {
 					Toast.makeText(getActivity(), adapter.getItem(position).name, Toast.LENGTH_LONG).show();
+			
+					Hub.viewSticker = adapter.getItem(position);
+					ViewStickerDialog newFragment = new ViewStickerDialog();
+					//newFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.ViewStickerDialog);
+					newFragment.setStyle(DialogFragment.STYLE_NO_TITLE,android.R.style.Theme_Holo_Light);
+					newFragment.show(getFragmentManager(), "View Sticker");
 				}
 				return true;
 			}
