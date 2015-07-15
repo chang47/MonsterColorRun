@@ -421,6 +421,107 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		party5 = new BattleMonster(partyList.get(4), partyList.get(4).hp, 1000 / partyList.get(4).speed);
     		partyBattleList.add(party5);
     	}
+    	
+    	
+
+		for (int l=0;l<2;l++) {
+			RelativeLayout relLayout = new RelativeLayout(getActivity());
+			
+    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+    		relLayout.setLayoutParams(linLayoutParam);
+			
+    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		
+    		// Assigned id for enemy ui
+    		TextView txt = new TextView(getActivity());
+    		txt.setId((l + 5));
+    		ImageView imgView = new ImageView(getActivity());
+    		imgView.setId((l + 5) * 10 );
+    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
+    		progBar.setId((l + 5) * 100);
+    		progBar.setProgress(100);
+    		
+    		imgView.setBackgroundResource(R.drawable.ic_launcher);
+    		
+    		txt.setText("text");
+    		txt.setTextColor(Color.BLUE);
+    		txt.setGravity(Gravity.CENTER);
+
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
+    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
+
+    		txt.setLayoutParams(relLayoutParamTxt);
+    		imgView.setLayoutParams(relLayoutParamImg);
+    		progBar.setLayoutParams(relLayoutParamProg);
+    		
+    		
+    		
+    		relLayout.addView(txt);
+    		relLayout.addView(imgView);
+    		relLayout.addView(progBar);
+    		
+    		progBarList.add(l, progBar);	
+    		Log.d("size", "size of list is" + progBarList.size());
+    		
+    		enemyPartyLayout.addView(relLayout);
+    		if (partyBattleList.get(l) == null) {
+    			txt.setText("");
+    		}
+    		else {
+    			txt.setText(partyBattleList.get(l).monster.name);
+    		}
+		}
+		for (int l=2;l<4;l++) {
+			RelativeLayout relLayout = new RelativeLayout(getActivity());
+			
+    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+    		relLayout.setLayoutParams(linLayoutParam);
+			
+    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		
+    		// Assigned id for enemy ui
+    		TextView txt = new TextView(getActivity());
+    		txt.setId((l + 7));
+    		ImageView imgView = new ImageView(getActivity());
+    		imgView.setId((l + 7) * 10 );
+    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
+    		progBar.setId((l + 7) * 100);
+    		progBar.setProgress(100);
+    		
+    		imgView.setBackgroundResource(R.drawable.ic_launcher);
+    		
+    		txt.setText("text");
+    		txt.setTextColor(Color.BLUE);
+    		txt.setGravity(Gravity.CENTER);
+
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
+    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
+
+    		txt.setLayoutParams(relLayoutParamTxt);
+    		imgView.setLayoutParams(relLayoutParamImg);
+    		progBar.setLayoutParams(relLayoutParamProg);
+    		
+    		
+    		
+    		relLayout.addView(txt);
+    		relLayout.addView(imgView);
+    		relLayout.addView(progBar);
+    		
+    		progBarList.add(l, progBar);	
+    		Log.d("size", "size of list is" + progBarList.size());
+    		
+    		enemyPartyLayout.addView(relLayout);
+    		if (partyBattleList.get(l) == null) {
+    			txt.setText("");
+    		}
+    		else {
+    			txt.setText(partyBattleList.get(l).monster.name);
+    		}
+		}
     }
     
     @Override
