@@ -18,6 +18,7 @@ import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
+import Items.EquipStickers;
 import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
@@ -41,7 +42,7 @@ public class Hub extends Activity {
 	//Access to the game's DB
 	private static DBManager db;	
 	// stores all of the players information
-	private static Player player;
+	public static Player player;
 	// contains all of the player's equipments
 	private static ArrayList<Equipment> equipmentList;
 	// contains all of the player's stickers
@@ -70,6 +71,10 @@ public class Hub extends Activity {
 	public static Route currentRoute;
 	public static Dungeon currentDungeon;
 	
+	public static ArrayList<Sticker> tempEquippedSticker;
+	
+	public static Sticker viewSticker;
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -87,19 +92,9 @@ public class Hub extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hub_activity);
 		
-		// Sets up all of the user's data  
 		db = new DBManager(getApplicationContext());
-		List<Player> playerList = db.getPlayer();
-		player = playerList.get(0);
-		equipmentList = db.getEquipments();
-		stickerList = db.getStickers();
-		equippedEquipments = db.getEquippedEquipment();
+		createChanges();
 		
-		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
-		//equippedStickers = db.getEquippedStickers();
-		equippedStickers = db.getFakeEquippedParty();
-		monsterList = db.getMonsters();
-		partyList = db.getParty();
 		
 		// creates the list of cities
 		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
@@ -115,10 +110,11 @@ public class Hub extends Activity {
 			city.dungeons = cityDungeonList.get(city.cityId);
 		}
 		currentCity = cities.get(0);
-		db.close();
+		// db.close(); // necessary to close the db?
 		currentEquipment = null;
 		currentCategory = 0;
 		currentSticker = null;
+		viewSticker = null;
 		currentStickerPosition = 0;
 		if (equippedEquipments.size() != 0) {
 			Collections.sort(equippedEquipments);
@@ -140,7 +136,32 @@ public class Hub extends Activity {
 			ft.commit();
 		}
 	}
+	
+	/**
+	 * Used to re-create/update the user database so that users
+	 * can see changes when they are made
+	 */
+	public static void createChanges() {
+		// Sets up all of the user's data  
+		List<Player> playerList = db.getPlayer();
+		player = playerList.get(0);
+		equipmentList = db.getEquipments();
+		stickerList = db.getStickers();
+		equippedEquipments = db.getEquippedEquipment();
+		
+		// @TODO the real one is the one being used below with mock data
+		// this is just for testing
+		tempEquippedSticker = db.getEquippedStickers();
+		
+		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
+		//equippedStickers = db.getEquippedStickers();
+		equippedStickers = db.getFakeEquippedParty();
+		monsterList = db.getMonsters();
+		partyList = db.getParty();
+	}
 
+	
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -336,6 +357,12 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, equip).commit();
 	}
 	
+	public static void equipNewSticker() {
+		FragmentTransaction ft = setFT();
+		EquipStickers equip = new EquipStickers();
+		ft.replace(R.id.hub, equip).commit();
+	}
+	
 	public static void cityHub() {
 		FragmentTransaction ft = setFT();
 		CityHub townHub = new CityHub();
@@ -389,6 +416,10 @@ public class Hub extends Activity {
 		
 		// Needs to be changed to 
 		cityHub();
+	}
+	
+	public static void viewSticker(Sticker sticker) {
+		viewSticker = sticker;
 	}
 	 
 	

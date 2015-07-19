@@ -191,7 +191,7 @@ public class DBManager extends SQLiteOpenHelper {
 	
 	public ArrayList<Sticker> getUnequipedStickers() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return StickerManager.getUnequppedStickers(db);
+		return StickerManager.getUnequppedStickersWithNull(db);
 	}
 	
 	

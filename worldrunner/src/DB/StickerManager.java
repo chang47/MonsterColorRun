@@ -212,23 +212,35 @@ public class StickerManager {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
 		String select = "SELECT * FROM " + TABLE_STICKER + " WHERE " + EQUIPPED + "=1";
 		Cursor cursor = db.rawQuery(select, null);
+		Sticker[] stickers = new Sticker[5];
 		if (cursor.moveToFirst()) {
 			do {
 				Sticker sticker = createSticker(cursor);
-				list.add(sticker);
+				stickers[sticker.position - 1] = sticker;
 			} while (cursor.moveToNext());
+		}
+		// orders the stickers
+		for (int i = 0; i < stickers.length; i++) {
+			if (stickers[i] == null) {
+				list.add(null);
+			} else {
+				list.add(stickers[i]);
+			}
 		}
 		return list;
 	}
 	
 	/**
-	 * Returns a list of equipments that are in a certain category.
+	 * Returns a list of equipments that aren't currently being equipped
 	 * @param db - connection to the DB
 	 * @param category - the specific type of equipment
-	 * @return list of equipment
+	 * @return list of stickers with null being the first value because
+	 * 			it will be used to create the remove interface for the sticker
+	 * 			adapter
 	 */
-	public static ArrayList<Sticker> getUnequppedStickers(SQLiteDatabase db) {
+	public static ArrayList<Sticker> getUnequppedStickersWithNull(SQLiteDatabase db) {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
+		list.add(null);
 		String select = "SELECT * FROM " + TABLE_STICKER + " WHERE " + EQUIPPED + "=0";
 		Cursor cursor = db.rawQuery(select, null);
 		if (cursor.moveToFirst()) {
@@ -239,6 +251,5 @@ public class StickerManager {
 		}
 		return list;
 	}
-	
 	
 }

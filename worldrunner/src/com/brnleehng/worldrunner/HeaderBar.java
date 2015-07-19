@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 // The header to display your stats.
@@ -36,6 +37,10 @@ public class HeaderBar extends Fragment {
 		TextView coins = (TextView) view.findViewById(R.id.headerCoin);
 		coins.setText("Coin: " + player.getCoin());
 		
+		ProgressBar exp = (ProgressBar) view.findViewById(R.id.expBar);
+		exp.setProgress(player.getExp());
+		
 		return view;
 	}
+	
 }

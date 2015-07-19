@@ -439,7 +439,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
     	steps++;
     	//currentProgress += powerStep;
     	distance = (steps * .91) / 1000;
-        tvDistance.setText("Distance: " + distance);
+    	tvDistance.setText("Distance: " + String.format("%.2f", distance));
         tvPace.setText("Steps: " + steps);
         tvCoin.setText("Coins: " + coins);
         
