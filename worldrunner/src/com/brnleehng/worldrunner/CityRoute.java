@@ -31,7 +31,8 @@ public class CityRoute extends Fragment{
 				
 				@Override
 				public void onClick(View v) {
-					Hub.startRouteRun(route);
+					if (Hub.partySize() > 0)
+						Hub.startRouteRun(route);
 				}
 			});
 			

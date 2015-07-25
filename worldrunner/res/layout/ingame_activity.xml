@@ -97,14 +97,14 @@
     </LinearLayout>
 
     
-    <ListView
+  <!--   <ListView
             android:id="@+id/item_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/audio"
             android:layout_below="@+id/monster">
 
-    </ListView>
+    </ListView> -->
     <LinearLayout
             android:id="@+id/audio"
             android:layout_alignParentBottom="true"
@@ -133,8 +133,17 @@
         </Button>
     </LinearLayout>
 
+    <LinearLayout 
+        android:id="@+id/playerParty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/audio"
+        android:orientation="horizontal">
+        
+    </LinearLayout>
+    
     <RelativeLayout
-        android:id="@+id/monster"
+        android:id="@+id/playerParty2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"

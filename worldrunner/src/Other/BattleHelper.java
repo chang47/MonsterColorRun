@@ -72,21 +72,21 @@ public class BattleHelper {
 	 * Decides which target from the list if being attacked
 	 * @param enemy Who is attacking
 	 * @param party The list of people who are attacking
-	 * @return The index the monster that is going to be attacked is at
+	 * @return The index the monster that is going to be attacked is at, -1 if all monsters are dead
 	 */
 	public static int AIAttack(BattleMonster enemy,ArrayList<BattleMonster> party)
 	{
 		//Sets the AI of what monsters attack
-		double largest = (double)(party.get(0).monster.hp/BattleHelper.Attack(enemy, party.get(0)));
-		double tempSize = 0;
-		int largestIndex = 0;
+		double largest = -1;
+		double tempSize = -1;
+		int largestIndex = -1;
 		
-		for (int a = 1; a < party.size(); a++) {
-			if (party.get(a).currentHp > 0	) {
+		for (int a = 0; a < party.size(); a++) {
+			if (party.get(a) != null && party.get(a).currentHp > 0	) {
 				
 				tempSize = (double)(party.get(a).monster.hp/BattleHelper.Attack(enemy, party.get(a)));
 				
-				if (largest > tempSize) {
+				if (largest < tempSize) {
 					largest = tempSize;
 					largestIndex = a;
 				}

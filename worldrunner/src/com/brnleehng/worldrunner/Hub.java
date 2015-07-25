@@ -156,8 +156,10 @@ public class Hub extends Activity {
 		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
 		//equippedStickers = db.getEquippedStickers();
 		equippedStickers = db.getFakeEquippedParty();
+		
+		
 		monsterList = db.getMonsters();
-		partyList = db.getParty();
+		//partyList = db.getParty();
 	}
 
 	
@@ -422,7 +424,15 @@ public class Hub extends Activity {
 		viewSticker = sticker;
 	}
 	 
-	
+	public static int partySize() {
+		int count = 0;
+		for (Sticker sticker : equippedStickers) {
+			if (sticker != null) {
+				count++;
+			}
+		}
+		return count;
+	}
 	
 	/**
 	 *  HELPER FUNCTIONS

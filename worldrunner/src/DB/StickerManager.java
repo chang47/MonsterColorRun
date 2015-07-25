@@ -20,8 +20,6 @@ public class StickerManager {
 	private static final String COLOR = "color";
 	private static final String CURRENT_LEVEL = "current_level";
 	private static final String CURRENT_EXP = "current_exp";
-	private static final String CURRENT_SPEED = "current_speed";
-	private static final String CURRENT_REACH = "current_reach";
 	private static final String SPAID = "spaid";
 	private static final String SAAID = "saaid";
 	private static final String EVOLVE = "evolve";
@@ -42,14 +40,13 @@ public class StickerManager {
 		String CREATE_STICKER_TABLE = "CREATE TABLE " + TABLE_STICKER + "("
                 + PSTID + " INTEGER PRIMARY KEY," + PID + " INTEGER,"
                 + SID + " INTEGER," + NAME + " TEXT," + COLOR + " INTEGER," +
-                CURRENT_LEVEL + " INTEGER," + CURRENT_EXP + " INTEGER," + CURRENT_SPEED + " INTEGER," +
-                CURRENT_REACH + " INTEGER," + SPAID + " INTEGER, " + SAAID +
+                CURRENT_LEVEL + " INTEGER," + CURRENT_EXP + " INTEGER," + SPAID + " INTEGER, " + SAAID +
                 " INTEGER," + EVOLVE + " INTEGER," + EQUIPPED + " INTEGER," + POSITION + " INTEGER," + 
                 HP + " INTEGER," + ATTACK + " INTEGER," + DEFENSE + " INTEGER, " + SPEED + " INTEGER," 
                 + CAPTURE + " REAL" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
-        createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
-        		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
+        /*createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
+        		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));*/
 	}
 	
 	/**
@@ -90,18 +87,16 @@ public class StickerManager {
 				sticker.color = cursor.getInt(4);
 				sticker.current_level = cursor.getInt(5);
 				sticker.current_exp = cursor.getInt(6);
-				sticker.current_speed = cursor.getInt(7);
-				sticker.current_reach = cursor.getInt(8);
-				sticker.spaid = cursor.getInt(9);
-				sticker.saaid = cursor.getInt(10);
-				sticker.evolve = cursor.getInt(11);
-				sticker.equipped = cursor.getInt(12);
-				sticker.position = cursor.getInt(13);
-				sticker.hp = cursor.getInt(14);
-				sticker.attack = cursor.getInt(15);
-				sticker.defense = cursor.getInt(16);
-				sticker.speed = cursor.getInt(17);
-				sticker.capture = cursor.getDouble(18);
+				sticker.spaid = cursor.getInt(7);
+				sticker.saaid = cursor.getInt(8);
+				sticker.evolve = cursor.getInt(9);
+				sticker.equipped = cursor.getInt(10);
+				sticker.position = cursor.getInt(11);
+				sticker.hp = cursor.getInt(12);
+				sticker.attack = cursor.getInt(13);
+				sticker.defense = cursor.getInt(14);
+				sticker.speed = cursor.getInt(15);
+				sticker.capture = cursor.getDouble(16);
 				list.add(sticker);
 			} while (cursor.moveToNext());
 		}
@@ -117,18 +112,16 @@ public class StickerManager {
 		sticker.color = cursor.getInt(4);
 		sticker.current_level = cursor.getInt(5);
 		sticker.current_exp = cursor.getInt(6);
-		sticker.current_speed = cursor.getInt(7);
-		sticker.current_reach = cursor.getInt(8);
-		sticker.spaid = cursor.getInt(9);
-		sticker.saaid = cursor.getInt(10);
-		sticker.evolve = cursor.getInt(11);
-		sticker.equipped = cursor.getInt(12);
-		sticker.position = cursor.getInt(13);
-		sticker.hp = cursor.getInt(14);
-		sticker.attack = cursor.getInt(15);
-		sticker.defense = cursor.getInt(16);
-		sticker.speed = cursor.getInt(17);
-		sticker.capture = cursor.getDouble(18);
+		sticker.spaid = cursor.getInt(7);
+		sticker.saaid = cursor.getInt(8);
+		sticker.evolve = cursor.getInt(9);
+		sticker.equipped = cursor.getInt(10);
+		sticker.position = cursor.getInt(11);
+		sticker.hp = cursor.getInt(12);
+		sticker.attack = cursor.getInt(13);
+		sticker.defense = cursor.getInt(14);
+		sticker.speed = cursor.getInt(15);
+		sticker.capture = cursor.getDouble(16);
 		return sticker;
 	}
 	
@@ -188,8 +181,6 @@ public class StickerManager {
 		values.put(COLOR, sticker.color);
 		values.put(CURRENT_LEVEL, sticker.current_level);
 		values.put(CURRENT_EXP, sticker.current_exp);
-		values.put(CURRENT_SPEED, sticker.current_speed);
-		values.put(CURRENT_REACH, sticker.current_reach);
 		values.put(SPAID, sticker.spaid);
 		values.put(SAAID, sticker.saaid);
 		values.put(EVOLVE, sticker.evolve);

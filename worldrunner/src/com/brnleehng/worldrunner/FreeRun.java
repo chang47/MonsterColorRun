@@ -674,7 +674,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         					
         					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
         					
-        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,0,0,
+        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,
         							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
         							monsterBattleList.get(partyAttack).monster.defense,monsterBattleList.get(partyAttack).monster.speed,
         							monsterBattleList.get(partyAttack).monster.capture,monsterBattleList.get(partyAttack).monster.element,
@@ -741,7 +741,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        					
 	        					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
 	        					
-	        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,0,0,
+	        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,
 	        							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
 	        							monsterBattleList.get(partyAttack).monster.defense,monsterBattleList.get(partyAttack).monster.speed,
 	        							monsterBattleList.get(partyAttack).monster.capture,monsterBattleList.get(partyAttack).monster.element,

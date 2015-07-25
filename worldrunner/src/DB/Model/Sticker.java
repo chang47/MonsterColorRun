@@ -12,8 +12,6 @@ public class Sticker {
 	public int color;
 	public int current_level;
 	public int current_exp;
-	public int current_speed;
-	public int current_reach;
 	public int spaid;
 	public int saaid;
 	public int evolve;
@@ -28,8 +26,7 @@ public class Sticker {
 	public Ability ability;
 	
 	public Sticker(int pstid, int pid, int sid, String name, int color,
-			int current_level, int current_exp, int current_speed,
-			int current_reach, int spaid, int saaid, int evolve, int equipped, int position,
+			int current_level, int current_exp, int spaid, int saaid, int evolve, int equipped, int position,
 			int hp, int attack, int defense, int speed, double capture, int element, Ability ability) {
 		super();
 		this.pstid = pstid;
@@ -39,8 +36,6 @@ public class Sticker {
 		this.color = color;
 		this.current_level = current_level;
 		this.current_exp = current_exp;
-		this.current_speed = current_speed;
-		this.current_reach = current_reach;
 		this.spaid = spaid;
 		this.saaid = saaid;
 		this.evolve = evolve;
@@ -56,5 +51,9 @@ public class Sticker {
 	}
 	
 	public Sticker() { }
+	
+	public Monster convertToMonster() {
+		return new Monster(pstid, name, hp, attack, defense, speed, capture, color, ability);
+	}
 	
 }

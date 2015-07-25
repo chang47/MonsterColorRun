@@ -76,8 +76,8 @@ public class StickerAdapter extends ArrayAdapter<Sticker> {
 			holder.txtTitle.setText(list.get(position).name);
 			holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
 			holder.lvl.setText("lvl: " + list.get(position).current_level);
-			holder.spd.setText("spd: " + list.get(position).current_speed);
-			holder.rch.setText("rch: " + list.get(position).current_reach);
+			holder.spd.setText("spd: " + list.get(position).attack);
+			holder.rch.setText("rch: " + list.get(position).speed);
 			if (mSelectedItemsIds.get(position)) {
 				view.setBackgroundColor(Color.BLUE);
 			} else {
