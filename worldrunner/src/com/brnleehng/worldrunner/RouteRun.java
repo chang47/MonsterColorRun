@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
@@ -13,7 +14,6 @@ import DB.Model.Monster;
 import DB.Model.Route;
 import DB.Model.Sticker;
 import Model.BattleMonster;
-import Other.BattleHelper;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;

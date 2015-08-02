@@ -1,4 +1,4 @@
-package Other;
+package util;
 
 import com.brnleehng.worldrunner.R;
 

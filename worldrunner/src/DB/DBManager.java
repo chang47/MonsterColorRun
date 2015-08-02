@@ -176,20 +176,20 @@ public class DBManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ArrayList<Monster> monsters = new ArrayList<Monster>();
 		for (Sticker sticker : StickerManager.getSticker(db)) {
-			monsters.add(Other.Parser.stickerToMonster(sticker));
+			monsters.add(util.Parser.stickerToMonster(sticker));
 		}
 		return monsters;
 	}
 	
 	public int updateSticker(Monster monster) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return StickerManager.updateSticker(db, Other.Parser.MonsterToSticker(monster));
+		return StickerManager.updateSticker(db, util.Parser.MonsterToSticker(monster));
 	}
 	
 	public void addSticker(Monster monster) {
 		// TODO you need to reload the player sticker so they have the accurate information
 		SQLiteDatabase db = this.getWritableDatabase();
-		StickerManager.addSticker(db, Other.Parser.CapturedMonsterToSticker(monster));
+		StickerManager.addSticker(db, util.Parser.CapturedMonsterToSticker(monster));
 		db.close();
 	}
 	
@@ -205,7 +205,7 @@ public class DBManager extends SQLiteOpenHelper {
 		List<Sticker> stickers = new ArrayList<Sticker>();
 		// TODO you need to reload the player sticker so they have the accurate information
 		for (Monster monster : monsters) 
-			stickers.add(Other.Parser.CapturedMonsterToSticker(monster));
+			stickers.add(util.Parser.CapturedMonsterToSticker(monster));
 		StickerManager.addStickers(db, stickers);
 		db.close();
 	}
@@ -215,7 +215,7 @@ public class DBManager extends SQLiteOpenHelper {
 		ArrayList<Monster> monsters = new ArrayList<Monster>();
 		for (Sticker sticker : StickerManager.getEquippedStickers(db)) {
 			if (sticker != null)
-				monsters.add(Other.Parser.stickerToMonster(sticker));
+				monsters.add(util.Parser.stickerToMonster(sticker));
 			else 
 				monsters.add(null);
 		}
