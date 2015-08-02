@@ -6,6 +6,7 @@ import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 
 import DB.Model.Equipment;
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -25,8 +26,8 @@ public class EquipItem extends Fragment {
 	private ArrayList<Equipment> equippedEquipment;
 	private ArrayList<Equipment> equipmentMapping;
 	
-	private ArrayList<Sticker> equippedSticker;
-	private ArrayList<Sticker> stickerMapping;
+	private ArrayList<Monster> equippedMonsters;
+	private ArrayList<Monster> stickerMapping;
 	
 	private ImageView equipment1;
 	private ImageView equipment2;
@@ -55,7 +56,7 @@ public class EquipItem extends Fragment {
 		
 		// TODO Needs to be changed to equipped sticker, this is a temp because
 		// Justin is using the original
-		equippedSticker = Hub.tempEquippedSticker;
+		equippedMonsters = Hub.equippedStickers;
 		//equippedSticker = Hub.equippedStickers;
 		stickerViews = new ImageView[5];
 		equipmentViews = new ImageView[5];
@@ -67,12 +68,6 @@ public class EquipItem extends Fragment {
 		equipment4 = (ImageView) view.findViewById(R.id.Equipment4);
 		equipment5 = (ImageView) view.findViewById(R.id.Equipment5);
 		
-/*		equipmentViews[0] = (ImageView) view.findViewById(R.id.Equipment1);
-		equipmentViews[1] = (ImageView) view.findViewById(R.id.Equipment2);
-		equipmentViews[2] = (ImageView) view.findViewById(R.id.Equipment3);
-		equipmentViews[3] = (ImageView) view.findViewById(R.id.Equipment4);
-		equipmentViews[4] = (ImageView) view.findViewById(R.id.Equipment5);
-		*/
 		// Sets default empty
 		equipment1.setImageResource(R.drawable.colorworld);
 		equipment2.setImageResource(R.drawable.colorworld);
@@ -80,27 +75,12 @@ public class EquipItem extends Fragment {
 		equipment4.setImageResource(R.drawable.colorworld);
 		equipment5.setImageResource(R.drawable.colorworld);
 		
-		// setup stickers
-	/*	sticker1 = (ImageView) view.findViewById(R.id.Sticker1);
-		sticker2 = (ImageView) view.findViewById(R.id.Sticker2);
-		sticker3 = (ImageView) view.findViewById(R.id.Sticker3);
-		sticker4 = (ImageView) view.findViewById(R.id.Sticker4);
-		sticker5 = (ImageView) view.findViewById(R.id.Sticker5);
-		*/
 		stickerViews[0] = (ImageView) view.findViewById(R.id.Sticker1);
 		stickerViews[1] = (ImageView) view.findViewById(R.id.Sticker2);
 		stickerViews[2] = (ImageView) view.findViewById(R.id.Sticker3);
 		stickerViews[3] = (ImageView) view.findViewById(R.id.Sticker4);
 		stickerViews[4] = (ImageView) view.findViewById(R.id.Sticker5);
 				
-		
-		// sets default empty sticker
-/*		sticker1.setImageResource(R.drawable.colorworld);
-		sticker2.setImageResource(R.drawable.colorworld);
-		sticker3.setImageResource(R.drawable.colorworld);
-		sticker4.setImageResource(R.drawable.colorworld);
-		sticker5.setImageResource(R.drawable.colorworld);*/
-		
 		// initializes arrays
 		equipmentMapping = new ArrayList<Equipment>();
 		//stickerMapping = new ArrayList<Sticker>();
@@ -129,26 +109,9 @@ public class EquipItem extends Fragment {
 			}
 		}
 		
-		// adds the stickers to their appropriate location
-	/*	for (Sticker sticker : equippedSticker) {
-			Log.d("error with length", "" + sticker.position + " " + sticker.name);
-			
-			stickerMapping.set(sticker.position - 1, sticker);
-			if (sticker.position == 1) {
-				sticker1.setImageResource(R.drawable.ic_launcher);
-			} else if (sticker.position == 2) {
-				sticker2.setImageResource(R.drawable.ic_launcher);
-			} else if (sticker.position == 3) {
-				sticker3.setImageResource(R.drawable.ic_launcher);
-			} else if (sticker.position == 4) {
-				sticker4.setImageResource(R.drawable.ic_launcher);
-			} else {
-				sticker5.setImageResource(R.drawable.ic_launcher);
-			}
-		}*/
-		Log.d("size of equipped stickers", "" + equippedSticker.size());
-		for (int i = 0; i < equippedSticker.size(); i++) {
-			if (equippedSticker.get(i) != null) {
+		// Adds in sticker image
+		for (int i = 0; i < equippedMonsters.size(); i++) {
+			if (equippedMonsters.get(i) != null) {
 				stickerViews[i].setImageResource(R.drawable.ic_launcher);
 			}
 		}
@@ -212,14 +175,16 @@ public class EquipItem extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					Hub.equipSticker(temp + 1, equippedSticker.get(temp));
+					// goes to EquipSticker
+					Hub.equipSticker(temp + 1, equippedMonsters.get(temp));
 				}
 			});
 		}
 		
-		for (int i = 0; i < equippedSticker.size(); i++) {
-			if (equippedSticker.get(i) != null) {
-				Log.d("equipped sticker", "" + i + " " + equippedSticker.get(i).name);
+		// loop through all stickers
+		for (int i = 0; i < equippedMonsters.size(); i++) {
+			if (equippedMonsters.get(i) != null) {
+				Log.d("equipped sticker", "" + i + " " + equippedMonsters.get(i).name);
 			} else {
 				Log.d("equipped sticker", i + " empty");
 			}

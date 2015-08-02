@@ -1,7 +1,9 @@
 package Items;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.Fragment;
@@ -21,7 +23,7 @@ import com.brnleehng.worldrunner.R;
 // Not used?
 public class ViewSticker extends Fragment {
 	GridView gridview;
-	ArrayList<Sticker> list;
+	List<Monster> list;
 
 	
 	@Override
@@ -29,7 +31,7 @@ public class ViewSticker extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.viewitems_activity, container, false);
-		list = Hub.getStickers();
+		list = Hub.stickerList;
 		StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, list);
 		
 		gridview = (GridView) view.findViewById(R.id.viewGridView);
@@ -38,8 +40,8 @@ public class ViewSticker extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Sticker SelectedItem = list.get(position);
-				Toast.makeText(getActivity().  getApplicationContext(), SelectedItem.name, Toast.LENGTH_SHORT).show();
+				Monster SelectedItem = list.get(position);
+				Toast.makeText(getActivity(). getApplicationContext(), SelectedItem.name, Toast.LENGTH_SHORT).show();
 			}
 		});
 		return view;

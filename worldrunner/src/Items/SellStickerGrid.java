@@ -1,8 +1,10 @@
 package Items;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import DB.DBManager;
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.Fragment;
@@ -24,9 +26,9 @@ import com.brnleehng.worldrunner.R;
 public class SellStickerGrid extends Fragment {
 	GridView gridview;
 
-	ArrayList<Sticker> list;
+	List<Monster> list;
 	private StickerAdapter adapter;
-	private ArrayList<Sticker> sellList;
+	private ArrayList<Monster> sellList;
 	DBManager db;
 	
 	@Override
@@ -34,10 +36,10 @@ public class SellStickerGrid extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.sellequipmentgrid_activity, container, false);
-		list = Hub.getStickers();
+		list = Hub.stickerList;
 		db = new DBManager(getActivity());
 		
-		sellList = new ArrayList<Sticker>();
+		sellList = new ArrayList<Monster>();
 		adapter = new StickerAdapter(getActivity(), R.layout.mylist, list);
 		
 		gridview = (GridView) view.findViewById(R.id.gridview);
@@ -49,14 +51,14 @@ public class SellStickerGrid extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				boolean checked = adapter.toggleSelection(position);
-				Sticker sticker = adapter.getItem(position);
-				sellList.add(sticker);
+				Monster monster = adapter.getItem(position);
+				sellList.add(monster);
 				if (checked) {
 					//view.setBackgroundColor(Color.TRANSPARENT);
-					sellList.remove(sticker);
+					sellList.remove(monster);
 				} else {
 					//view.setBackgroundColor(Color.BLUE);
-					sellList.add(sticker);
+					sellList.add(monster);
 				}
 			}
 		});
@@ -71,10 +73,12 @@ public class SellStickerGrid extends Fragment {
 				SparseBooleanArray selected = adapter.getSelectedIds();
 				for (int i = (selected.size() - 1); i >= 0; i--) {
 					if (selected.valueAt(i)) {
-						Sticker selecteditem = adapter.getItem(selected.keyAt(i));
+						Monster selecteditem = adapter.getItem(selected.keyAt(i));
 						// Remove selected items following the ids
 						adapter.remove(selecteditem);
 						db.deleteSticker(selecteditem);
+						// reloads the user party and all items
+						Hub.createChanges();
 					}
 				}
 				adapter.removeSelection();

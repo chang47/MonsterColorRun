@@ -9,7 +9,7 @@ public class Sticker {
 	public int pid;
 	public int sid;
 	public String name;
-	public int color;
+	public int element;
 	public int current_level;
 	public int current_exp;
 	public int spaid;
@@ -22,18 +22,16 @@ public class Sticker {
 	public int defense;
 	public int speed;
 	public double capture;
-	public int element;
 	public Ability ability;
 	
-	public Sticker(int pstid, int pid, int sid, String name, int color,
+	public Sticker(int pstid, int pid, int sid, String name, int element,
 			int current_level, int current_exp, int spaid, int saaid, int evolve, int equipped, int position,
-			int hp, int attack, int defense, int speed, double capture, int element, Ability ability) {
+			int hp, int attack, int defense, int speed, double capture) {
 		super();
 		this.pstid = pstid;
 		this.pid = pid;
-		this.sid = sid;
 		this.name = name;
-		this.color = color;
+		this.element = element;
 		this.current_level = current_level;
 		this.current_exp = current_exp;
 		this.spaid = spaid;
@@ -52,8 +50,8 @@ public class Sticker {
 	
 	public Sticker() { }
 	
-	public Monster convertToMonster() {
+/*	public Monster convertToMonster() {
 		return new Monster(pstid, name, hp, attack, defense, speed, capture, color, ability);
-	}
+	}*/
 	
 }

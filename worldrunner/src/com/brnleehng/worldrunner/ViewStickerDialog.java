@@ -2,6 +2,7 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -30,7 +31,7 @@ public class ViewStickerDialog extends DialogFragment {
 	public ProgressBar expBar;
 	public TextView exp;
 	public TextView level;
-	public Sticker sticker;
+	public Monster monster;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,14 +47,14 @@ public class ViewStickerDialog extends DialogFragment {
         exp = (TextView) view.findViewById(R.id.stickerExp);
         level = (TextView) view.findViewById(R.id.stickerLevel);
         
-        sticker = Hub.viewSticker;
+        monster = Hub.viewSticker;
         
-        attack.setText("Atk: " + sticker.attack);
-        defense.setText("Def: " + sticker.defense);
-        speed.setText("Spd: " + sticker.speed);
-        hp.setText("HP: " + sticker.hp);
-        exp.setText("EXP to go: " + sticker.current_exp);
-        level.setText("Level: " + sticker.current_level);
+        attack.setText("Atk: " + monster.attack);
+        defense.setText("Def: " + monster.defense);
+        speed.setText("Spd: " + monster.speed);
+        hp.setText("HP: " + monster.hp);
+        exp.setText("EXP to go: " + monster.exp);
+        level.setText("Level: " + monster.level);
         
         expBar.setProgress(10);
         

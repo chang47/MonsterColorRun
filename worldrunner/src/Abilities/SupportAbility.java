@@ -6,8 +6,8 @@ public class SupportAbility extends Ability {
 	public int attribute;
 	public int duration;
 
-	public SupportAbility(String name, String description, int level, int steps, double modifer, int attribute,int duration) {
-		super(name, description, level, steps);
+	public SupportAbility(String name, String description, int level, int steps, double modifer, int attribute,int duration, int abilityId) {
+		super(name, description, level, steps, abilityId);
 		// TODO Auto-generated constructor stub
 		this.modifier = modifer;
 		this.attribute = attribute;

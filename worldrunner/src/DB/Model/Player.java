@@ -2,18 +2,18 @@ package DB.Model;
 
 // Model representing the players
 public class Player {
-	private int pid;
-	private String username;
-	private String fname;
-	private String lname;
-	private int level;
-	private int exp;
-	private int coin;
-	private int gem;
-	private int currentEquipment;
-	private int maxEquipment;
-	private int currentSticker;
-	private int maxSticker;
+	public int pid;
+	public String username;
+	public String fname;
+	public String lname;
+	public int level;
+	public int exp;
+	public int coin;
+	public int gem;
+	public int currentEquipment;
+	public int maxEquipment;
+	public int currentSticker;
+	public int maxSticker;
 	
 	public Player() { }
 	

@@ -1,70 +1,60 @@
 package com.brnleehng.worldrunner;
 
-import Abilities.Ability;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import Abilities.Buff;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.Monster;
+import DB.Model.Route;
 import DB.Model.Sticker;
 import Model.BattleMonster;
 import Other.BattleHelper;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.renderscript.Sampler.Value;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.Inflater;
-
 /**
- * Created by Brian on 3/20/2015.
+ * 
+ * Super class that everything will extend from this.
+ * 
+ * @author JoshDesktop
+ *
  */
-public class FreeRun extends Fragment implements SensorEventListener, StepListener{
+public class FreeRun extends Fragment implements SensorEventListener, StepListener {
 	// setup the step detectors
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -75,22 +65,14 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private TextView tvTime;
     private TextView tvPace;
     private TextView tvCoin;
-    private ListView listView;
-    private TextView monsterName;
-    private ProgressBar monsterHealth;
-    private ProgressBar partyHealth1;
-    private ProgressBar partyHealth2;
-    private ProgressBar partyHealth3;
-    private ProgressBar partyHealth4;
-    private ProgressBar partyHealth5;
-    private Button btnLog;
-    private Button btnExitLog;
     private Button stopMission;
+    private Button btnLog;
     private LinearLayout enemyPartyLayout;
+    private LinearLayout playerPartyLayout;
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
-    private ArrayList<Sticker> found;
+    private ArrayList<Monster> found;
     //private ArrayList<Monster> found;
     
    
@@ -101,8 +83,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     private int steps;
     private double distance;
     private int coins;
-    private double powerStep;
-    private int enemyAttack;
+    private int iPartyAttacked;
     
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
@@ -117,13 +98,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
    
     // Ignore until sticker fixed
     //private Sticker monster;
-    
-    // the current monster
-    private BattleMonster monster = null;
 
-    
-    //The Party
-    private BattleMonster party1,party2,party3,party4,party5 = null;
     
     //For logging purposes
 	private ArrayList<String> list = new ArrayList<String>();
@@ -138,32 +113,41 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     //Sets the list of monsters for various purposes
     public ArrayList<Monster> monsterList;
     public ArrayList<Monster> partyList;
-    public ArrayList<BattleMonster> partyBattleList;
-    public ArrayList<BattleMonster> monsterBattleList;
-    public ArrayList<ProgressBar> progBarList;
+    public ArrayList<BattleMonster> partyMonsterBattleList;
+    public ArrayList<BattleMonster> enemyMonsterBattleList;
+    public ArrayList<ProgressBar> enemyProgressBarList;
+    public ProgressBar[] playerProgressBarList;
     
     //Shows the player's log
     public Dialog showLog;
     
-    public int partyMonsters;
+    public int partyMonstersSize;
     
     //Sets amount of monsters defeated based on sides
-    public int deadMonsters;
+    public int deadPartyMonsters;
     //Player
     public int deadEnemies;
     //Enemy
     
     //Sets amount of enemies
-	int amount;
+	int enemyPartySize;
 	
-	double captureRate;
+	//Sets how many monsters are needed to be beaten
+	public int monsterPartiesNeeded = 1;
+	
+	//Sets if the finish button can be used
+	public boolean finishEnabled = false;
+	
+	public boolean caughtAlready = false;
     
   
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		View view = inflater.inflate(R.layout.ingame_activity, container, false);
+		
+		//TODO seperated routes!!!!
+		View view = inflater.inflate(R.layout.routeingame_activity, container, false);
 		
         // setup intitial objects
         startTime = SystemClock.elapsedRealtime();
@@ -171,32 +155,25 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         tvPace = (TextView) view.findViewById(R.id.tvPage);
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvCoin = (TextView) view.findViewById(R.id.tvCoin);
-        listView = (ListView) view.findViewById(R.id.item_list);
-        //monsterName = (TextView) view.findViewById(R.id.monsterName);
-        //monsterHealth = (ProgressBar) view.findViewById(R.id.enemyProgress);
-        partyHealth1 = (ProgressBar) view.findViewById(R.id.monsterProgress1);
-        partyHealth2 = (ProgressBar) view.findViewById(R.id.monsterProgress2);
-        partyHealth3 = (ProgressBar) view.findViewById(R.id.monsterProgress3);
-        partyHealth4 = (ProgressBar) view.findViewById(R.id.monsterProgress4);
-        partyHealth5 = (ProgressBar) view.findViewById(R.id.monsterProgress5);
-        
+
         monsterList = Hub.monsterList;
-        partyList = Hub.partyList;
-        partyBattleList = new ArrayList<BattleMonster>();
-        monsterBattleList = new ArrayList<BattleMonster>();
-        //Sets it so it has a limit
-        progBarList = new ArrayList<ProgressBar>();
+        partyList = Hub.equippedStickers;
+        partyMonsterBattleList = new ArrayList<BattleMonster>();
+        enemyMonsterBattleList = new ArrayList<BattleMonster>();
+        enemyProgressBarList = new ArrayList<ProgressBar>();
+        playerProgressBarList = new ProgressBar[5];
         enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
-        deadMonsters = 0;
+        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
+        deadPartyMonsters = 0;
         deadEnemies = 0;
-        amount = 0;
+        enemyPartySize = 0;
+        partyMonstersSize = 0;
         //monsterHealth.getProgressDrawable().setColorFilter(Color.RED,);
         //Need to set the mode in order to change the color.
         Log.d("size of party list", "" + partyList.size());
         //Hub.partyList
         
         btnLog = (Button) view.findViewById(R.id.btnLog);
-        btnExitLog = (Button) view.findViewById(R.id.exitButton);
         stopMission = (Button) view.findViewById(R.id.stopMission);
         
         // initialize fields
@@ -204,17 +181,15 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
         distance = 0;
         coins = 0;
         db = new DBManager(getActivity().getApplicationContext());
-        found = new ArrayList<Sticker>();
+        found = new ArrayList<Monster>();
         //found = new ArrayList<Monster>();
         
-        // ignore, will be added once you can add friends 
-        powerStep = 5 * FRIEND1 * FRIEND2 * FRIEND3 * FRIEND4 * FRIEND5;
-
         // Initializes first monster encounter
-        generateMonster();
+        generateEnemies();
         generateParty();
         
-        partyMonsters = partyBattleList.size();
+        
+        //partyMonstersSize = partyBattleList.size();
         
         // Once you're done with your run you can save all of the
         // new monsters that you've caught. Ignore for now
@@ -223,13 +198,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 					@Override
 					public void onClick(View v) {
 						
-						
 						Bundle bundle = new Bundle();
 						bundle.putStringArrayList("Log", list);
 						
 						
 						RunLogDialog newFragment = new RunLogDialog();
-						
 						
 						newFragment.setArguments(bundle);
 						
@@ -237,29 +210,23 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 					}
 				});
 		
-
-		
-		stopMission.setOnClickListener(new View.OnClickListener() {
+		// TODO for super class, pass in a function that can be overwrited 
+        stopMission.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				// TODO add sticker and then once we move out, we would re-load the 
+				// the sticker list
 				db.addStickers(found);
-				found.clear();
-				Hub.backToCity();
+				if (finishEnabled) {
+					found.clear();
+					Hub.moveCity(Hub.currentRoute.to);
+				} else {
+					found.clear();
+					Hub.backToCity();
+				}
 			}
-		});
-		
-/*        btnStop.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				db.addStickers(found);
-				found.clear();
-				Hub.result();
-			}
-		});
-  */      
+		});      
        
         
         
@@ -284,26 +251,18 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
                 // user passes in the dungeon type that would all inherit the
                 // methods with just varied difficulties
                 
-                for (int b = 0;b<progBarList.size();b++) {
-                	
-                	progBarList.get(b).setProgress((int) (monsterBattleList.get(b).currentHp / monsterBattleList.get(b).monster.hp * 100));
-                	Log.d("size time", "size of list: " + progBarList.size());
+                // sets the enemy's hp
+                // @TODO change it so that the hp gets updated when they get hit and not by the second?
+                for (int b = 0; b < enemyProgressBarList.size(); b++) {
+                	Log.d("EnemProgBar", "" + enemyMonsterBattleList.get(b).currentHp);
+                	enemyProgressBarList.get(b).setProgress((int) (enemyMonsterBattleList.get(b).currentHp / enemyMonsterBattleList.get(b).monster.hp * 100));
                 }
-                partyHealth1.setProgress((int) (party1.currentHp / party1.monster.hp * 100));
-                partyHealth2.setProgress((int) (party2.currentHp / party2.monster.hp * 100));
-                partyHealth3.setProgress((int) (party3.currentHp / party3.monster.hp * 100));
-                partyHealth4.setProgress((int) (party4.currentHp / party4.monster.hp * 100));
-                partyHealth5.setProgress((int) (party5.currentHp / party5.monster.hp * 100));
-                // FreeRun.checkRun(); this class is the different variation?
-                if (monster.currentHp <= 0) {
-                	// TODO change to not only check when the monster is dead but you
-                	// also need to check the probability of catching it before you add it
-                	// into the list of found monsters
-                	//list.add("got " + monster.name + "!");
-                	// TODO convert a monster to a sticker
-                	//found.add(monster);
-                	generateMonster();
+                
+                for (int iPlayer = 0; iPlayer < partyMonsterBattleList.size(); iPlayer++) {
+                	if (partyMonsterBattleList.get(iPlayer) != null)
+                		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).monster.hp * 100));
                 }
+                
             }
         });
         stopWatch.start();
@@ -318,30 +277,17 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     
     // The function to create a new random monster
     // use your list of monster to generate a new monster to fight
-    private void generateMonster() {
-   	 	
+    private void generateEnemies() {
+    	caughtAlready = false;
     	deadEnemies = 0;
-    	double chance = Math.random() * 1.0;
-    	amount = (int) ((Math.random() * 3.0) + 1);
-    	
+    	enemyPartySize = (int) ((Math.random() * 3.0) + 1);
+    	list.add("new enemy party with " + enemyPartySize + " monsters");
 		enemyPartyLayout.removeAllViews();
-    	/** Replace to randomly generate from your list of monsters in a good style
-    	 * HINT you'll probably need to use the size of the list of monsters somehow to
-    	 * select a random index of yourlist
-    	if (chance < 0.33) {
-    		monster = new Sticker(0, 1, 7, "Sample Rock1", 1, 1, 0, 200, 100, 1, 1, 0, 0, 0, 2000, 100, 100, 100, 5);
-    	} else if (chance < 0.66) {
-    		monster = new Sticker(0, 1, 7, "Sample Rock2", 1, 1, 0, 125, 140, 1, 1, 0, 0, 0, 2000, 100, 100, 100, 5);
-    	} else {
-    		monster = new Sticker(0, 1, 7, "Sample Rock3", 1, 1, 0, 159, 153, 1, 1, 0, 0, 0, 2000, 100, 100, 100, 5);
-    	}**/
-    	
-    	// don't need this anymore, you'll change the progress bar to be the enemies hp
-    	//monsterProgress = monster.current_speed + monster.current_reach;
-		/*
-		 * Creates the monsters and adds the UI elements for them
-		 */
-		for (int l=0;l<amount;l++) {
+		enemyProgressBarList.clear();
+		enemyMonsterBattleList.clear();
+		
+		//Creates the monsters and adds the UI elements for them
+		for (int i = 0; i < enemyPartySize; i++) {
 			RelativeLayout relLayout = new RelativeLayout(getActivity());
 			
     		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
@@ -353,11 +299,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		
     		// Assigned id for enemy ui
     		TextView txt = new TextView(getActivity());
-    		txt.setId((l + 1));
+    		txt.setId((i + 1));
     		ImageView imgView = new ImageView(getActivity());
-    		imgView.setId((l + 1) * 10 );
+    		imgView.setId((i + 1) * 10 );
     		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
-    		progBar.setId((l + 1) * 100);
+    		progBar.setId((i + 1) * 100);
     		progBar.setProgress(100);
     		
     		imgView.setBackgroundResource(R.drawable.ic_launcher);
@@ -366,30 +312,30 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
 
-    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
-    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1));
+    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 10);
 
     		txt.setLayoutParams(relLayoutParamTxt);
     		imgView.setLayoutParams(relLayoutParamImg);
     		progBar.setLayoutParams(relLayoutParamProg);
     		
     		
-    		
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
     		relLayout.addView(progBar);
     		
-    		progBarList.add(l, progBar);
-    		Log.d("size", "size of list is" + progBarList.size());
+    		enemyProgressBarList.add(progBar);
+    		Log.d("size", "size of list is" + enemyProgressBarList.size());
     		
     		enemyPartyLayout.addView(relLayout);
-    		
-       	   	monster = new BattleMonster(monsterList.get(l), monsterList.get(l).hp, 1000 / monsterList.get(l).speed);
-       	   	//Is the first few on the list of applicable encounters, because 
-       	 	//monsterBattleList.add(monster);
-       	 	monsterBattleList.add(l, monster);
 
-    		txt.setText(monster.monster.name);
+    		int monsterGen = (int) (Math.random() * Hub.currentRoute.monsters.size());
+    		
+       	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
+       	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
+       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
+       	   			Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed));
+    		
 		}
     	
     	//While might work better here, but depends on how the effectiveness of that.
@@ -401,31 +347,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
      * Generates the player's party
      */
     private void generateParty() {
-    	if (partyList.get(0) != null) {
-    		party1 = new BattleMonster(partyList.get(0), partyList.get(0).hp, 1000 / partyList.get(0).speed);
-    		partyBattleList.add(party1);
-    	}
-    	if (partyList.get(1) != null) {
-    		party2 = new BattleMonster(partyList.get(1), partyList.get(1).hp, 1000 / partyList.get(1).speed);
-    		partyBattleList.add(party2);
-    	}
-    	if (partyList.get(2) != null) {
-    		party3 = new BattleMonster(partyList.get(2), partyList.get(2).hp, 1000 / partyList.get(2).speed);
-    		partyBattleList.add(party3);
-    	}
-    	if (partyList.get(3) != null) {
-    		party4 = new BattleMonster(partyList.get(3), partyList.get(3).hp, 1000 / partyList.get(3).speed);
-    		partyBattleList.add(party4);
-    	}
-    	if (partyList.get(4) != null) {
-    		party5 = new BattleMonster(partyList.get(4), partyList.get(4).hp, 1000 / partyList.get(4).speed);
-    		partyBattleList.add(party5);
-    	}
+    	playerPartyLayout.removeAllViews();
     	
-    	
-
-		for (int l=0;l<2;l++) {
-			RelativeLayout relLayout = new RelativeLayout(getActivity());
+    	Log.d("user party size", "" + partyList.size());
+    	for (int i = 0; i < partyList.size(); i++) {
+    		RelativeLayout relLayout = new RelativeLayout(getActivity());
 			
     		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
     		relLayout.setLayoutParams(linLayoutParam);
@@ -434,94 +360,53 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		
-    		// Assigned id for enemy ui
+    		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
-    		txt.setId((l + 5));
+    		txt.setId((i + 10));
     		ImageView imgView = new ImageView(getActivity());
-    		imgView.setId((l + 5) * 10 );
-    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
-    		progBar.setId((l + 5) * 100);
-    		progBar.setProgress(100);
+    		imgView.setId((i + 1) * 11 );
     		
-    		imgView.setBackgroundResource(R.drawable.ic_launcher);
-    		
-    		txt.setText("text");
-    		txt.setTextColor(Color.BLUE);
+    		// assigns text
+    		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
-
-    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
-    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
-
-    		txt.setLayoutParams(relLayoutParamTxt);
+    		
+    		// assigns the rule for pictures
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
+    		
+       		txt.setLayoutParams(relLayoutParamTxt);
     		imgView.setLayoutParams(relLayoutParamImg);
-    		progBar.setLayoutParams(relLayoutParamProg);
-    		
-    		
     		
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
-    		relLayout.addView(progBar);
     		
-    		progBarList.add(l, progBar);	
-    		Log.d("size", "size of list is" + progBarList.size());
-    		
-    		enemyPartyLayout.addView(relLayout);
-    		if (partyBattleList.get(l) == null) {
-    			txt.setText("");
+    		if (partyList.get(i) == null) {
+    			partyMonsterBattleList.add(null);
+    			txt.setText("empty");
+    			imgView.setBackgroundResource(R.drawable.colorworld);
+    			playerProgressBarList[i] = null;
+    		} else {
+    			// setup real monsters, only creates progress bar if real monster exists
+        		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
+        		progBar.setId((i + 1) * 101);
+        		progBar.setProgress(100);
+        		txt.setText("monster");
+        		imgView.setBackgroundResource(R.drawable.ic_launcher);
+        		
+        		progBar.setLayoutParams(relLayoutParamProg);
+        		
+        		// sets the progress bar
+        		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 11);
+    			
+        		relLayout.addView(progBar);
+        		playerProgressBarList[i] = progBar;
+        		Log.d("size", "size of list is" + enemyProgressBarList.size());
+    			partyMonstersSize++;
+    			// TODO Quick hack, but needs to be fixed properly.
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
     		}
-    		else {
-    			txt.setText(partyBattleList.get(l).monster.name);
-    		}
-		}
-		for (int l=2;l<4;l++) {
-			RelativeLayout relLayout = new RelativeLayout(getActivity());
-			
-    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
-    		relLayout.setLayoutParams(linLayoutParam);
-			
-    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		
-    		// Assigned id for enemy ui
-    		TextView txt = new TextView(getActivity());
-    		txt.setId((l + 7));
-    		ImageView imgView = new ImageView(getActivity());
-    		imgView.setId((l + 7) * 10 );
-    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
-    		progBar.setId((l + 7) * 100);
-    		progBar.setProgress(100);
-    		
-    		imgView.setBackgroundResource(R.drawable.ic_launcher);
-    		
-    		txt.setText("text");
-    		txt.setTextColor(Color.BLUE);
-    		txt.setGravity(Gravity.CENTER);
-
-    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (l + 1));
-    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (l + 1) * 10);
-
-    		txt.setLayoutParams(relLayoutParamTxt);
-    		imgView.setLayoutParams(relLayoutParamImg);
-    		progBar.setLayoutParams(relLayoutParamProg);
-    		
-    		
-    		
-    		relLayout.addView(txt);
-    		relLayout.addView(imgView);
-    		relLayout.addView(progBar);
-    		
-    		progBarList.add(l, progBar);	
-    		Log.d("size", "size of list is" + progBarList.size());
-    		
-    		enemyPartyLayout.addView(relLayout);
-    		if (partyBattleList.get(l) == null) {
-    			txt.setText("");
-    		}
-    		else {
-    			txt.setText(partyBattleList.get(l).monster.name);
-    		}
-		}
+    		playerPartyLayout.addView(relLayout);
+    	}
     }
     
     @Override
@@ -549,10 +434,10 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     	
     }
     
-    public void reviveParty(int size) {
-    	deadMonsters = 0;
+    private void reviveParty(int size) {
+    	deadPartyMonsters = 0;
     	for (int i = 0; i < size; i++) {
-    		partyBattleList.get(i).currentHp = partyBattleList.get(i).monster.hp;
+    		partyMonsterBattleList.get(i).currentHp = partyMonsterBattleList.get(i).monster.hp;
     	}
     }
 
@@ -569,124 +454,109 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
             coins++;
         }
     	steps++;
-    	//currentProgress += powerStep;
     	distance = (steps * .91) / 1000;
-        tvDistance.setText("Distance: " + distance);
+    	
+        tvDistance.setText("Distance: " + String.format("%.2f", distance));
         tvPace.setText("Steps: " + steps);
         tvCoin.setText("Coins: " + coins);
         
         // monster turn
-        for (int i = 0;i < amount; i++) {
+        for (int i = 0;i < enemyPartySize; i++) {
         	//Attacks Regularly
-        	if (monsterBattleList.get(i).currentHp > 0) {
-		        if (steps % monsterBattleList.get(i).currentStep == 0) {
-		        	enemyAttack = BattleHelper.AIAttack(monsterBattleList.get(i), partyBattleList);
+        	if (enemyMonsterBattleList.get(i).currentHp > 0) {
+		        if (steps % enemyMonsterBattleList.get(i).currentStep == 0) {
+		        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
+
+		        	if (iPartyAttacked == -1) {
+		        		Log.d("failure", "monster index attacked is -1!!!");
+		        	}
 		        	
-		        	partyBattleList.get(enemyAttack).currentHp -= BattleHelper.Attack(monster, partyBattleList.get(enemyAttack));
+		        	partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked));
 		        	
-		            list.add("Enemy " + monsterBattleList.get(i).monster.name + " Attacks " + partyBattleList.get(enemyAttack).monster.name + " For " + 
-		            BattleHelper.Attack(monsterBattleList.get(i),partyBattleList.get(enemyAttack)));
+		            list.add("Enemy " + enemyMonsterBattleList.get(i).monster.name + " Attacks " + partyMonsterBattleList.get(iPartyAttacked).monster.name + " For " + 
+		            BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked)));
 		
-					if (partyBattleList.get(enemyAttack).currentHp <= 0) {
-						
-						deadMonsters++;
-						
-						if (deadMonsters >= partyMonsters) {
+					if (partyMonsterBattleList.get(iPartyAttacked).currentHp <= 0) {
+						deadPartyMonsters++;
+						if (deadPartyMonsters >= partyMonstersSize) {
 							//Entire Party is dead, resurrect them and change monsters
-							reviveParty(partyBattleList.size());
-							
-							generateMonster();
+							reviveParty(partyMonsterBattleList.size());
+							generateEnemies();
 							return;
 						}
 					}
 		        }
 		        
 		        // monster uses their ability
-		        if (steps % monsterBattleList.get(i).monster.ability.steps == 0) {
-		        	enemyAttack = BattleHelper.AIAttack(monster, partyBattleList);
-					double damage = monsterBattleList.get(i).monster.ability.activateAbility();
-					
-					partyBattleList.get(enemyAttack).currentHp -= damage;
-					
-					
-		    		list.add("Enemy " + monsterBattleList.get(i).monster.name + " Used Ability " +  monsterBattleList.get(i).monster.ability.name
-					+" On " + partyBattleList.get(enemyAttack).monster.name + " For " + damage + "!");
-		    		
-		
-					if (partyBattleList.get(enemyAttack).currentHp <= 0) {
+		        // TODO nothing for now, only do this if working in special battles
+/*		        if (steps % enemyMonsterBattleList.get(i).monster.ability.steps == 0) {
+		        	if (enemyMonsterBattleList.get(i).monster.ability.getClass() == DamageAbility.class) {
+			        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
+						double damage = enemyMonsterBattleList.get(i).monster.ability.activateAbility();
 						
-						deadMonsters++;
+						partyMonsterBattleList.get(iPartyAttacked).currentHp -= damage;
 						
-						if (deadMonsters >= partyMonsters) {
-							//Entire Party is dead, resurrect them and change monsters
-							reviveParty(partyBattleList.size());
-		
-							generateMonster();
-							return;
+						
+			    		list.add("Enemy " + enemyMonsterBattleList.get(i).monster.name + " Used Ability " +  enemyMonsterBattleList.get(i).monster.ability.name
+						+" On " + partyMonsterBattleList.get(iPartyAttacked).monster.name + " For " + damage + "!");
+			    		
+						if (partyMonsterBattleList.get(iPartyAttacked).currentHp <= 0) {
+							
+							deadMonsters++;
+							
+							if (deadMonsters >= partyMonstersSize) {
+								//Entire Party is dead, resurrect them and change monsters
+								reviveParty(partyMonsterBattleList.size());
+								generateEnemies();
+								return;
+							}
 						}
-					}
-		        } else if (monsterBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
-        			SupportAbility support = (SupportAbility)monsterBattleList.get(i).monster.ability;
-        	        for (int b = 0; b < monsterBattleList.size(); b++) {
-        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
-        	        	BattleMonster monster = monsterBattleList.get(b);
-        	        	monsterBattleList.get(b).buffs.put(support.attribute, newBuff);
-/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
-            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
-            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
-            	        		+ " " + partyBattleList.get(4));*/
-            	        		
-            	        
-        	        	if (support.attribute == 3) {
-        	        		monsterBattleList.get(b).RecalculateSpeed();
-        	        		Log.d("Speed","New Speed Calculated for : " + monsterBattleList.get(b).monster.name + " is " + 
-        	        		monsterBattleList.get(b).currentStep + " duration is: " + monsterBattleList.get(b).buffs.get(3).duration);
-            	        }
-        	        }
-            		list.add(monsterBattleList.get(i).monster.name + " Used Ability " +  monsterBattleList.get(i).monster.ability.name + "!");
-        		}
+						// TODO never used their support ability
+			        } else if (enemyMonsterBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
+	        			SupportAbility support = (SupportAbility)enemyMonsterBattleList.get(i).monster.ability;
+	        	        for (int b = 0; b < enemyMonsterBattleList.size(); b++) {
+	        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
+	        	        	BattleMonster monster = enemyMonsterBattleList.get(b);
+	        	        	enemyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);
+	            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
+	            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
+	            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
+	            	        		+ " " + partyBattleList.get(4));
+	            	        		
+	            	        
+	        	        	if (support.attribute == 3) {
+	        	        		enemyMonsterBattleList.get(b).RecalculateSpeed();
+	        	        		Log.d("Speed","New Speed Calculated for : " + enemyMonsterBattleList.get(b).monster.name + " is " + 
+	        	        		enemyMonsterBattleList.get(b).currentStep + " duration is: " + enemyMonsterBattleList.get(b).buffs.get(3).duration);
+	            	        }
+	        	        }
+	 //           		list.add(enemyMonsterBattleList.get(i).monster.name + " Used Ability " +  enemyMonsterBattleList.get(i).monster.ability.name + "!");
+			        }        		
+		        }*/
         	}
         }
         
         // user party attacks
-        for (int i = 0; i < partyBattleList.size(); i++) {
-        	if (partyBattleList.get(i).currentHp > 0) {
-	        	if (steps % partyBattleList.get(i).currentStep == 0) {
-	        		int partyAttack = BattleHelper.AIAttack(partyBattleList.get(i), monsterBattleList);
+        for (int i = 0; i < partyMonsterBattleList.size(); i++) {
+        	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
+	        	if (steps % partyMonsterBattleList.get(i).currentStep == 0) {
+	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 	        		
-	        		Log.d("Speed","Current step speed for " + partyBattleList.get(i).monster.name + " is " + partyBattleList.get(i).currentStep);
-	        		double damage = BattleHelper.Attack(partyBattleList.get(i), monster);
-	        		monsterBattleList.get(partyAttack).currentHp -= damage;
-	        		list.add(partyBattleList.get(i).monster.name + " Attacks " + monsterBattleList.get(partyAttack).monster.name + " For " + damage + "!");
+	        		Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).currentStep);
+	        		Log.d("index problems", "" + iEnemyAttacked);
+	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
+	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
+//	        		list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
 
-	        		if (monsterBattleList.get(partyAttack).currentHp <= 0) {
-		        		list.add(monsterBattleList.get(partyAttack).monster.name + " has been defeated!");
-		        		
-    					Log.d("Defeated", ""+monsterBattleList.get(partyAttack).monster.name + "has been defeated");
-    					
+	        		if (enemyMonsterBattleList.get(iEnemyAttacked).currentHp <= 0) {
 		        		deadEnemies++;
-		        		
-		        		captureRate = (double) ((Math.random() * 100) + 1);
-
-        				if (captureRate >= monsterBattleList.get(partyAttack).monster.capture) {
-        					
-        					list.add(monsterBattleList.get(partyAttack).monster.name + " has been captured!");
-        					
-        					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
-        					
-        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,
-        							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
-        							monsterBattleList.get(partyAttack).monster.defense,monsterBattleList.get(partyAttack).monster.speed,
-        							monsterBattleList.get(partyAttack).monster.capture,monsterBattleList.get(partyAttack).monster.element,
-        							monsterBattleList.get(partyAttack).monster.ability));
-        				}
-        				
-	        			if (deadEnemies >= amount) {
-		        			generateMonster();
-	        			}
+    					list.add("enemy " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " has been defeated!");
+    					
+    					captureMonster(iEnemyAttacked);
+    					checkEnemyMonsterAllDead();
 	        		}
 	        		
-	        		Iterator iterator = partyBattleList.get(i).buffs.entrySet().iterator();
+	        		Iterator iterator = partyMonsterBattleList.get(i).buffs.entrySet().iterator();
 	        		// decrease buff of monsters
 	        		while (iterator.hasNext()) {
 	        			Map.Entry<Integer, Buff> pair = (Entry<Integer, Buff>) iterator.next();
@@ -694,7 +564,7 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        			Buff buff = pair.getValue();
 	        			//Log.d("buff with duration at: ", "" + buff.duration);
 	        			buff.duration--;
-	        			Log.d("duration", "" + partyBattleList.get(i).monster.name + " buff " + buff.name + " has duration " + buff.duration);
+	        			Log.d("duration", "" + partyMonsterBattleList.get(i).monster.name + " buff " + buff.name + " has duration " + buff.duration);
 	        			//partyBattleList.get(i).buffs.get(iterator).duration--;
 	        			//Check if above code actually decreases
 	        			if (buff.duration <= 0) {
@@ -704,8 +574,8 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        				
 	        				// important to be after, becauase recalculate checks for the attribute key
 	        				if (attribute == 3) {
-	        					partyBattleList.get(i).RecalculateSpeed();
-	        	        		Log.d("Speed","New Speed Calculated (Buff Removed): " + partyBattleList.get(i).currentStep);
+	        					partyMonsterBattleList.get(i).RecalculateSpeed();
+	        	        		Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
 	        				}
 	        				//partyBattleList.get(i).buffs.remove(iterator);
 	        			}
@@ -716,65 +586,71 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        	// check monster status
 	        	//Log.d("buff size", ""+ partyBattleList.get(0).buffs.size());
 	        	
-	        	
+	        	Log.d("party crash", "at index: " + i);
 	        	// checks for user's party's ability
-	        	if (steps % partyBattleList.get(i).monster.ability.steps == 0) { 
+	        	if (steps % partyMonsterBattleList.get(i).monster.ability.steps == 0) { 
 	        		//Applies ability to attack enemy
-	        		if (partyBattleList.get(i).monster.ability.getClass() == DamageAbility.class) {
-		        		int partyAttack = BattleHelper.AIAttack(partyBattleList.get(i), monsterBattleList);
-	        			double damage = partyBattleList.get(i).monster.ability.activateAbility();
-	        			monsterBattleList.get(partyAttack).currentHp -= damage;
-	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + 
-	            				" For " + damage + "!");
+	        		if (partyMonsterBattleList.get(i).monster.ability.getClass() == DamageAbility.class) {
+		        		int partyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+	        			double damage = partyMonsterBattleList.get(i).monster.ability.activateAbility();
+	        			enemyMonsterBattleList.get(partyAttack).currentHp -= damage;
+//	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
+//	            				" For " + damage + "!");
 	            		
-	            		
-	            		//Checks if all enemies are dead
-		        		if (monsterBattleList.get(partyAttack).currentHp <= 0) {
-			        		list.add(monsterBattleList.get(partyAttack).monster.name + " has been defeated!");
+	            		//Checks if all enemies are dead 
+		        		if (enemyMonsterBattleList.get(partyAttack).currentHp <= 0) {
+			        		list.add(enemyMonsterBattleList.get(partyAttack).monster.name + " has been defeated!");
 			        		deadEnemies++;
-			        		
-			        		captureRate = (double) ((Math.random() * 100) + 1);
-			        		
-	        				if (captureRate > monsterBattleList.get(partyAttack).monster.capture) {
-	        					
-	        					list.add(monsterBattleList.get(partyAttack).monster.name + " has been captured!");
-	        					
-	        					Log.d("Capture", ""+monsterBattleList.get(partyAttack).monster.name + "has been captured");
-	        					
-	        					Hub.addSticker(new Sticker(0,0,0,monsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,
-	        							monsterBattleList.get(partyAttack).monster.hp,monsterBattleList.get(partyAttack).monster.attack,
-	        							monsterBattleList.get(partyAttack).monster.defense,monsterBattleList.get(partyAttack).monster.speed,
-	        							monsterBattleList.get(partyAttack).monster.capture,monsterBattleList.get(partyAttack).monster.element,
-	        							monsterBattleList.get(partyAttack).monster.ability));
-	        				}
-	        				
-		        			if (deadEnemies >= amount) {
-			        			generateMonster();
-		        			}
+			        		captureMonster(partyAttack);
+			        		checkEnemyMonsterAllDead();
 		        		}
-	        		} else if (partyBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
+	        		} else if (partyMonsterBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
-	        			SupportAbility support = (SupportAbility)partyBattleList.get(i).monster.ability;
-	        	        for (int b = 0; b < partyBattleList.size(); b++) {
-	        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
-	        	        	BattleMonster monster = partyBattleList.get(b);
-	        	        	partyBattleList.get(b).buffs.put(support.attribute, newBuff);
-	/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
-	            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
-	            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
-	            	        		+ " " + partyBattleList.get(4));*/
-	            	        		
-	            	        
-	        	        	if (support.attribute == 3) {
-	        	        		partyBattleList.get(b).RecalculateSpeed();
-	        	        		Log.d("Speed","New Speed Calculated for : " + partyBattleList.get(b).monster.name + " is " + partyBattleList.get(b).currentStep + " duration is: " + partyBattleList.get(b).buffs.get(3).duration);
-	            	        }
+	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.ability;
+	        	        for (int b = 0; b < partyMonsterBattleList.size(); b++) {
+	        	        	if (partyMonsterBattleList.get(b) != null) {
+		        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
+		        	        	BattleMonster monster = partyMonsterBattleList.get(b);
+		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);
+		        	        	
+		/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
+		            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
+		            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
+		            	        		+ " " + partyBattleList.get(4));*/
+		            	        		
+		            	        
+		        	        	if (support.attribute == 3) {
+		        	        		partyMonsterBattleList.get(b).RecalculateSpeed();
+		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).currentStep + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
+		            	        }
+	        	        	}
 	        	        }
-	            		list.add(partyBattleList.get(i).monster.name + " Used Ability " +  partyBattleList.get(i).monster.ability.name + "!");
+//	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + "!");
 	        		}
 	        	}
         	}
         }
     }
     
+    private void captureMonster(int partyAttack) {
+    	if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(partyAttack).monster.capture) {
+			
+			list.add(enemyMonsterBattleList.get(partyAttack).monster.name + " has been captured!");
+			
+			found.add(enemyMonsterBattleList.get(partyAttack).monster);
+			caughtAlready = true;
+		}
+    }
+    
+    private void checkEnemyMonsterAllDead() {
+    	if (deadEnemies >= enemyPartySize) {
+			//deadMonsters++;	
+    		list.add("Defeated all enemies");
+			monsterPartiesNeeded--;	
+			if (monsterPartiesNeeded <= 0) {
+				finishEnabled = true;
+			}
+			generateEnemies();
+		}
+    }
 }

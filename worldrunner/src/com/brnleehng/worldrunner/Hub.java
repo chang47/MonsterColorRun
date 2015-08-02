@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import Abilities.SupportAbility;
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.City;
@@ -14,7 +13,6 @@ import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
 import DB.Model.Route;
-import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
@@ -23,7 +21,6 @@ import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
 import Items.ViewSticker;
-import Model.BattleMonster;
 import Races.Result;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -46,17 +43,17 @@ public class Hub extends Activity {
 	// contains all of the player's equipments
 	private static ArrayList<Equipment> equipmentList;
 	// contains all of the player's stickers
-	private static ArrayList<Sticker> stickerList;
+	public static ArrayList<Monster> stickerList;
 	private static HeaderBar header;
 	private static FooterBar footer;
 	// contains the list of the equipment the player is currently using
 	private static ArrayList<Equipment> equippedEquipments;
 	// contains the list of the stickers the player is currently using
-	public static ArrayList<Sticker> equippedStickers;
+	public static ArrayList<Monster> equippedStickers;
 	// the equipment that the player selected to be changed. Only used in equip 
 	private static Equipment currentEquipment;
 	// The sticker that the player selected to be changed. Only used in equip
-	public static Sticker currentSticker;
+	public static Monster currentSticker;
 	// the category/position of the equipment that the character selected to be replaced in equip
 	private static int currentCategory;
 	// the position of the sticker that the character selected to be replaced in equip
@@ -66,14 +63,15 @@ public class Hub extends Activity {
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
 	public static ArrayList<City> cities;
-	public static ArrayList<BattleMonster> partyBattleList;
+	//public static ArrayList<BattleMonster> partyBattleList;
+	public static List<Monster> unequippedMonster;
 	
 	public static Route currentRoute;
 	public static Dungeon currentDungeon;
 	
-	public static ArrayList<Sticker> tempEquippedSticker;
+	//public static ArrayList<Monster> tempEquippedSticker;
 	
-	public static Sticker viewSticker;
+	public static Monster viewSticker;
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -142,7 +140,7 @@ public class Hub extends Activity {
 	 * can see changes when they are made
 	 */
 	public static void createChanges() {
-		// Sets up all of the user's data  
+		// Sets up all of the user's data 
 		List<Player> playerList = db.getPlayer();
 		player = playerList.get(0);
 		equipmentList = db.getEquipments();
@@ -151,15 +149,23 @@ public class Hub extends Activity {
 		
 		// @TODO the real one is the one being used below with mock data
 		// this is just for testing
-		tempEquippedSticker = db.getEquippedStickers();
+		//tempEquippedSticker = db.getEquippedStickers();
 		
 		// @TODO getting the mock data. Will probably break the equipped sticker until changed 
-		//equippedStickers = db.getEquippedStickers();
-		equippedStickers = db.getFakeEquippedParty();
-		
+		equippedStickers = db.getEquippedStickers();
+		//equippedStickers = db.getFakeEquippedParty();
 		
 		monsterList = db.getMonsters();
 		//partyList = db.getParty();
+		
+		unequippedMonster = new ArrayList<Monster>();
+		unequippedMonster.add(null);
+		for (Monster monster : stickerList) {
+			if (monster.equipped == 0)
+				unequippedMonster.add(monster);
+		}
+		Log.d("unequip size", "" + unequippedMonster.size());
+		Log.d("total size", "" + stickerList.size());
 	}
 
 	
@@ -186,7 +192,7 @@ public class Hub extends Activity {
     	return equipmentList;
     }
     
-    public static ArrayList<Sticker> getStickers() {
+    public static ArrayList<Monster> getStickers() {
     	return stickerList;
     }
     
@@ -231,11 +237,11 @@ public class Hub extends Activity {
      * CHANGE CURRENT STICKER
      */
     
-    public static void setCurrentSticker(Sticker sticker) {
-    	currentSticker = sticker;
+    public static void setCurrentSticker(Monster monster) {
+    	currentSticker = monster;
     }
     
-    public static ArrayList<Sticker> getEquippedSticker() {
+    public static ArrayList<Monster> getEquippedSticker() {
     	return equippedStickers;
     }
     
@@ -325,10 +331,10 @@ public class Hub extends Activity {
 	
 	public static void backToCity() {
 		FragmentTransaction ft = setFT();
-		Race race = new Race();
+		CityHub townHub = new CityHub();
 		ft.replace(R.id.header, header);
 		ft.replace(R.id.footer, footer);
-		ft.replace(R.id.hub, race).commit();
+		ft.replace(R.id.hub, townHub).commit();
 	}
 	
 	public static void equipItems() {
@@ -350,7 +356,7 @@ public class Hub extends Activity {
 	 * @param position - the position that the sticker will be replaced at: 0-4
 	 * @param sticker - the sticker that is being replaced 
 	 */
-	public static void equipSticker(int position, Sticker sticker) {
+	public static void equipSticker(int position, Monster sticker) {
 		// is this needed?
 		currentStickerPosition = position;
 		currentSticker = sticker;
@@ -396,14 +402,14 @@ public class Hub extends Activity {
 	public static void startRouteRun(Route route) {
 		// to be filledetFT();
 		FragmentTransaction ft = setFT();
-		CityRun cityRun = new CityRun();
+		RouteRun cityRun = new RouteRun();
 		currentRoute = route;
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();
 	}
 	
-	public static void addSticker(Sticker monsterSticker) {
+	public static void addSticker(Monster monsterSticker) {
 		stickerList.add(monsterSticker);
 		db.addSticker(monsterSticker);
 	}
@@ -415,19 +421,13 @@ public class Hub extends Activity {
 	public static void moveCity(int newCity) {
 		//@TODO check if you need to subtract 1
 		setCurrentCity(cities.get(newCity - 1));
-		
-		// Needs to be changed to 
-		cityHub();
-	}
-	
-	public static void viewSticker(Sticker sticker) {
-		viewSticker = sticker;
+		backToCity();
 	}
 	 
 	public static int partySize() {
 		int count = 0;
-		for (Sticker sticker : equippedStickers) {
-			if (sticker != null) {
+		for (Monster monster : equippedStickers) {
+			if (monster != null) {
 				count++;
 			}
 		}

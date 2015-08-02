@@ -17,7 +17,7 @@ public class StickerManager {
 	private static final String PID = "pid";
 	private static final String SID = "sid";
 	private static final String NAME = "name";
-	private static final String COLOR = "color";
+	private static final String ELEMENT = "color";
 	private static final String CURRENT_LEVEL = "current_level";
 	private static final String CURRENT_EXP = "current_exp";
 	private static final String SPAID = "spaid";
@@ -39,7 +39,7 @@ public class StickerManager {
 	public static void create(SQLiteDatabase db) {
 		String CREATE_STICKER_TABLE = "CREATE TABLE " + TABLE_STICKER + "("
                 + PSTID + " INTEGER PRIMARY KEY," + PID + " INTEGER,"
-                + SID + " INTEGER," + NAME + " TEXT," + COLOR + " INTEGER," +
+                + SID + " INTEGER," + NAME + " TEXT," + ELEMENT + " INTEGER," +
                 CURRENT_LEVEL + " INTEGER," + CURRENT_EXP + " INTEGER," + SPAID + " INTEGER, " + SAAID +
                 " INTEGER," + EVOLVE + " INTEGER," + EQUIPPED + " INTEGER," + POSITION + " INTEGER," + 
                 HP + " INTEGER," + ATTACK + " INTEGER," + DEFENSE + " INTEGER, " + SPEED + " INTEGER," 
@@ -47,6 +47,8 @@ public class StickerManager {
         db.execSQL(CREATE_STICKER_TABLE);
         /*createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
         		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));*/
+        createInitial(db, new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0));
+		
 	}
 	
 	/**
@@ -84,7 +86,7 @@ public class StickerManager {
 				sticker.pid = cursor.getInt(1);
 				sticker.sid = cursor.getInt(2);
 				sticker.name = cursor.getString(3);
-				sticker.color = cursor.getInt(4);
+				sticker.element = cursor.getInt(4);
 				sticker.current_level = cursor.getInt(5);
 				sticker.current_exp = cursor.getInt(6);
 				sticker.spaid = cursor.getInt(7);
@@ -109,7 +111,7 @@ public class StickerManager {
 		sticker.pid = cursor.getInt(1);
 		sticker.sid = cursor.getInt(2);
 		sticker.name = cursor.getString(3);
-		sticker.color = cursor.getInt(4);
+		sticker.element = cursor.getInt(4);
 		sticker.current_level = cursor.getInt(5);
 		sticker.current_exp = cursor.getInt(6);
 		sticker.spaid = cursor.getInt(7);
@@ -153,7 +155,7 @@ public class StickerManager {
 	 * @param db
 	 * @param stickers - list of stickers to be added into the DB
 	 */
-	public static void addStickers(SQLiteDatabase db, ArrayList<Sticker> stickers) {
+	public static void addStickers(SQLiteDatabase db, List<Sticker> stickers) {
 		for (Sticker sticker : stickers) {
 			addSticker(db, sticker);
 		}
@@ -164,8 +166,8 @@ public class StickerManager {
 	 * @param db
 	 * @param sticker - sticker to be deleted
 	 */
-	public static void deleteSticker(SQLiteDatabase db, Sticker sticker) {
-		db.delete(TABLE_STICKER, PSTID + " = ?", new String[] { String.valueOf(sticker.pstid) });
+	public static void deleteSticker(SQLiteDatabase db, int uid) {
+		db.delete(TABLE_STICKER, PSTID + " = ?", new String[] { String.valueOf(uid) });
 	}
 	
 	/**
@@ -178,7 +180,7 @@ public class StickerManager {
 		values.put(PID, sticker.pid);
 		values.put(SID, sticker.sid);
 		values.put(NAME, sticker.name);
-		values.put(COLOR, sticker.color);
+		values.put(ELEMENT, sticker.element);
 		values.put(CURRENT_LEVEL, sticker.current_level);
 		values.put(CURRENT_EXP, sticker.current_exp);
 		values.put(SPAID, sticker.spaid);

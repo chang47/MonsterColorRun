@@ -1,9 +1,11 @@
 package Items;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import DB.DBManager;
 import DB.Model.Equipment;
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.DialogFragment;
@@ -28,9 +30,9 @@ import com.brnleehng.worldrunner.ViewStickerDialog;
  */
 public class EquipSticker extends Fragment {
 	GridView gridview;	
-	ArrayList<Sticker> unequippedSticker;
-	ArrayList<Sticker> equippedSticker;
-	Sticker currentSticker;
+	List<Monster> unequippedMonsters;
+	ArrayList<Monster> equippedMonsters;
+	Monster currentSticker;
 	int currentPosition;
 	
 	/**
@@ -46,23 +48,24 @@ public class EquipSticker extends Fragment {
 		currentSticker = Hub.currentSticker;
 		currentPosition = Hub.currentStickerPosition;
 		
+		// TODO this is a ui thing we have to just organize the stickers 
 		// Note: the first value is set to be null so that we can make the remove
 		// button in the gridview.
-		unequippedSticker = db.getUnequipedStickers();
+		unequippedMonsters = Hub.unequippedMonster;
 		
 		// TODO temp that needs to be replace soon
-		equippedSticker = Hub.tempEquippedSticker;
+		equippedMonsters = Hub.equippedStickers;
 		//equippedSticker = Hub.equippedStickers;
 		
-		for (Sticker sticker : unequippedSticker) {
-			if (sticker != null) {
-				Log.d("unequipped sticker", sticker.name);
+		for (Monster monster: unequippedMonsters) {
+			if (monster != null) {
+				Log.d("unequipped sticker", monster.name);
 			} else {
 				Log.d("unequipped sticker", "empty");
 			}
 		}
 		// TODO is this the correct adapter? Need to reformat adapters to make sense
-		final StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, unequippedSticker);
+		final StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, unequippedMonsters);
 		gridview = (GridView) view.findViewById(R.id.viewGridView);
 		gridview.setAdapter(adapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -71,27 +74,29 @@ public class EquipSticker extends Fragment {
 					int position, long id) {
 				
 				// gets the user's selected equipment
-				Sticker newSticker = adapter.getItem(position);
+				Monster newMonster = adapter.getItem(position);
 				
-				// checks for the event of no monsters
+				// adding new monster to non-empty slot
 				if (currentSticker != null) {
-					equippedSticker.remove(currentSticker);
+					equippedMonsters.remove(currentSticker);
+					unequippedMonsters.add(currentSticker);
 					currentSticker.equipped = 0;
 					currentSticker.position = 0;
 					// TODO instead of relying on database for everything, store it all locally and then send it once it's ready
 					db.updateSticker(currentSticker);
+					Hub.stickerList.add(currentSticker);
 				}
 				
-				// if the user got another sticker that wasn't the
-				// remove sticker
-				if (newSticker != null) {
-					newSticker.equipped = 1;
-					newSticker.position = Hub.currentStickerPosition;
-					equippedSticker.set(newSticker.position - 1, newSticker);
-					Hub.equippedStickers = equippedSticker;
-					
-					// TODO - Still need to save everything to the DB, simple loop update
-					db.updateSticker(newSticker);
+				// adds the new selected monster to the party
+				if (newMonster != null) {
+					newMonster.equipped = 1;
+					newMonster.position = Hub.currentStickerPosition;
+					unequippedMonsters.remove(newMonster);
+					equippedMonsters.set(newMonster.position - 1, newMonster);
+					//Hub.equippedStickers = equippedMonsters;
+					// TODO instead of relying on database for everything, store it all locally and then send it once it's ready
+					db.updateSticker(newMonster);
+					Hub.stickerList.remove(newMonster);
 				}
 				Hub.equipItems();
 				//Goes back to equipped page.

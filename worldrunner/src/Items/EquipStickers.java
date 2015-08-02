@@ -3,6 +3,7 @@ package Items;
 import java.util.ArrayList;
 
 import DB.DBManager;
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.Fragment;
@@ -20,9 +21,9 @@ import com.brnleehng.worldrunner.R;
 
 public class EquipStickers extends Fragment {
 	GridView gridview;	
-	ArrayList<Sticker> unequippedSticker;
-	ArrayList<Sticker> equippedSticker;
-	Sticker currentSticker;
+	ArrayList<Monster> unequippedSticker;
+	ArrayList<Monster> equippedSticker;
+	Monster currentSticker;
 	int currentPosition;
 	private ImageView sticker1;
 	private ImageView sticker2;
@@ -64,7 +65,7 @@ public class EquipStickers extends Fragment {
 		
 		// TODO temp to be fixed because the current one is used
 		//equippedSticker = Hub.equippedStickers;
-		equippedSticker = Hub.tempEquippedSticker;
+		equippedSticker = Hub.equippedStickers;
 		
 		// assumes that the stickers can never be put in an incorrect order
 		// adds in the picture of the monsters
@@ -86,7 +87,7 @@ public class EquipStickers extends Fragment {
 				// gets the user's selected equipment
 				} else if (equippedSticker.size() < 5) {
 					
-					Sticker newSticker = adapter.getItem(position);
+					Monster newMonster = adapter.getItem(position);
 					
 					// updates the sticker list
 					if (currentSticker != null) {
@@ -99,13 +100,13 @@ public class EquipStickers extends Fragment {
 						db.updateSticker(currentSticker);
 					}
 					
-					newSticker.equipped = 1;
-					newSticker.position = equippedSticker.size() + 1;
-					equippedSticker.add(newSticker);
+					newMonster.equipped = 1;
+					newMonster.position = equippedSticker.size() + 1;
+					equippedSticker.add(newMonster);
 					Hub.equippedStickers = equippedSticker;
 					
 					// TODO - Still need to save everything to the DB, simple loop update
-					db.updateSticker(newSticker);
+					db.updateSticker(newMonster);
 					Hub.equipItems();
 					//Goes back to equipped page.
 				}

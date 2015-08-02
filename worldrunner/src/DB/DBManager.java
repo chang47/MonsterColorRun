@@ -19,6 +19,9 @@ import java.util.List;
 
 
 
+
+import org.xml.sax.Parser;
+
 import Abilities.Ability;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
@@ -50,6 +53,19 @@ public class DBManager extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
 	}
+	
+	private static final Monster RABBIT  = new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2, 
+			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1);
+	private static final Monster DEER = new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, 
+			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3, 1), 0, 0, 0, 1, 0, 2);
+	private static final Monster MARTIN = new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, 
+			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1, 1), 0, 0, 0, 1, 0, 3);
+	private static final Monster TURTLE = new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, 
+			new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1, 3, 2), 0, 0, 0, 1, 0, 4);
+	private static final Monster SEAHORSE = new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, 
+			new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2, 3, 2), 0, 0, 0, 1, 0, 5);
+	private static final Monster SNAKE = new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, 
+			new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3, 3, 2), 0, 0, 0, 1, 0, 6);
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -83,7 +99,7 @@ public class DBManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
-	public ArrayList<Monster> getParty() {
+/*	public ArrayList<Monster> getParty() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
 		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
@@ -91,7 +107,7 @@ public class DBManager extends SQLiteOpenHelper {
 		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
 		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 55, 1.5, 3,3)));
 		return list;
-	}
+	}*/
 	
 	
 	public List<Player> getPlayer() {
@@ -156,44 +172,62 @@ public class DBManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
-	public ArrayList<Sticker> getStickers() {
+	public ArrayList<Monster> getStickers() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return StickerManager.getSticker(db);
+		ArrayList<Monster> monsters = new ArrayList<Monster>();
+		for (Sticker sticker : StickerManager.getSticker(db)) {
+			monsters.add(Other.Parser.stickerToMonster(sticker));
+		}
+		return monsters;
 	}
 	
-	public int updateSticker(Sticker sticker) {
+	public int updateSticker(Monster monster) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return StickerManager.updateSticker(db, sticker);
+		return StickerManager.updateSticker(db, Other.Parser.MonsterToSticker(monster));
 	}
 	
-	public void addSticker(Sticker sticker) {
+	public void addSticker(Monster monster) {
+		// TODO you need to reload the player sticker so they have the accurate information
 		SQLiteDatabase db = this.getWritableDatabase();
-		StickerManager.addSticker(db, sticker);
+		StickerManager.addSticker(db, Other.Parser.CapturedMonsterToSticker(monster));
 		db.close();
 	}
 	
-	public void deleteSticker(Sticker sticker) {
+	public void deleteSticker(Monster monster) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		StickerManager.deleteSticker(db, sticker);
+		StickerManager.deleteSticker(db, monster.uid);
+		// TODO you need to reload the player sticker so they have the accurate information
 		db.close();
 	}
 	
-	public void addStickers(ArrayList<Sticker> stickers) {
+	public void addStickers(ArrayList<Monster> monsters) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		List<Sticker> stickers = new ArrayList<Sticker>();
+		// TODO you need to reload the player sticker so they have the accurate information
+		for (Monster monster : monsters) 
+			stickers.add(Other.Parser.CapturedMonsterToSticker(monster));
 		StickerManager.addStickers(db, stickers);
 		db.close();
 	}
 	
-	public ArrayList<Sticker> getEquippedStickers() {
+	public ArrayList<Monster> getEquippedStickers() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return StickerManager.getEquippedStickers(db);
+		ArrayList<Monster> monsters = new ArrayList<Monster>();
+		for (Sticker sticker : StickerManager.getEquippedStickers(db)) {
+			if (sticker != null)
+				monsters.add(Other.Parser.stickerToMonster(sticker));
+			else 
+				monsters.add(null);
+		}
+		return monsters;
 	}
-	
+
+/*	Not used anymore, it's a ui thing in how things get sorted.	
 	public ArrayList<Sticker> getUnequipedStickers() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return StickerManager.getUnequppedStickersWithNull(db);
 	}
-	
+*/
 	
 	/**
 	 * int pstid, int pid, int sid, String name, int color,
@@ -201,15 +235,15 @@ public class DBManager extends SQLiteOpenHelper {
 			int current_reach, int spaid, int saaid, int evolve, int equipped, int position,
 			int hp, int attack, int defense, int speed, double capture
 	 */
-	public ArrayList<Sticker> getFakeEquippedParty() {
+/*	public ArrayList<Sticker> getFakeEquippedParty() {
 		ArrayList<Sticker> list = new ArrayList<Sticker>();
 		list.add(new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 1, 1, 2000, 150, 125, 100, 0.0,2,new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
 		list.add(new Sticker(2, 1, 101, "Rose Deer", 2, 1, 1, 1, 1, 1, 1, 2, 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
-		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
+		list.add(new Sticker(4, 1, 103, "Turtle", 1, 1, 1, 1, 1, 1, 1, 4, 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1, 3)));
 		list.add(null);
 		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
 		return list;
-	}
+	}*/
 	
 	/**
 	 * 
@@ -276,12 +310,12 @@ public class DBManager extends SQLiteOpenHelper {
 	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		
-		list.add(new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));
-		list.add(new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3)));
-		list.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
-		list.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
-		list.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
-		list.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
+		list.add(RABBIT);
+		list.add(DEER);
+		list.add(MARTIN);
+		list.add(TURTLE);
+		list.add(SEAHORSE);
+		list.add(SNAKE);
 		return list;
 	}
 	
@@ -312,9 +346,9 @@ public class DBManager extends SQLiteOpenHelper {
 		// getRouteMonsters()
 		// future, probably empty or doesn't exist and just get the list from db call
 		for (int i = 0; i < routes.size(); i++) {
-			routes.get(i).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
-			routes.get(i).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
-			routes.get(i).monsters.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
+			routes.get(i).monsters.add(TURTLE);
+			routes.get(i).monsters.add(SEAHORSE);
+			routes.get(i).monsters.add(SNAKE);
 		}
 		city1Route.add(routes.get(0));
 		ArrayList<Route> city2Route = new ArrayList<Route>();
@@ -339,10 +373,10 @@ public class DBManager extends SQLiteOpenHelper {
 		// getDungeonMonster()
 		
 		// future, probably empty or doesn't exist and just get the list from db call
-		dungeons.get(0).monsters.add(new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1)));
-		dungeons.get(0).monsters.add(new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3)));
-		dungeons.get(1).monsters.add(new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
-		dungeons.get(1).monsters.add(new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3,3)));
+		dungeons.get(0).monsters.add(MARTIN);
+		dungeons.get(0).monsters.add(TURTLE);
+		dungeons.get(1).monsters.add(SEAHORSE);
+		dungeons.get(1).monsters.add(SNAKE);
 		// maps from city to dungeon id 
 		// similar to routes, need to get a mapping from the actual db
 		city1Dungeon.add(dungeons.get(0));

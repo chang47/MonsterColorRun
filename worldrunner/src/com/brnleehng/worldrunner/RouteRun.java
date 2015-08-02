@@ -47,7 +47,7 @@ import android.widget.Toast;
 import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
-public class CityRun extends Fragment implements SensorEventListener, StepListener {
+public class RouteRun extends Fragment implements SensorEventListener, StepListener {
 	// setup the step detectors
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -65,7 +65,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
-    private ArrayList<Sticker> found;
+    private ArrayList<Monster> found;
     //private ArrayList<Monster> found;
     
    
@@ -76,7 +76,6 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     private int steps;
     private double distance;
     private int coins;
-    private double powerStep;
     private int iPartyAttacked;
     
     // shouldn't have since the DB technically should only be accessed via
@@ -106,7 +105,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     
     //Sets the list of monsters for various purposes
     public ArrayList<Monster> monsterList;
-    public ArrayList<Sticker> partyList;
+    public ArrayList<Monster> partyList;
     public ArrayList<BattleMonster> partyMonsterBattleList;
     public ArrayList<BattleMonster> enemyMonsterBattleList;
     public ArrayList<ProgressBar> enemyProgressBarList;
@@ -118,7 +117,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     public int partyMonstersSize;
     
     //Sets amount of monsters defeated based on sides
-    public int deadMonsters;
+    public int deadPartyMonsters;
     //Player
     public int deadEnemies;
     //Enemy
@@ -131,6 +130,8 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 	
 	//Sets if the finish button can be used
 	public boolean finishEnabled = false;
+	
+	public boolean caughtAlready = false;
     
   
     @Override
@@ -156,7 +157,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
         playerProgressBarList = new ProgressBar[5];
         enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
         playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
-        deadMonsters = 0;
+        deadPartyMonsters = 0;
         deadEnemies = 0;
         enemyPartySize = 0;
         partyMonstersSize = 0;
@@ -173,12 +174,9 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
         distance = 0;
         coins = 0;
         db = new DBManager(getActivity().getApplicationContext());
-        found = new ArrayList<Sticker>();
+        found = new ArrayList<Monster>();
         //found = new ArrayList<Monster>();
         
-        // ignore, will be added once you can add friends 
-        powerStep = 5 * FRIEND1 * FRIEND2 * FRIEND3 * FRIEND4 * FRIEND5;
-
         // Initializes first monster encounter
         generateEnemies();
         generateParty();
@@ -210,12 +208,13 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 			
 			@Override
 			public void onClick(View v) {
+				// TODO add sticker and then once we move out, we would re-load the 
+				// the sticker list
+				db.addStickers(found);
 				if (finishEnabled) {
-					db.addStickers(found);
 					found.clear();
 					Hub.moveCity(Hub.currentRoute.to);
 				} else {
-					db.addStickers(found);
 					found.clear();
 					Hub.backToCity();
 				}
@@ -257,20 +256,6 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
                 		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).monster.hp * 100));
                 }
                 
-                // FreeRun.checkRun(); this class is the different variation?
-                // advantage and disadvantage:
-                // pro: you don't need to race 
-                // con: you have to do unnecessary check
-                // TOOD get rid of for the loop above and port it first
-/*                if (monster.currentHp <= 0) {
-                	// TODO change to not only check when the monster is dead but you
-                	// also need to check the probability of catching it before you add it
-                	// into the list of found monsters
-                	//list.add("got " + monster.name + "!");
-                	// TODO convert a monster to a sticker
-                	//found.add(monster);
-                	generateMonster();
-                }*/
             }
         });
         stopWatch.start();
@@ -286,6 +271,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     // The function to create a new random monster
     // use your list of monster to generate a new monster to fight
     private void generateEnemies() {
+    	caughtAlready = false;
     	deadEnemies = 0;
     	enemyPartySize = (int) ((Math.random() * 3.0) + 1);
     	list.add("new enemy party with " + enemyPartySize + " monsters");
@@ -356,6 +342,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     private void generateParty() {
     	playerPartyLayout.removeAllViews();
     	
+    	Log.d("user party size", "" + partyList.size());
     	for (int i = 0; i < partyList.size(); i++) {
     		RelativeLayout relLayout = new RelativeLayout(getActivity());
 			
@@ -408,7 +395,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
         		Log.d("size", "size of list is" + enemyProgressBarList.size());
     			partyMonstersSize++;
     			// TODO Quick hack, but needs to be fixed properly.
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i).convertToMonster(), partyList.get(i).hp, 1000 / partyList.get(i).speed));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
     		}
     		
     		playerPartyLayout.addView(relLayout);
@@ -441,7 +428,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     }
     
     private void reviveParty(int size) {
-    	deadMonsters = 0;
+    	deadPartyMonsters = 0;
     	for (int i = 0; i < size; i++) {
     		partyMonsterBattleList.get(i).currentHp = partyMonsterBattleList.get(i).monster.hp;
     	}
@@ -460,7 +447,6 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
             coins++;
         }
     	steps++;
-    	//currentProgress += powerStep;
     	distance = (steps * .91) / 1000;
     	
         tvDistance.setText("Distance: " + String.format("%.2f", distance));
@@ -484,10 +470,8 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 		            BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked)));
 		
 					if (partyMonsterBattleList.get(iPartyAttacked).currentHp <= 0) {
-						deadMonsters++;
-						// @TODO have to do something about the fact that you can have null monsters
-						if (deadMonsters >= partyMonstersSize) {
-							monsterPartiesNeeded--;
+						deadPartyMonsters++;
+						if (deadPartyMonsters >= partyMonstersSize) {
 							//Entire Party is dead, resurrect them and change monsters
 							reviveParty(partyMonsterBattleList.size());
 							generateEnemies();
@@ -561,7 +545,6 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 		        		deadEnemies++;
     					list.add("enemy " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " has been defeated!");
     					
-    					// TODO need to ensure that you can only catch one monster
     					captureMonster(iEnemyAttacked);
     					checkEnemyMonsterAllDead();
 	        		}
@@ -596,7 +579,7 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 	        	// check monster status
 	        	//Log.d("buff size", ""+ partyBattleList.get(0).buffs.size());
 	        	
-	        	
+	        	Log.d("party crash", "at index: " + i);
 	        	// checks for user's party's ability
 	        	if (steps % partyMonsterBattleList.get(i).monster.ability.steps == 0) { 
 	        		//Applies ability to attack enemy
@@ -635,7 +618,6 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
 		            	        }
 	        	        	}
 	        	        }
-	        	        // TODO seems to be called prematuralely?
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + "!");
 	        		}
 	        	}
@@ -644,15 +626,12 @@ public class CityRun extends Fragment implements SensorEventListener, StepListen
     }
     
     private void captureMonster(int partyAttack) {
-    	if ((double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(partyAttack).monster.capture) {
+    	if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(partyAttack).monster.capture) {
 			
 			list.add(enemyMonsterBattleList.get(partyAttack).monster.name + " has been captured!");
 			
-			found.add(new Sticker(0,0,0,enemyMonsterBattleList.get(partyAttack).monster.name,0,0,0,0,0,0,0,0,
-					enemyMonsterBattleList.get(partyAttack).monster.hp,enemyMonsterBattleList.get(partyAttack).monster.attack,
-					enemyMonsterBattleList.get(partyAttack).monster.defense,enemyMonsterBattleList.get(partyAttack).monster.speed,
-					enemyMonsterBattleList.get(partyAttack).monster.capture,enemyMonsterBattleList.get(partyAttack).monster.element,
-					enemyMonsterBattleList.get(partyAttack).monster.ability));
+			found.add(enemyMonsterBattleList.get(partyAttack).monster);
+			caughtAlready = true;
 		}
     }
     

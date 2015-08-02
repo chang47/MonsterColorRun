@@ -6,6 +6,7 @@ import java.util.List;
 import com.brnleehng.worldrunner.R;
 
 import DB.Model.Equipment;
+import DB.Model.Monster;
 import DB.Model.Sticker;
 import android.R.color;
 import android.app.Activity;
@@ -23,20 +24,20 @@ import android.widget.TextView;
  * Adapter used to show Stickers in a grid view. Used for viewing and equipping
  * stickers. Similar to equipmentAdapter
  */
-public class StickerAdapter extends ArrayAdapter<Sticker> {
+public class StickerAdapter extends ArrayAdapter<Monster> {
  
 	Context context;
 	LayoutInflater inflater;
-	ArrayList<Sticker> list;
+	List<Monster> monsterList;
 	private SparseBooleanArray mSelectedItemsIds;
  
 	// Constructor that takes in the list that is being used to read the 
 	// whole grid
-	public StickerAdapter(Context context, int resourceID, ArrayList<Sticker> list) {
+	public StickerAdapter(Context context, int resourceID, List<Monster> list) {
 		super(context, resourceID, list);
 		mSelectedItemsIds = new SparseBooleanArray();
 		this.context = context;
-		this.list = list;
+		this.monsterList = list;
 		inflater = LayoutInflater.from(context);
 	}
 	
@@ -73,11 +74,11 @@ public class StickerAdapter extends ArrayAdapter<Sticker> {
 		if (getItem(position) == null) {
 			holder.imageView.setImageResource(R.drawable.icon);
 		} else {
-			holder.txtTitle.setText(list.get(position).name);
+			holder.txtTitle.setText(monsterList.get(position).name);
 			holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
-			holder.lvl.setText("lvl: " + list.get(position).current_level);
-			holder.spd.setText("spd: " + list.get(position).attack);
-			holder.rch.setText("rch: " + list.get(position).speed);
+			holder.lvl.setText("lvl: " + monsterList.get(position).level);
+			holder.spd.setText("spd: " + monsterList.get(position).attack);
+			holder.rch.setText("rch: " + monsterList.get(position).speed);
 			if (mSelectedItemsIds.get(position)) {
 				view.setBackgroundColor(Color.BLUE);
 			} else {
@@ -89,14 +90,14 @@ public class StickerAdapter extends ArrayAdapter<Sticker> {
  	
 	@Override
 	// removes the sticker from the grid view list. Used for selling
-	public void remove(Sticker object) {
-		list.remove(object);
+	public void remove(Monster object) {
+		monsterList.remove(object);
 		notifyDataSetChanged();
 	}
  
 	// Gets the list that represents the list of stickers
-	public ArrayList<Sticker> getArray() {
-		return list;
+	public List<Monster> getArray() {
+		return monsterList;
 	}
  
 	// toggles the selected item. Selects or un-selects them based off of it's
