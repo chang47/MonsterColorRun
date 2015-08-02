@@ -78,7 +78,9 @@ public class SellStickerGrid extends Fragment {
 						adapter.remove(selecteditem);
 						db.deleteSticker(selecteditem);
 						// reloads the user party and all items
-						Hub.createChanges();
+						DBManager db = new DBManager(getActivity().getApplicationContext());
+						Hub.createChanges(db);
+						db.close();
 					}
 				}
 				adapter.removeSelection();

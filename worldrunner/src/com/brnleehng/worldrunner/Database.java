@@ -26,8 +26,9 @@ public class Database extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				Hub.createChanges();
+				// DB.CreateDB
 				Hub.createDB();
+				//Hub.createChanges();
 			}
 		});
 		

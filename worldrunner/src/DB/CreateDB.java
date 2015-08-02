@@ -3,6 +3,7 @@ package DB;
 import java.io.File;
 import java.util.List;
 
+import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 
 import DB.Model.Player;
@@ -20,9 +21,11 @@ public class CreateDB extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.createdb_activity, container, false);
-		DBManager db = new DBManager(getActivity());
+		DBManager db = new DBManager(getActivity().getApplicationContext());
+		Hub.createChanges(db);
 		List<Player> list = db.getPlayer();
 		Player player= list.get(0);
+		db.close();
 		TextView tv = (TextView) view.findViewById(R.id.dbView);
 		tv.setText("pid:" + player.getPid() + " username " + player.getUsername() + " fname " + player.getFname() + " lname " + player.getLname()
 				+ " level " + player.getLevel());

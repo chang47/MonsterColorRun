@@ -91,7 +91,7 @@ public class Hub extends Activity {
 		setContentView(R.layout.hub_activity);
 		
 		db = new DBManager(getApplicationContext());
-		createChanges();
+		createChanges(db);
 		
 		
 		// creates the list of cities
@@ -108,7 +108,7 @@ public class Hub extends Activity {
 			city.dungeons = cityDungeonList.get(city.cityId);
 		}
 		currentCity = cities.get(0);
-		// db.close(); // necessary to close the db?
+		db.close(); // necessary to close the db?
 		currentEquipment = null;
 		currentCategory = 0;
 		currentSticker = null;
@@ -139,7 +139,7 @@ public class Hub extends Activity {
 	 * Used to re-create/update the user database so that users
 	 * can see changes when they are made
 	 */
-	public static void createChanges() {
+	public static void createChanges(DBManager db) {
 		// Sets up all of the user's data 
 		List<Player> playerList = db.getPlayer();
 		player = playerList.get(0);
