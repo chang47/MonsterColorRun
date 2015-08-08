@@ -1,8 +1,8 @@
 package com.brnleehng.worldrunner;
 
-import DB.Model.City;
-import DB.Model.Dungeon;
-import DB.Model.Route;
+import metaModel.City;
+import metaModel.Dungeon;
+import metaModel.Route;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

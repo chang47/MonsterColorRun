@@ -20,17 +20,28 @@ import java.util.List;
 
 
 
+
+
+
+
+
+
+
+import metaModel.City;
+import metaModel.Dungeon;
+import metaModel.Route;
+
 import org.xml.sax.Parser;
 
+import dbReference.CityManager;
+import dbReference.DungeonManager;
+import dbReference.RouteManager;
 import Abilities.Ability;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
-import DB.Model.City;
-import DB.Model.Dungeon;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
-import DB.Model.Route;
 import DB.Model.Sticker;
 import Model.BattleMonster;
 import android.content.Context;
@@ -54,17 +65,21 @@ public class DBManager extends SQLiteOpenHelper {
 		this.context = context;
 	}
 	
-	private static final Monster RABBIT  = new Monster(1, "Artic Babbit" ,2000, 150, 125, 100, 0.0,2, 
+	private static final int ATTACK = 150;
+	private static final int HP = 1000;
+	// int uid, String name, int hp, int attack, int defense, int speed, double capture, int element, Ability ability, 
+	// int position, int equipped, int exp, int level, int evolve, int monsterId
+	private static final Monster RABBIT  = new Monster(1, "Artic Babbit" , HP, ATTACK, 125, 100, 0.0,2, 
 			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1);
-	private static final Monster DEER = new Monster(2, "Rose Deer", 2000, 125, 100, 150, 0.0,3, 
+	private static final Monster DEER = new Monster(2, "Rose Deer", HP, ATTACK, 100, 150, 0.0,3, 
 			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3, 1), 0, 0, 0, 1, 0, 2);
-	private static final Monster MARTIN = new Monster(3, "Fire Martin", 2000, 100, 150, 125, 0.0,1, 
+	private static final Monster MARTIN = new Monster(3, "Fire Martin", HP, ATTACK, 150, 125, 0.0,1, 
 			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1, 1), 0, 0, 0, 1, 0, 3);
-	private static final Monster TURTLE = new Monster(4, "Turtle", 1000, 100, 100, 100, 50.0,2, 
+	private static final Monster TURTLE = new Monster(4, "Turtle", HP, ATTACK, 100, 100, 50.0,2, 
 			new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1, 3, 2), 0, 0, 0, 1, 0, 4);
-	private static final Monster SEAHORSE = new Monster(5, "Sea Horse",800, 120, 50, 130, 50.0,2, 
+	private static final Monster SEAHORSE = new Monster(5, "Sea Horse",HP, ATTACK, 50, 130, 50.0,2, 
 			new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2, 3, 2), 0, 0, 0, 1, 0, 5);
-	private static final Monster SNAKE = new Monster(6, "Grass Snake", 1500, 70, 130, 70, 50.0,3, 
+	private static final Monster SNAKE = new Monster(6, "Grass Snake", HP, ATTACK, 130, 70, 50.0,3, 
 			new SupportAbility("Increase speed", "Moderately increase speed", 1, 50, 1.5, 3, 3, 2), 0, 0, 0, 1, 0, 6);
 
 	@Override
@@ -72,11 +87,7 @@ public class DBManager extends SQLiteOpenHelper {
 		PlayerManager.create(db);
 		EquipmentManager.create(db);
 		StickerManager.create(db);
-		CityManager.create(db);
-		RouteManager.create(db);
-		DungeonManager.create(db);
 		CityMappingManager.create(db);
-		MonsterManager.create(db);
 	}
 
 	@Override
@@ -85,11 +96,7 @@ public class DBManager extends SQLiteOpenHelper {
 		PlayerManager.drop(db);
 		EquipmentManager.drop(db);
 		StickerManager.drop(db);
-		CityManager.drop(db);
-		RouteManager.drop(db);
-		DungeonManager.drop(db);
 		CityMappingManager.drop(db);
-		MonsterManager.drop(db);
 		onCreate(db);
 	}
 	
@@ -244,57 +251,7 @@ public class DBManager extends SQLiteOpenHelper {
 		list.add(new Sticker(5, 1, 104, "Sea Horse", 1, 1, 1, 1, 1, 1, 1, 5, 800, 120, 50, 130, 50.0,2, new SupportAbility("Increase defense", "Moderately increase defense", 1, 50, 1.5, 2,3)));
 		return list;
 	}*/
-	
-	/**
-	 * 
-	 * City
-	 * 
-	 */
-	
-	public ArrayList<City> getCities() {
-		SQLiteDatabase db = this.getWritableDatabase();
-		return CityManager.getCity(db);
-	}
-	
-	public int updateCity(City city) {
-		SQLiteDatabase db = this.getWritableDatabase();
-		return CityManager.updateCity(db, city);
-	}
 
-	public void deleteCity(City city) {
-		SQLiteDatabase db = this.getWritableDatabase();
-		CityManager.deleteCity(db, city);
-		db.close();
-	}
-	
-	public void addCity(City city) {
-		SQLiteDatabase db = this.getWritableDatabase();
-		CityManager.addCity(db, city);
-		db.close();
-	}
-	
-	/**
-	 * 
-	 * Routes
-	 * 
-	 */
-	
-	public ArrayList<Route> getRoutes() {
-		SQLiteDatabase db = this.getWritableDatabase();
-		return RouteManager.getRoutes(db);
-	}
-	
-	/**
-	 * 
-	 * Dungeons
-	 * 
-	 */
-	
-	public ArrayList<Dungeon> getDungeons() {
-		SQLiteDatabase db = this.getWritableDatabase();
-		return DungeonManager.getDungeons(db);
-	}
-	
 	/**
 	 * 
 	 * MONSTERS
@@ -319,112 +276,5 @@ public class DBManager extends SQLiteOpenHelper {
 		return list;
 	}
 	
-	/**
-	 * 
-	 * CITY MAPPINGs
-	 * 
-	 */
-	
-	/**
-	 * Stub that setup the initial mapping cities to their routes
-	 * @return a SparseArray that contains all of the mapping of cities and their cities
-	 * 		   in the form of cityId -> List of routes id that belong to the city
-	 */
-	public SparseArray<ArrayList<Route>> getCityRoutes() {
-		ArrayList<Route> routes = getRoutes();
-		SparseArray<ArrayList<Route>> map = new SparseArray<ArrayList<Route>>();
-		ArrayList<Route> city1Route = new ArrayList<Route>();
-		// maps to route ID path so we can get more info from the route class
-		
-		// TODO note that we would need to get the mapping from the RouteManager
-		// TODO also get the routing of monsters to the routes
-		// and then loop through them and put the appropriate routes
-		
-		// adds the monsters in
-		
-		// TODO get the monster routing mapping
-		// getRouteMonsters()
-		// future, probably empty or doesn't exist and just get the list from db call
-		for (int i = 0; i < routes.size(); i++) {
-			routes.get(i).monsters.add(TURTLE);
-			routes.get(i).monsters.add(SEAHORSE);
-			routes.get(i).monsters.add(SNAKE);
-		}
-		city1Route.add(routes.get(0));
-		ArrayList<Route> city2Route = new ArrayList<Route>();
-		city2Route.add(routes.get(1));
-		map.put(1, city1Route);
-		map.put(2, city2Route);
-		return map;
-	}
-	
-	/**
-	 * Stub that setup the initial mapping of cities to their dungeons
-	 * @return a SparseArray that contains all of the mapping of cities to their dungeons
-	 * 		   in the form of cityId ->list of dungeons
-	 */
-	public SparseArray<ArrayList<Dungeon>> getCityDungeons() {
-		SparseArray<ArrayList<Dungeon>> map = new SparseArray<ArrayList<Dungeon>>();
-		ArrayList<Dungeon> city1Dungeon = new ArrayList<Dungeon>();
-		ArrayList<Dungeon> dungeons = getDungeons();
-		
-		// maps dungeons to their monsters, would have to loop through
-		// the mapping to add the dungeon
-		// getDungeonMonster()
-		
-		// future, probably empty or doesn't exist and just get the list from db call
-		dungeons.get(0).monsters.add(MARTIN);
-		dungeons.get(0).monsters.add(TURTLE);
-		dungeons.get(1).monsters.add(SEAHORSE);
-		dungeons.get(1).monsters.add(SNAKE);
-		// maps from city to dungeon id 
-		// similar to routes, need to get a mapping from the actual db
-		city1Dungeon.add(dungeons.get(0));
-		ArrayList<Dungeon> city2Dungeon = new ArrayList<Dungeon>();
-		city2Dungeon.add(dungeons.get(1));
-		map.put(1, city1Dungeon);
-		map.put(2, city2Dungeon);
-		return map;
-	}
-	
-	/**
-	 * 
-	 * Dungeon Mappings
-	 * 
-	 */
-	
-	/**
-	 * Stub that setup the initial mapping of monsters to their routes
-	 * @return a SparseArray that contains all of the mapping of monsters to their routes
-	 * 		   in the form of routeId -> list of monsters
-	 */
-	public SparseArray<ArrayList<Integer>> getRouteMonsters() {
-		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
-		ArrayList<Integer> route1Monsters = new ArrayList<Integer>();
-		route1Monsters.add(4);
-		route1Monsters.add(5);
-		route1Monsters.add(6);
-		map.put(1, route1Monsters);
-		map.put(2, route1Monsters);
-		return map;
-	}
-	   
-	/**
-	 * Stub that setup the initial mapping of monsters to their dungeons
-	 * @return a SparseArray that contains all of the mapping of monsters to their dungeons
-	 * 		   in the form of dungeonId -> list of monsters
-	 */
-	public SparseArray<ArrayList<Integer>> getDungeonMonsters() {
-		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
-		ArrayList<Integer> dungeon1Monsters = new ArrayList<Integer>();
-		ArrayList<Integer> dungeon2Monsters = new ArrayList<Integer>();
-		dungeon1Monsters.add(4);
-		dungeon1Monsters.add(5);
-		dungeon2Monsters.add(4);
-		dungeon2Monsters.add(6);
-		map.put(1, dungeon1Monsters);
-		map.put(2, dungeon2Monsters);
-		return map;
-	}
 
 }

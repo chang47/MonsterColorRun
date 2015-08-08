@@ -5,13 +5,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import metaModel.Route;
 import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.Monster;
-import DB.Model.Route;
 import DB.Model.Sticker;
 import Model.BattleMonster;
 import android.app.Dialog;
@@ -588,11 +588,11 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 	        	
 	        	Log.d("party crash", "at index: " + i);
 	        	// checks for user's party's ability
-	        	if (steps % partyMonsterBattleList.get(i).monster.ability.steps == 0) { 
+	        	if (steps % partyMonsterBattleList.get(i).monster.activeAbility.steps == 0) { 
 	        		//Applies ability to attack enemy
-	        		if (partyMonsterBattleList.get(i).monster.ability.getClass() == DamageAbility.class) {
+	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
 		        		int partyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-	        			double damage = partyMonsterBattleList.get(i).monster.ability.activateAbility();
+	        			double damage = partyMonsterBattleList.get(i).monster.activeAbility.activateAbility();
 	        			enemyMonsterBattleList.get(partyAttack).currentHp -= damage;
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
@@ -604,9 +604,9 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
 			        		captureMonster(partyAttack);
 			        		checkEnemyMonsterAllDead();
 		        		}
-	        		} else if (partyMonsterBattleList.get(i).monster.ability.getClass() == SupportAbility.class) {
+	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
-	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.ability;
+	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.activeAbility;
 	        	        for (int b = 0; b < partyMonsterBattleList.size(); b++) {
 	        	        	if (partyMonsterBattleList.get(b) != null) {
 		        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);

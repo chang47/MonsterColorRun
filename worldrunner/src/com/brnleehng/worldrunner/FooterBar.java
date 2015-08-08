@@ -17,12 +17,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class FooterBar extends Fragment {
-	private Button race;
+	private Button city;
 	private Button items;
 	private Button store;
 	private Button friends;
 	private Button db;
-	private Button city;
+
 	
 	
 	@Override
@@ -31,12 +31,13 @@ public class FooterBar extends Fragment {
 		final LinearLayout view = (LinearLayout) 
 				inflate.inflate(R.layout.footer_activity, container, false);
 		//final LinearLayout layout = (LinearLayout) inflate.inflate(resource, root)
-		race = (Button) view.findViewById(R.id.menuRace);
-		race.setOnClickListener(new OnClickListener() {
+
+		city = (Button) view.findViewById(R.id.menuCity);
+		city.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Hub.race();
+				Hub.cityHub();
 			}
 		});
 		
@@ -76,14 +77,6 @@ public class FooterBar extends Fragment {
 			}
 		});
 		
-		city = (Button) view.findViewById(R.id.city);
-		city.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Hub.cityHub();
-			}
-		});
 		return view;
 	}
 }

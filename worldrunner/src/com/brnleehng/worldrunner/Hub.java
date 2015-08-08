@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import metaModel.City;
+import metaModel.Dungeon;
+import metaModel.Route;
 import DB.CreateDB;
 import DB.DBManager;
-import DB.Model.City;
-import DB.Model.Dungeon;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
-import DB.Model.Route;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
@@ -122,15 +122,15 @@ public class Hub extends Activity {
 			if (savedInstanceState != null) {
 				return;
 			}
-			Race race = new Race();
+			CityHub cityHub = new CityHub();
 			header = new HeaderBar();
 			footer = new FooterBar();
-			race.setArguments(getIntent().getExtras());
+			cityHub.setArguments(getIntent().getExtras());
 			fm = getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();
 			ft.replace(R.id.header, header);
 			ft.replace(R.id.footer, footer);
-			ft.replace(R.id.hub, race);
+			ft.replace(R.id.hub, cityHub);
 			ft.commit();
 		}
 	}

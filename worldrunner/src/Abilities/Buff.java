@@ -1,5 +1,7 @@
 package Abilities;
 
+
+// Data model that represents a buff a monster can get
 public class Buff {
 	
 	public String name;

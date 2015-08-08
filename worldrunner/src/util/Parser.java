@@ -87,9 +87,8 @@ public class Parser {
 				ability = new SupportAbility("Increase attack", "Modterately increase attack", 1, 50, 1.5, 1, 3, 2);
 				break;
 			default:
-				// TODO catch errors
-				ability = null;
-				break;
+				throw new Error("ability id is not within the acceptable range, crashed at " + sticker.name + " with ability id: "
+						 + sticker.saaid);
 		}
 		return new Monster(sticker.pstid, sticker.name, sticker.hp, sticker.attack, sticker.defense, 
 				sticker.speed, sticker.capture, sticker.element, ability, sticker.position, sticker.equipped,
@@ -105,7 +104,7 @@ public class Parser {
 		// TODO need to get a list of default stats for stickers, for now we'll just put placeholders
 		// generates new sticker id when being added
 		return new Sticker(-1, Hub.player.pid, monster.monsterId, monster.name, monster.element,
-				1, 0, monster.ability.abilityId, 0, 0, 0, 0, monster.hp, monster.attack, monster.defense, 
+				1, 0, monster.activeAbility.abilityId, monster.activeAbility.abilityId, 0, 0, 0, monster.hp, monster.attack, monster.defense, 
 				monster.speed, monster.capture);
 		
 		 
@@ -116,8 +115,8 @@ public class Parser {
 		return new Sticker(monster.uid, Hub.player.pid, monster.monsterId, monster.name, monster.element,
 				monster.level, 
 				monster.exp, 
-				monster.ability.abilityId, 
-				0, monster.evolve, monster.equipped, monster.position, 
+				monster.activeAbility.abilityId, 
+				monster.activeAbility.abilityId, monster.evolve, monster.equipped, monster.position, 
 				monster.hp, monster.attack, monster.defense, 
 				monster.speed, monster.capture);
 		

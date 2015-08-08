@@ -1,7 +1,7 @@
 package com.brnleehng.worldrunner;
 
-import DB.Model.City;
-import DB.Model.Dungeon;
+import metaModel.City;
+import metaModel.Dungeon;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;

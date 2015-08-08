@@ -5,17 +5,15 @@
     android:orientation="horizontal" >
 
     <Button
-        android:id="@+id/menuRace"
-        android:layout_width="wrap_content"
+        android:id="@+id/menuCity"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="4dp"
         android:layout_weight="1"
-        android:text="Race" />
-
+        android:text="City" />
     <Button
         android:id="@+id/menuItems"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
@@ -23,7 +21,7 @@
 
     <Button
         android:id="@+id/menuStore"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
@@ -31,24 +29,18 @@
 
     <Button
         android:id="@+id/menuFriends"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
         android:text="Friends" />
     <Button
         android:id="@+id/menuDB"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
         android:text="DB" />
-    <Button
-        android:id="@+id/city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
-        android:text="City" />
+
 
 </LinearLayout>

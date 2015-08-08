@@ -2,9 +2,9 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 
-import DB.Model.City;
+import metaModel.City;
+import metaModel.Route;
 import DB.Model.MapGraph;
-import DB.Model.Route;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;

@@ -22,7 +22,6 @@ public class Sticker {
 	public int defense;
 	public int speed;
 	public double capture;
-	public Ability ability;
 	
 	public Sticker(int pstid, int pid, int sid, String name, int element,
 			int current_level, int current_exp, int spaid, int saaid, int evolve, int equipped, int position,
@@ -45,7 +44,6 @@ public class Sticker {
 		this.speed = speed;
 		this.capture = capture;
 		this.element = element;
-		this.ability = ability;
 	}
 	
 	public Sticker() { }

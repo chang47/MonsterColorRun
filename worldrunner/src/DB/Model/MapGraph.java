@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import metaModel.City;
+import metaModel.Dungeon;
+import metaModel.Route;
 import android.util.Log;
 import android.util.SparseArray;
 

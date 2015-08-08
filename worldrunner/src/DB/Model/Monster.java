@@ -13,16 +13,17 @@ public class Monster {
 	public int speed;
 	public double capture;
 	public int element;
-	public Ability ability;
+	public Ability activeAbility;
 	public int position;
 	public int equipped;
 	public int exp;
 	public int level;
 	public int evolve;
 	public int monsterId;
+	//public Ability passiveAbility;
 	
-	public Monster(int uid, String name, int hp, int attack, int defense, int speed, double capture, int element, Ability ability, 
-			int position, int equipped, int exp, int level, int evolve, int monsterId) {
+	public Monster(int uid, String name, int hp, int attack, int defense, int speed, double capture, int element, Ability activeAbility, 
+			int position, int equipped, int exp, int level, int evolve, int monsterId/*, Ability passiveAbility*/) {
 		this.uid = uid;
 		this.name = name;
 		this.hp = hp;
@@ -36,12 +37,13 @@ public class Monster {
 		//2 = Grass
 		//3 = Light
 		//4 = Dark
-		this.ability = ability;
+		this.activeAbility = activeAbility;
 		this.position = position;
 		this.equipped = equipped;
 		this.exp = exp;
 		this.level = level;
 		this.evolve = evolve;
 		this.monsterId = monsterId;
+		//this.passiveAbility = passiveAbility;
 	}
 }

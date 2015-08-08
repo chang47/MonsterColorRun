@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class StickerManager {
+	//TODO needs ability level
 	private static final String TABLE_STICKER = "Sticker";
 	private static final String PSTID = "pstid";
 	private static final String PID = "pid";
@@ -47,6 +48,7 @@ public class StickerManager {
         db.execSQL(CREATE_STICKER_TABLE);
         /*createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
         		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));*/
+        // active ability can't be 0 or crash
         createInitial(db, new Sticker(1, 1, 100, "Artic Babbit", 1, 1, 0, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0));
 		
 	}
