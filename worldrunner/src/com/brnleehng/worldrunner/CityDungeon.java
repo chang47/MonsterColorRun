@@ -33,7 +33,8 @@ public class CityDungeon extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					Hub.startDungeonRun(dungeon);
+					if (Hub.partySize() > 0)
+						Hub.startDungeonRun(dungeon);
 				}
 			});
 			

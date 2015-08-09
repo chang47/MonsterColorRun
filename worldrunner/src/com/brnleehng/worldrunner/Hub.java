@@ -423,6 +423,7 @@ public class Hub extends Activity {
 		FragmentTransaction ft = setFT();
 		DungeonRun dunRun = new DungeonRun();
 		currentDungeon = dungeon;
+		enemyList = util.Parser.enemyDungeonStickersToEnemyMonsters(refMonsters, refDungeonMonsters.get(dungeon.dungeonId));
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, dunRun).commit();
@@ -433,10 +434,11 @@ public class Hub extends Activity {
 		FragmentTransaction ft = setFT();
 		RouteRun cityRun = new RouteRun();
 		currentRoute = route;
+		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();
-		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
+		
 	}
 	
 	public static void addSticker(Monster monsterSticker) {

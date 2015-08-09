@@ -112,6 +112,12 @@ public class Parser {
 		
 	}
 	
+	/**
+	 * Creates a list of monster for a route
+	 * @param stickers
+	 * @param routeMonsters
+	 * @return
+	 */
 	public static List<Monster> enemyRouteStickersToEnemyMonsters(List<Sticker> stickers, List<RouteMonsters> routeMonsters) {
 		List<Monster> monsters = new ArrayList<Monster>();
 		for (RouteMonsters monster : routeMonsters) {
@@ -121,17 +127,49 @@ public class Parser {
 		return monsters;
 	}
 	
+	/**
+	 * Creates a list of monsters for a dungeon
+	 * @param stickers
+	 * @param dungeonMonsters
+	 * @return
+	 */
+	public static List<Monster> enemyDungeonStickersToEnemyMonsters(List<Sticker> stickers, List<DungeonMonsters> dungeonMonsters) {
+		List<Monster> monsters = new ArrayList<Monster>();
+		for (DungeonMonsters monster : dungeonMonsters) {
+			Sticker sticker = stickers.get(monster.monsterId - 1);
+			monsters.add(convertEnemyStickerToMonster(sticker, monster));
+		}
+		return monsters;
+	}
+	
+	/**
+	 * Converts a sticker to a route monster
+	 * @param sticker
+	 * @param routeMonster
+	 * @return
+	 */
 	public static Monster convertEnemyStickerToMonster(Sticker sticker, RouteMonsters routeMonster) {
 		
 		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, routeMonster.capture, sticker.element,
 				null, -1, -1, 0, routeMonster.level, sticker.evolve, sticker.sid);
 	}
 	
+	/**
+	 * Converts a sticker to a dungeon monster
+	 * @param sticker
+	 * @param dungeonMonster
+	 * @return
+	 */
 	public static Monster convertEnemyStickerToMonster(Sticker sticker, DungeonMonsters dungeonMonster) {
 		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, dungeonMonster.capture, sticker.element,
 				getAbility(sticker), -1, -1, 0, dungeonMonster.level, sticker.evolve, sticker.sid);
 	}
 	
+	/**
+	 * Return the ability from the given sticker
+	 * @param sticker
+	 * @return
+	 */
 	private static Ability getAbility(Sticker sticker) {
 		Ability ability;
 		switch (sticker.saaid) {

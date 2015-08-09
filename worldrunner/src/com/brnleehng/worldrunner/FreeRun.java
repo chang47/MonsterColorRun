@@ -329,12 +329,12 @@ public class FreeRun extends Fragment implements SensorEventListener, StepListen
     		
     		enemyPartyLayout.addView(relLayout);
 
-    		int monsterGen = (int) (Math.random() * Hub.currentRoute.monsters.size());
+    		int monsterGen = (int) (Math.random() * Hub.enemyList.size());
     		
        	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
-       	   			Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed));
+       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
+       	   			Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
     		
 		}
     	
