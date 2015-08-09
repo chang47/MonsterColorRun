@@ -16,8 +16,8 @@ public class RouteManager {
 	private static final String DESCRIPTION = "description";
 	private static final String MIN = "min";
 	private static final String MAX = "max";
-	private static final String FROM = "from";
-	private static final String TO = "to";
+	private static final String FROM_CITY = "from_city";
+	private static final String TO_CITY = "to_city";
 	private static final String CLEAR = "clear";
 	private static final String QUANTITY = "quantity";
 	private static final String MONSTER_ROUTE_ID = "monster_route_id";
@@ -26,11 +26,11 @@ public class RouteManager {
 		String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_ROUTE + "("
                 + ROUTE_ID + " INTEGER PRIMARY KEY," + ROUTE_NAME + " TEXT," +
 				DESCRIPTION + " TEXT," + MIN + " INTEGER," + MAX + " INTEGER," +
-                FROM + " INTEGER," + TO + " INTEGER," + CLEAR + " INTEGER," + QUANTITY +
-                " INTEGER," + MONSTER_ROUTE_ID + "INTEGER)";
+                FROM_CITY + " INTEGER," + TO_CITY + " INTEGER," + CLEAR + " INTEGER," + QUANTITY +
+                " INTEGER," + MONSTER_ROUTE_ID + " INTEGER)";
 		db.execSQL(CREATE_PLAYER_TABLE);
 		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 1, 2, 1, 10, 1));
-		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 2, 1, 1, 10, 1));
+		createInitial(db, new Route(2, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 2, 1, 1, 10, 1));
 	}
 	
 	private static void createInitial(SQLiteDatabase db, Route route) {
@@ -40,8 +40,8 @@ public class RouteManager {
 		values.put(DESCRIPTION, route.description);
 		values.put(MIN, route.min);
 		values.put(MAX, route.max);
-		values.put(FROM, route.from);
-		values.put(TO, route.to);
+		values.put(FROM_CITY, route.from);
+		values.put(TO_CITY, route.to);
 		values.put(CLEAR, route.clear);
 		values.put(QUANTITY, route.quantity);
 		values.put(MONSTER_ROUTE_ID, route.monsterRouteId);

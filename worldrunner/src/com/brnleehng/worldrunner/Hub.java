@@ -121,6 +121,10 @@ public class Hub extends Activity {
 		refRoutes = refDb.getRoutesList();
 		expTable = refDb.getExp();
 		refMonsters = refDb.monstersList();
+		
+		for (Sticker sticker : refMonsters) {
+			Log.d("monster name:", sticker.name);
+		}
 		//Iterator<City> iter = refCities.iterator();
 		
 		// probably in the future create the monster content in the routes and dungeons when you do

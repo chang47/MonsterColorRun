@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class MonsterManager {
 	private static final String MONSTERS_REFERENCE = "monstersReference";
+	private static final String UID = "uid";
 	private static final String SID = "sid";
 	private static final String NAME = "name";
 	private static final String ELEMENT = "color";
@@ -28,7 +29,7 @@ public class MonsterManager {
 	 */
 	public static void create(SQLiteDatabase db) {
 		String CREATE_STICKER_TABLE = "CREATE TABLE " + MONSTERS_REFERENCE + "("
-                + SID + " INTEGER PRIMARY KEY," + NAME + " TEXT," + ELEMENT + " INTEGER," +
+                + UID + "INTEGER PRIMARY KEY," + SID + " INTEGER," + NAME + " TEXT," + ELEMENT + " INTEGER," +
                  SPAID + " INTEGER, " + SAAID + " INTEGER," + EVOLVE + " INTEGER," + 
                 HP + " INTEGER," + ATK + " INTEGER," + DEF + " INTEGER, " + SPD + " INTEGER" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
@@ -44,9 +45,9 @@ public class MonsterManager {
         createInitial(db, createReferenceMonster(9, "Brewster", 0, 9, 9, 1, 40, 50, 50, 50));
 	}
 	
-	private static Sticker createReferenceMonster(int id, String name, int element, int spaid, int saaid, int evo,
+	private static Sticker createReferenceMonster(int sid, String name, int element, int spaid, int saaid, int evo,
 			int hp, int atk, int def, int spd) {
-		return new Sticker(-1, -1, id, name, element, -1, -1, spaid, saaid, evo, -1, -1, hp, atk, def, spd, -1);
+		return new Sticker(-1, -1, sid, name, element, -1, -1, spaid, saaid, evo, -1, -1, hp, atk, def, spd, -1);
 	}
 	
 	/**
@@ -58,6 +59,26 @@ public class MonsterManager {
 		ContentValues values = new ContentValues();
 		values = addContent(values, sticker);
 		db.insert(MONSTERS_REFERENCE, null, values);
+	}
+	
+	/**
+	 * Helps setup the sticker to be used in an add query
+	 * @param values - the thing to be added to
+	 * @param sticker - the sticker that will be affected
+	 * @return a ContentValues that have been updated
+	 */
+	private static ContentValues addContent(ContentValues values, Sticker sticker) {
+		values.put(SID, sticker.sid);
+		values.put(NAME, sticker.name);
+		values.put(ELEMENT, sticker.element);
+		values.put(SPAID, sticker.spaid);
+		values.put(SAAID, sticker.saaid);
+		values.put(EVOLVE, sticker.evolve);
+		values.put(HP, sticker.hp);
+		values.put(ATK, sticker.attack);
+		values.put(DEF, sticker.defense);
+		values.put(SPD, sticker.speed);
+		return values;
 	}
 	
 	/**
@@ -82,20 +103,20 @@ public class MonsterManager {
 				Sticker sticker = new Sticker();
 				sticker.pstid = -1;
 				sticker.pid = -1;
-				sticker.sid = cursor.getInt(0);
-				sticker.name = cursor.getString(1);
-				sticker.element = cursor.getInt(2);
+				sticker.sid = cursor.getInt(1);
+				sticker.name = cursor.getString(2);
+				sticker.element = cursor.getInt(3);
 				sticker.current_level = -1;
 				sticker.current_exp = -1;
-				sticker.spaid = cursor.getInt(3);
-				sticker.saaid = cursor.getInt(4);
-				sticker.evolve = cursor.getInt(5);
+				sticker.spaid = cursor.getInt(4);
+				sticker.saaid = cursor.getInt(5);
+				sticker.evolve = cursor.getInt(6);
 				sticker.equipped = -1;
 				sticker.position = -1;
-				sticker.hp = cursor.getInt(6);
-				sticker.attack = cursor.getInt(7);
-				sticker.defense = cursor.getInt(8);
-				sticker.speed = cursor.getInt(9);
+				sticker.hp = cursor.getInt(7);
+				sticker.attack = cursor.getInt(8);
+				sticker.defense = cursor.getInt(9);
+				sticker.speed = cursor.getInt(10);
 				sticker.capture = -1;
 				list.add(sticker);
 			} while (cursor.moveToNext());
@@ -134,23 +155,5 @@ public class MonsterManager {
 		db.delete(MONSTERS_REFERENCE, SID + " = ?", new String[] { String.valueOf(uid) });
 	}
 	
-	/**
-	 * Helps setup the sticker to be used in an add query
-	 * @param values - the thing to be added to
-	 * @param sticker - the sticker that will be affected
-	 * @return a ContentValues that have been updated
-	 */
-	private static ContentValues addContent(ContentValues values, Sticker sticker) {
-		values.put(SID, sticker.sid);
-		values.put(NAME, sticker.name);
-		values.put(ELEMENT, sticker.element);
-		values.put(SPAID, sticker.spaid);
-		values.put(SAAID, sticker.saaid);
-		values.put(EVOLVE, sticker.evolve);
-		values.put(HP, sticker.hp);
-		values.put(ATK, sticker.attack);
-		values.put(DEF, sticker.defense);
-		values.put(SPD, sticker.speed);
-		return values;
-	}
+	
 }
