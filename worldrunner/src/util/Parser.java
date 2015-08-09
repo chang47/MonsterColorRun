@@ -1,5 +1,11 @@
 package util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import metaModel.DungeonMonsters;
+import metaModel.RouteMonsters;
+
 import com.brnleehng.worldrunner.Hub;
 
 import Abilities.Ability;
@@ -74,24 +80,8 @@ public class Parser {
 	}
 	
 	public static Monster stickerToMonster(Sticker sticker) {
-		Ability ability;
-		switch (sticker.saaid) {
-			// damage ability
-			case 1:
-				// TODO need to have some table of all ability so that it can be used to get the needed data
-				//"Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2
-				ability = new DamageAbility("Damage All", "Does moderate damage to one enemy", 1, 10, 200.0, 2, 1);
-				break;
-			case 2:
-				//"Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3
-				ability = new SupportAbility("Increase attack", "Modterately increase attack", 1, 50, 1.5, 1, 3, 2);
-				break;
-			default:
-				throw new Error("ability id is not within the acceptable range, crashed at " + sticker.name + " with ability id: "
-						 + sticker.saaid);
-		}
 		return new Monster(sticker.pstid, sticker.name, sticker.hp, sticker.attack, sticker.defense, 
-				sticker.speed, sticker.capture, sticker.element, ability, sticker.position, sticker.equipped,
+				sticker.speed, sticker.capture, sticker.element, getAbility(sticker), sticker.position, sticker.equipped,
 				sticker.current_exp, sticker.current_level, sticker.evolve, sticker.sid);
 	}
 	
@@ -120,5 +110,45 @@ public class Parser {
 				monster.hp, monster.attack, monster.defense, 
 				monster.speed, monster.capture);
 		
+	}
+	
+	public static List<Monster> enemyRouteStickersToEnemyMonsters(List<Sticker> stickers, List<RouteMonsters> routeMonsters) {
+		List<Monster> monsters = new ArrayList<Monster>();
+		for (RouteMonsters monster : routeMonsters) {
+			Sticker sticker = stickers.get(monster.monsterId - 1);
+			monsters.add(convertEnemyStickerToMonster(sticker, monster));
+		}
+		return monsters;
+	}
+	
+	public static Monster convertEnemyStickerToMonster(Sticker sticker, RouteMonsters routeMonster) {
+		
+		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, routeMonster.capture, sticker.element,
+				null, -1, -1, 0, routeMonster.level, sticker.evolve, sticker.sid);
+	}
+	
+	public static Monster convertEnemyStickerToMonster(Sticker sticker, DungeonMonsters dungeonMonster) {
+		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, dungeonMonster.capture, sticker.element,
+				getAbility(sticker), -1, -1, 0, dungeonMonster.level, sticker.evolve, sticker.sid);
+	}
+	
+	private static Ability getAbility(Sticker sticker) {
+		Ability ability;
+		switch (sticker.saaid) {
+		// damage ability
+		case 1:
+			// TODO need to have some table of all ability so that it can be used to get the needed data
+			//"Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2
+			ability = new DamageAbility("Damage All", "Does moderate damage to one enemy", 1, 10, 200.0, 2, 1);
+			break;
+		case 2:
+			//"Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3
+			ability = new SupportAbility("Increase attack", "Modterately increase attack", 1, 50, 1.5, 1, 3, 2);
+			break;
+		default:
+			throw new Error("ability id is not within the acceptable range, crashed at " + sticker.name + " with ability id: "
+					 + sticker.saaid);
+		}
+		return ability;
 	}
 }

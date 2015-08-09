@@ -79,7 +79,7 @@ public class SellStickerGrid extends Fragment {
 						db.deleteSticker(selecteditem);
 						// reloads the user party and all items
 						DBManager db = new DBManager(getActivity().getApplicationContext());
-						Hub.createChanges(db);
+						Hub.getPlayerData(db);
 						db.close();
 					}
 				}

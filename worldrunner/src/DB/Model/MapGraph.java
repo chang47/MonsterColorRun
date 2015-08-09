@@ -17,12 +17,12 @@ import android.util.SparseArray;
  * from city to city
  */
 public class MapGraph {
-	private static SparseArray<City> graph;
+/*	private static SparseArray<City> graph;
 	private static SparseArray<Route> cityToRoutes;
 	
 	public static void createGraph() {
 		graph = new SparseArray<City>();
-		/**
+		*//**
 		City city1 = new City(1);
 		City city2 = new City(2);
 		
@@ -33,7 +33,7 @@ public class MapGraph {
 		city2.routes.add(route2);
 		graph.put(city1.cityID, city1);
 		graph.put(city2.cityID, city2);
-		**/
+		**//*
 		//constructGraph();
 	}
 	
@@ -49,7 +49,8 @@ public class MapGraph {
 	public static void constructGraph(ArrayList<City> cities, ArrayList<Route> routes, 
 			ArrayList<Dungeon> dungeons) {
 		
-	}
+	}*/
+	// TODO commenting ends here
 	
 /*	private void constructGraph() {
         try {

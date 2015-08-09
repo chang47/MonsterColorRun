@@ -20,16 +20,17 @@ public class RouteManager {
 	private static final String TO = "to";
 	private static final String CLEAR = "clear";
 	private static final String QUANTITY = "quantity";
+	private static final String MONSTER_ROUTE_ID = "monster_route_id";
 	
 	public static void create(SQLiteDatabase db) {
 		String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_ROUTE + "("
                 + ROUTE_ID + " INTEGER PRIMARY KEY," + ROUTE_NAME + " TEXT," +
 				DESCRIPTION + " TEXT," + MIN + " INTEGER," + MAX + " INTEGER," +
-                FROM + " INTEGER," + TO + " INTEGER," + CLEAR + "INTEGER" + QUANTITY +
-                "INTEGER)";
+                FROM + " INTEGER," + TO + " INTEGER," + CLEAR + " INTEGER," + QUANTITY +
+                " INTEGER," + MONSTER_ROUTE_ID + "INTEGER)";
 		db.execSQL(CREATE_PLAYER_TABLE);
-		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 1, 2, 1, 10));
-		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 2, 1, 1, 10));
+		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 1, 2, 1, 10, 1));
+		createInitial(db, new Route(1, "Sunny Road", "The sun brigthly shines on your first journey", 1, 3, 2, 1, 1, 10, 1));
 	}
 	
 	private static void createInitial(SQLiteDatabase db, Route route) {
@@ -43,6 +44,7 @@ public class RouteManager {
 		values.put(TO, route.to);
 		values.put(CLEAR, route.clear);
 		values.put(QUANTITY, route.quantity);
+		values.put(MONSTER_ROUTE_ID, route.monsterRouteId);
 		db.insert(TABLE_ROUTE, null, values);
 	}
 	
@@ -65,7 +67,8 @@ public class RouteManager {
 				int to = cursor.getInt(6);
 				int clear = cursor.getInt(7);
 				int quantity = cursor.getInt(8);
-				Route route = new Route(routeId, routeName, description, min, max, from, to, clear, quantity);
+				int monsterRouteId = cursor.getInt(9);
+				Route route = new Route(routeId, routeName, description, min, max, from, to, clear, quantity, monsterRouteId);
 				list.add(route);
 			} while (cursor.moveToNext());
 		}

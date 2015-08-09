@@ -174,7 +174,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         steps = 0;
         distance = 0;
         coins = 0;
-        db = new DBManager(getActivity().getApplicationContext());
+        //db = new DBManager(getActivity().getApplicationContext());
         found = new ArrayList<Monster>();
         //found = new ArrayList<Monster>();
         
@@ -211,7 +211,9 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 			public void onClick(View v) {
 				// TODO add sticker and then once we move out, we would re-load the 
 				// the sticker list
+				db = new DBManager(getActivity());
 				db.addStickers(found);
+				
 				// TODO need to figure out how to display all of this.
 				for (Monster monster : partyList) {
 					monster.exp += exp / partyMonstersSize;
@@ -327,12 +329,12 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     		
     		enemyPartyLayout.addView(relLayout);
 
-    		int monsterGen = (int) (Math.random() * Hub.currentRoute.monsters.size());
+    		int monsterGen = (int) (Math.random() * Hub.enemyList.size());
     		
        	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
-       	   			Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed));
+       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
+       	   			Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
     		
 		}
     	

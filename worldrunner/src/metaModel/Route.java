@@ -16,10 +16,11 @@ public class Route {
 	public int to;
 	public int clear;
 	public int quantity;
-	public ArrayList<Monster> monsters;
+	// unique identifier for list of monsters for this route
+	public int monsterRouteId;
 	
 	public Route(int routeId, String routeName, String description, int min, int max, int from, int to,
-			int clear, int quantity) {
+			int clear, int quantity, int monsterRouteId) {
 		this.id = routeId;
 		this.name = routeName;
 		this.description = description;
@@ -29,6 +30,6 @@ public class Route {
 		this.to = to;
 		this.clear = clear;
 		this.quantity = quantity;
-		monsters = new ArrayList<Monster>();
+		this.monsterRouteId = monsterRouteId;
 	}
 }

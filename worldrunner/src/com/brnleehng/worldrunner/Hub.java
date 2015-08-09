@@ -5,14 +5,18 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import dbReference.ReferenceManager;
 import metaModel.City;
 import metaModel.Dungeon;
+import metaModel.DungeonMonsters;
 import metaModel.Route;
+import metaModel.RouteMonsters;
 import DB.CreateDB;
 import DB.DBManager;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
+import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
@@ -38,6 +42,7 @@ public class Hub extends Activity {
 	private static FragmentManager fm;
 	//Access to the game's DB
 	private static DBManager db;	
+	private static ReferenceManager refDb;
 	// stores all of the players information
 	public static Player player;
 	// contains all of the player's equipments
@@ -62,16 +67,25 @@ public class Hub extends Activity {
 	public static City currentCity;
 	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
-	public static ArrayList<City> cities;
 	//public static ArrayList<BattleMonster> partyBattleList;
 	public static List<Monster> unequippedMonster;
 	
 	public static Route currentRoute;
 	public static Dungeon currentDungeon;
+	public static List<Monster> enemyList;
 	
 	//public static ArrayList<Monster> tempEquippedSticker;
 	
 	public static Monster viewSticker;
+	
+	// reference data
+	public static SparseArray<List<RouteMonsters>> refRouteMonsters; // routeId : mosnterIds
+	public static SparseArray<List<DungeonMonsters>> refDungeonMonsters; // dungeonId : mosnterIds
+	public static SparseArray<List<Dungeon>> refDungeons; // cityId : dungeonIds
+	public static SparseArray<List<Route>> refRoutes; // cityId : routeIds
+	public static List<City> refCities;
+	public static List<int[]> expTable;
+	public static List<Sticker> refMonsters;
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -91,24 +105,36 @@ public class Hub extends Activity {
 		setContentView(R.layout.hub_activity);
 		
 		db = new DBManager(getApplicationContext());
-		createChanges(db);
 		
+		// setup the user's data into the app
+		getPlayerData(db);
 		
-		// creates the list of cities
-		SparseArray<ArrayList<Route>> cityRouteList = db.getCityRoutes();
-		SparseArray<ArrayList<Dungeon>> cityDungeonList = db.getCityDungeons();
-		cities = db.getCities();
-		Iterator<City> iter = cities.iterator();
+		refDb = new ReferenceManager(getApplicationContext());
+		
+		// creates the reference information
+/*		SparseArray<List<Route>> cityRouteList = refDb.getCityRoutes();
+		SparseArray<List<Dungeon>> cityDungeonList = refDb.getCityDungeons();*/
+		refCities = refDb.getCitiesList();
+		refRouteMonsters = refDb.getRouteMonstersList();
+		refDungeonMonsters = refDb.getDungeonMonstersList();
+		refDungeons = refDb.getDungeonsList();
+		refRoutes = refDb.getRoutesList();
+		expTable = refDb.getExp();
+		refMonsters = refDb.monstersList();
+		//Iterator<City> iter = refCities.iterator();
 		
 		// probably in the future create the monster content in the routes and dungeons when you do
-		// a db call
-		while (iter.hasNext()) {
+		// a db call. 
+		// Probably not needed
+/*		while (iter.hasNext()) {
 			City city = iter.next();
 			city.routes = cityRouteList.get(city.cityId);
 			city.dungeons = cityDungeonList.get(city.cityId);
-		}
-		currentCity = cities.get(0);
+		}*/
+		currentCity = refCities.get(0);
 		db.close(); // necessary to close the db?
+		
+		// set default values;
 		currentEquipment = null;
 		currentCategory = 0;
 		currentSticker = null;
@@ -117,6 +143,9 @@ public class Hub extends Activity {
 		if (equippedEquipments.size() != 0) {
 			Collections.sort(equippedEquipments);
 		}
+		
+		enemyList = null;
+		
 		// prevents re-making hub if already made
 		if (findViewById(R.id.hub) != null) {
 			if (savedInstanceState != null) {
@@ -139,7 +168,7 @@ public class Hub extends Activity {
 	 * Used to re-create/update the user database so that users
 	 * can see changes when they are made
 	 */
-	public static void createChanges(DBManager db) {
+	public static void getPlayerData(DBManager db) {
 		// Sets up all of the user's data 
 		List<Player> playerList = db.getPlayer();
 		player = playerList.get(0);
@@ -407,6 +436,7 @@ public class Hub extends Activity {
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();
+		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
 	}
 	
 	public static void addSticker(Monster monsterSticker) {
@@ -420,7 +450,7 @@ public class Hub extends Activity {
 	 */
 	public static void moveCity(int newCity) {
 		//@TODO check if you need to subtract 1
-		setCurrentCity(cities.get(newCity - 1));
+		setCurrentCity(refCities.get(newCity - 1));
 		backToCity();
 	}
 	 

@@ -9,12 +9,16 @@ import java.util.List;
 
 
 
+
+
 import metaModel.City;
 import metaModel.Dungeon;
+import metaModel.DungeonMonsters;
 import metaModel.ExpTable;
 import metaModel.MetaAbility;
 import metaModel.MetaRoute;
 import metaModel.Route;
+import metaModel.RouteMonsters;
 import dbReference.CityManager;
 import dbReference.DungeonManager;
 import Abilities.Ability;
@@ -82,19 +86,28 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		return AbilitiesManager.getAbility(db);
 	}
 	
-	public List<City> citiesList() {
+	public List<City> getCitiesList() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return CityManager.getCity(db);
 	}
 	
-	public List<Dungeon> dungeonsList() {
+	public SparseArray<List<Dungeon>> getDungeonsList() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return DungeonManager.getDungeons(db);
+		List<Dungeon> dungeons = DungeonManager.getDungeons(db);
+		SparseArray<List<Dungeon>> list = new SparseArray<List<Dungeon>>();
+		for (Dungeon dungeon : dungeons) {
+			int cityId = dungeon.cityId;
+			if (list.get(cityId) == null) {
+				list.put(cityId, new ArrayList<Dungeon>());
+			}
+			list.get(cityId).add(dungeon);
+		}
+		return list;
 	}
 	
 	// TODO populating with monsters
 	// key = city id, value = routes that belong
-	public SparseArray<List<Route>> routesLsit() {
+	public SparseArray<List<Route>> getRoutesList() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		List<Route> routes = RouteManager.getRoutes(db);
 		SparseArray<List<Route>> list = new SparseArray<List<Route>>();
@@ -108,7 +121,43 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		return list;
 	}
 	
-	public 
+	public SparseArray<List<RouteMonsters>> getRouteMonstersList() {
+		List<RouteMonsters> monsters = new ArrayList<RouteMonsters>();
+		monsters.add(new RouteMonsters(1, 6, 1, 5, 7, 1));
+		monsters.add(new RouteMonsters(2, 7, 1, 5, 7, 1));
+		monsters.add(new RouteMonsters(3, 8, 1, 5, 7, 1));
+		SparseArray<List<RouteMonsters>> list = new SparseArray<List<RouteMonsters>>();
+		for (RouteMonsters monster : monsters) {
+			int routeId = monster.routeId;
+			if (list.get(routeId) == null) {
+				list.put(routeId, new ArrayList<RouteMonsters>());
+			}
+			list.get(routeId).add(monster);
+		}
+		return list;
+	}
+	
+	public SparseArray<List<DungeonMonsters>> getDungeonMonstersList() {
+		List<DungeonMonsters> monsters = new ArrayList<DungeonMonsters>();
+		monsters.add(new DungeonMonsters(1, 4, 1, 5, 2));
+		monsters.add(new DungeonMonsters(2, 5, 1, 5, 2));
+		monsters.add(new DungeonMonsters(3, 6, 1, 5, 2));
+		monsters.add(new DungeonMonsters(4, 5, 2, 5, 5));
+		monsters.add(new DungeonMonsters(5, 6, 2, 5, 5));
+		monsters.add(new DungeonMonsters(6, 7, 2, 5, 5));
+		monsters.add(new DungeonMonsters(7, 7, 3, 5, 9));
+		monsters.add(new DungeonMonsters(8, 8, 3, 5, 9));
+		monsters.add(new DungeonMonsters(9, 9, 3, 5, 9));
+		SparseArray<List<DungeonMonsters>> list = new SparseArray<List<DungeonMonsters>>();
+		for (DungeonMonsters monster : monsters) {
+			int dungeonId = monster.dungeonId;
+			if (list.get(dungeonId) == null) {
+				list.put(dungeonId, new ArrayList<DungeonMonsters>());
+			}
+			list.get(dungeonId).add(monster);
+		}
+		return list;
+	}
 	
 	/**
 	 	OTHER
@@ -119,10 +168,10 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	 * 
 	 */
 	
-	public ArrayList<City> getCities() {
+/*	public ArrayList<City> getCities() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return CityManager.getCity(db);
-	}
+	}*/
 	
 	public int updateCity(City city) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -152,7 +201,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	 * @return a SparseArray that contains all of the mapping of cities and their cities
 	 * 		   in the form of cityId -> List of routes id that belong to the city
 	 */
-	public SparseArray<ArrayList<Route>> getCityRoutes() {
+/*	public SparseArray<ArrayList<Route>> getCityRoutes() {
 		ArrayList<Route> routes = getRoutes();
 		SparseArray<ArrayList<Route>> map = new SparseArray<ArrayList<Route>>();
 		ArrayList<Route> city1Route = new ArrayList<Route>();
@@ -178,7 +227,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		map.put(1, city1Route);
 		map.put(2, city2Route);
 		return map;
-	}
+	}*/
 	
 	
 	/**
@@ -186,7 +235,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	 * @return a SparseArray that contains all of the mapping of cities to their dungeons
 	 * 		   in the form of cityId ->list of dungeons
 	 */
-	public SparseArray<ArrayList<Dungeon>> getCityDungeons() {
+	/*public SparseArray<ArrayList<Dungeon>> getCityDungeons() {
 		SparseArray<ArrayList<Dungeon>> map = new SparseArray<ArrayList<Dungeon>>();
 		ArrayList<Dungeon> city1Dungeon = new ArrayList<Dungeon>();
 		ArrayList<Dungeon> dungeons = getDungeons();
@@ -208,7 +257,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		map.put(1, city1Dungeon);
 		map.put(2, city2Dungeon);
 		return map;
-	}
+	}*/
 	
 	/**
 	 * 
@@ -221,7 +270,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	 * @return a SparseArray that contains all of the mapping of monsters to their routes
 	 * 		   in the form of routeId -> list of monsters
 	 */
-	public SparseArray<ArrayList<Integer>> getRouteMonsters() {
+/*	public SparseArray<ArrayList<Integer>> getRouteMonsters() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> route1Monsters = new ArrayList<Integer>();
 		route1Monsters.add(4);
@@ -230,7 +279,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		map.put(1, route1Monsters);
 		map.put(2, route1Monsters);
 		return map;
-	}
+	}*/
 	   
 	/**
 	 * Stub that setup the initial mapping of monsters to their dungeons

@@ -22,7 +22,7 @@ public class CreateDB extends Fragment {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.createdb_activity, container, false);
 		DBManager db = new DBManager(getActivity().getApplicationContext());
-		Hub.createChanges(db);
+		Hub.getPlayerData(db);
 		List<Player> list = db.getPlayer();
 		Player player= list.get(0);
 		db.close();

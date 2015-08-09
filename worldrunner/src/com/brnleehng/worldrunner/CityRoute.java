@@ -26,7 +26,7 @@ public class CityRoute extends Fragment{
 		for (final Route route : city.routes) {
 			Button button = new Button(getActivity());
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-			button.setText(route.routeName);
+			button.setText(route.name);
 			button.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
