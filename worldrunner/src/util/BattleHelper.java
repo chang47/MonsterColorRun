@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.R.integer;
 import android.util.Log;
-import Model.BattleMonster;
+import DB.Model.BattleMonster;
 
 /**
  * A class that offers helpful methods for monsters to fight
@@ -20,22 +20,24 @@ public class BattleHelper {
 	 * @return how much damage is done
 	 */
 	public static int Attack(BattleMonster attacker, BattleMonster defender) {
-		int damage = attacker.monster.attack;
-		int defense = defender.monster.defense;
-
-		Log.d("Damage", "Damage: " + attacker.monster.name + " And has a attack of " + damage);
-		Log.d("Defense", "Defender: " + defender.monster.name + " And has a defense of " + defense);
+		int attack = attacker.atk;
+		int defense = defender.def;
+		int damage = 0;
+		//Log.d("Damage", "Damage: " + attacker.monster.name + " And has a attack of " + damage);
+		//Log.d("Defense", "Defender: " + defender.monster.name + " And has a defense of " + defense);
 		
 		if (attacker.buffs.containsKey(1)) {
-			damage *= attacker.buffs.get(1).modifier;
-			Log.d("Damage", "Calculated: " + damage);
+			attack *= attacker.buffs.get(1).modifier;
+			//Log.d("Damage", "Calculated: " + damage);
 		}
 		
 		if (defender.buffs.containsKey(2)) {
 			//NOTE: Does not work for some reason. Troubleshoot it later.;
 			defense *= defender.buffs.get(2).modifier;
-			Log.d("Defense", "Calculated: " + defense);
+			//Log.d("Defense", "Calculated: " + defense);
 		}
+		
+		damage =  (int) (2.5 * attack * (attack / defense));
 		
 		if ((attacker.monster.element == 1  && defender.monster.element == 3)    || 
 				(attacker.monster.element == 2 && defender.monster.element == 1) ||
@@ -43,21 +45,18 @@ public class BattleHelper {
 				(attacker.monster.element == 4 && defender.monster.element == 5) ||
 				(attacker.monster.element == 5 && defender.monster.element == 4)) {
 			//If the attacker is strong vs. the defender
-			damage = (damage * 2) - defense;
+			damage *= 2;
 			
 		} else if ((attacker.monster.element == 3  && defender.monster.element == 1)    || 
 				(attacker.monster.element == 1 && defender.monster.element == 2) ||
 				(attacker.monster.element == 2 && defender.monster.element == 3)) {
 			//If the defender is strong vs. the attacker
-			damage = (damage / 2) - defense;
-		} else {
-			//If there is no strength/weakness
-			damage = damage - defense;
+			damage /= 2;
 		}
 
 
-		Log.d("Damage", "Attacker: " + attacker.monster.name + " has a total damage of " + damage);
-		Log.d("Defense", "Defender: " + defender.monster.name + " has a defense of " + defense);
+		//Log.d("Damage", "Attacker: " + attacker.monster.name + " has a total damage of " + damage);
+		//Log.d("Defense", "Defender: " + defender.monster.name + " has a defense of " + defense);
 		
 		
 		//If the damage is less than 0, set it to 0.
@@ -69,7 +68,8 @@ public class BattleHelper {
 	}
 	
 	/**
-	 * Decides which target from the list if being attacked
+	 * Decides which target from the list if being attacked. Selects the monster that the attacker
+	 * will deal the highest damage to.
 	 * @param enemy Who is attacking
 	 * @param party The list of people who are attacking
 	 * @return The index the monster that is going to be attacked is at, -1 if all monsters are dead
@@ -83,8 +83,7 @@ public class BattleHelper {
 		
 		for (int a = 0; a < party.size(); a++) {
 			if (party.get(a) != null && party.get(a).currentHp > 0	) {
-				
-				tempSize = (double)(party.get(a).monster.hp/BattleHelper.Attack(enemy, party.get(a)));
+				tempSize = (double)(party.get(a).hp / BattleHelper.Attack(enemy, party.get(a)));
 				
 				if (largest < tempSize) {
 					largest = tempSize;

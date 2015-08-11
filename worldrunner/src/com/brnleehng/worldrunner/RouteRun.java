@@ -11,9 +11,9 @@ import Abilities.Buff;
 import Abilities.DamageAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
+import DB.Model.BattleMonster;
 import DB.Model.Monster;
 import DB.Model.Sticker;
-import Model.BattleMonster;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -211,14 +211,31 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 			public void onClick(View v) {
 				// TODO add sticker and then once we move out, we would re-load the 
 				// the sticker list
+				
+				// added the new stickers
 				db = new DBManager(getActivity());
 				db.addStickers(found);
 				
-				// TODO need to figure out how to display all of this.
+				// updating current monsters
 				for (Monster monster : partyList) {
-					if (monster != null)
+					if (monster != null && monster.level != 100) {
 						monster.exp += exp / partyMonstersSize;
+						int[] exp;
+						// level 1, would need index 1 ie level 2 info
+						for (int i = monster.level; i < Hub.expTable.size(); i++) {
+							exp = Hub.expTable.get(i);
+							if (monster.exp >= exp[0]) {
+								monster.level++;
+							}
+						}
+						// if they get to level 100
+						if (monster.level == 100)
+							monster.exp = Hub.expTable.get(99)[0];
+						db.updateSticker(monster);
+					}					
 				}
+				
+				// finishing the race
 				if (finishEnabled) {
 					found.clear();
 					Hub.moveCity(Hub.currentRoute.to);
@@ -255,13 +272,12 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
                 // sets the enemy's hp
                 // @TODO change it so that the hp gets updated when they get hit and not by the second?
                 for (int b = 0; b < enemyProgressBarList.size(); b++) {
-                	Log.d("EnemProgBar", "" + enemyMonsterBattleList.get(b).currentHp);
-                	enemyProgressBarList.get(b).setProgress((int) (enemyMonsterBattleList.get(b).currentHp / enemyMonsterBattleList.get(b).monster.hp * 100));
+                	enemyProgressBarList.get(b).setProgress((enemyMonsterBattleList.get(b).currentHp * 100 / enemyMonsterBattleList.get(b).monster.hp));
                 }
                 
                 for (int iPlayer = 0; iPlayer < partyMonsterBattleList.size(); iPlayer++) {
                 	if (partyMonsterBattleList.get(iPlayer) != null)
-                		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).monster.hp * 100));
+                		playerProgressBarList[iPlayer].setProgress((partyMonsterBattleList.get(iPlayer).currentHp * 100 / partyMonsterBattleList.get(iPlayer).monster.hp));
                 }
                 
             }
@@ -334,8 +350,10 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     		
        	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
-       	   			Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
+       	 	//enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
+       	   	//		Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
+    		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
+    		
     		
 		}
     	
@@ -403,7 +421,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         		Log.d("size", "size of list is" + enemyProgressBarList.size());
     			partyMonstersSize++;
     			// TODO Quick hack, but needs to be fixed properly.
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
+    			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
     		}
     		
     		playerPartyLayout.addView(relLayout);
@@ -439,7 +458,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     	deadPartyMonsters = 0;
     	for (int i = 0; i < size; i++) {
     		if (partyMonsterBattleList.get(i) != null)
-    			partyMonsterBattleList.get(i).currentHp = partyMonsterBattleList.get(i).monster.hp;
+    			partyMonsterBattleList.get(i).resetHp();
     	}
     }
 
@@ -466,11 +485,11 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         for (int i = 0;i < enemyPartySize; i++) {
         	//Attacks Regularly
         	if (enemyMonsterBattleList.get(i).currentHp > 0) {
-		        if (steps % enemyMonsterBattleList.get(i).currentStep == 0) {
+		        if (steps % enemyMonsterBattleList.get(i).step == 0) {
 		        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
 
 		        	if (iPartyAttacked == -1) {
-		        		Log.d("failure", "monster index attacked is -1!!!");
+		        		throw new Error("attacked index is -1, impossible!");
 		        	}
 		        	
 		        	partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked));
@@ -541,11 +560,11 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         // user party attacks
         for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
-	        	if (steps % partyMonsterBattleList.get(i).currentStep == 0) {
+	        	if (steps % partyMonsterBattleList.get(i).step == 0) {
 	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 	        		
-	        		Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).currentStep);
-	        		Log.d("index problems", "" + iEnemyAttacked);
+	        		//Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).step);
+	        		//Log.d("index problems", "" + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
 //	        		list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
@@ -581,15 +600,13 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 	        	// check monster status
 	        	//Log.d("buff size", ""+ partyBattleList.get(0).buffs.size());
 	        	
-	        	Log.d("party crash", "at index: " + i);
-	        	Log.d("party crash", "at monster: " + partyMonsterBattleList.get(i).monster.name);
-	        	Log.d("party crash", "at monster: " + partyMonsterBattleList.get(i).monster.activeAbility.name);
 	        	// checks for user's party's ability
 	        	if (steps % partyMonsterBattleList.get(i).monster.activeAbility.steps == 0) { 
 	        		//Applies ability to attack enemy
 	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
 		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-	        			double damage = partyMonsterBattleList.get(i).monster.activeAbility.activateAbility();
+		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
 	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
@@ -603,18 +620,10 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 	        	        for (int b = 0; b < partyMonsterBattleList.size(); b++) {
 	        	        	if (partyMonsterBattleList.get(b) != null) {
 		        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
-		        	        	BattleMonster monster = partyMonsterBattleList.get(b);
-		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);
-		        	        	
-		/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
-		            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
-		            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
-		            	        		+ " " + partyBattleList.get(4));*/
-		            	        		
-		            	        
+		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);           	        
 		        	        	if (support.attribute == 3) {
 		        	        		partyMonsterBattleList.get(b).RecalculateSpeed();
-		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).currentStep + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
+		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).step + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
 		            	        }
 	        	        	}
 	        	        }

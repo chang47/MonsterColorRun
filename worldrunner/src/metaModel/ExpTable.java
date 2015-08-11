@@ -8,7 +8,8 @@ public class ExpTable {
 	
 	public static void populateTable() {
 		expTable = new ArrayList<int[]>();
-		expTable.add(new int[] {0, 8}); // 1
+		// total exp, exp required for next level
+		expTable.add(new int[] {0, 8}); // level 1
 		expTable.add(new int[] {8, 19});
 		expTable.add(new int[] {27, 37});
 		expTable.add(new int[] {64, 61});

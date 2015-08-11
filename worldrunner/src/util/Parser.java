@@ -87,6 +87,12 @@ public class Parser {
 				sticker.current_exp, sticker.current_level, sticker.evolve, sticker.sid);
 	}
 	
+	/**
+	 * Creates a new monster that's added to the database and will be promptly regenerated
+	 * afterwards so that they can be used
+	 * @param monster
+	 * @return
+	 */
 	public static Sticker CapturedMonsterToSticker(Monster monster) {
 		/*
 		 	public Sticker(int pstid, int pid, int sid, String name, int color,
@@ -108,6 +114,11 @@ public class Parser {
 		 
 	}
 	
+	/**
+	 * Returns existing monsters back to the database where they are stored
+	 * @param monster
+	 * @return
+	 */
 	public static Sticker MonsterToSticker(Monster monster) {
 		// TODO might requires the list of all monsters
 		return new Sticker(monster.uid, Hub.player.pid, monster.monsterId, monster.name, monster.element,
