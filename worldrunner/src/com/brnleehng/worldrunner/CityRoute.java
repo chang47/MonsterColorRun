@@ -23,7 +23,7 @@ public class CityRoute extends Fragment{
 		city = Hub.getCurrentCity();
 		
 		// lists dungeons
-		for (final Route route : city.routes) {
+		for (final Route route : Hub.refRoutes.get(city.cityId)) {
 			Button button = new Button(getActivity());
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			button.setText(route.name);

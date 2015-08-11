@@ -18,7 +18,7 @@ public class CityManager {
 	
 	public static void create(SQLiteDatabase db) {
 		String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_CITY + "("
-                + CITY_ID + " INTEGER PRIMARY KEY," + CITY_DESCRIPTION + " TEXT," + CITY_NAME + " TEXT" + ")";
+                + CITY_ID + " INTEGER PRIMARY KEY," + CITY_NAME + " TEXT," + CITY_DESCRIPTION + " TEXT" + ")";
 		db.execSQL(CREATE_PLAYER_TABLE);
 		createInitial(db, new City(1, "Flora City", "Flora City is known for it's beautiful patches of flowers"));
 		createInitial(db, new City(2, "Lonly Peak", "Stationed over the ocean, Lonely Peak is packed with abundunt life"));

@@ -9,6 +9,7 @@ import dbReference.ReferenceManager;
 import metaModel.City;
 import metaModel.Dungeon;
 import metaModel.DungeonMonsters;
+import metaModel.MetaAbility;
 import metaModel.Route;
 import metaModel.RouteMonsters;
 import DB.CreateDB;
@@ -86,6 +87,7 @@ public class Hub extends Activity {
 	public static List<City> refCities;
 	public static List<int[]> expTable;
 	public static List<Sticker> refMonsters;
+	public static List<MetaAbility> refAbilities;
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -106,8 +108,7 @@ public class Hub extends Activity {
 		
 		db = new DBManager(getApplicationContext());
 		
-		// setup the user's data into the app
-		getPlayerData(db);
+
 		
 		refDb = new ReferenceManager(getApplicationContext());
 		
@@ -121,10 +122,14 @@ public class Hub extends Activity {
 		refRoutes = refDb.getRoutesList();
 		expTable = refDb.getExp();
 		refMonsters = refDb.monstersList();
-		
+		refAbilities = refDb.abilitiesList();
 		for (Sticker sticker : refMonsters) {
-			Log.d("monster name:", sticker.name);
+			Log.d("monster name:", sticker.name + " with uid: " + sticker.pstid + " with sid " + sticker.sid);
 		}
+		
+		// setup the user's data into the app
+		getPlayerData(db);
+		
 		//Iterator<City> iter = refCities.iterator();
 		
 		// probably in the future create the monster content in the routes and dungeons when you do
@@ -137,6 +142,7 @@ public class Hub extends Activity {
 		}*/
 		currentCity = refCities.get(0);
 		db.close(); // necessary to close the db?
+		refDb.close();
 		
 		// set default values;
 		currentEquipment = null;

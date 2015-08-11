@@ -33,13 +33,13 @@ public class AbilitiesManager {
         db.execSQL(CREATE_STICKER_TABLE);
         
         createInitial(db, new MetaAbility(1, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(2, 1, "Water Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(3, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(4, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(5, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(6, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(7, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
-        createInitial(db, new MetaAbility(8, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
+        createInitial(db, new MetaAbility(2, 1, "Water Storm", "Does 1.5 Times monster's attack to all enemies", 200, 1, 1.5, -1));
+        createInitial(db, new MetaAbility(3, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 2, 1.5, -1));
+        createInitial(db, new MetaAbility(4, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 3, 1.5, -1));
+        createInitial(db, new MetaAbility(5, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 4, 1.5, -1));
+        createInitial(db, new MetaAbility(6, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 1, 1.5, 3));
+        createInitial(db, new MetaAbility(7, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 2, 1.5, 3));
+        createInitial(db, new MetaAbility(8, 2, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 3, 1.5, 3));
         createInitial(db, new MetaAbility(9, 3, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
         
 	}

@@ -32,7 +32,7 @@ public class CityHub extends Fragment {
 		move = (Button) view.findViewById(R.id.moveBut);
 		// receives the current city ID
 		City currentCity = Hub.currentCity;
-		Log.d("current city", "" + currentCity.cityName);
+		Log.d("current city", "" + currentCity.cityName + " description " + currentCity.description );
 		TextView cityName = (TextView) view.findViewById(R.id.currentCity);
 		cityName.setText("Welcome to: " + currentCity.cityName);
 		

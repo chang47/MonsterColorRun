@@ -62,7 +62,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     private Button btnLog;
     private LinearLayout enemyPartyLayout;
     private LinearLayout playerPartyLayout;
-    public int exp;
+    public int exp = 0;
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
@@ -216,7 +216,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 				
 				// TODO need to figure out how to display all of this.
 				for (Monster monster : partyList) {
-					monster.exp += exp / partyMonstersSize;
+					if (monster != null)
+						monster.exp += exp / partyMonstersSize;
 				}
 				if (finishEnabled) {
 					found.clear();

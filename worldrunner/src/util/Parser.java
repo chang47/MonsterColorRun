@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import metaModel.DungeonMonsters;
+import metaModel.MetaAbility;
 import metaModel.RouteMonsters;
+import android.util.Log;
 
 import com.brnleehng.worldrunner.Hub;
 
@@ -92,9 +94,15 @@ public class Parser {
 			int hp, int attack, int defense, int speed, double capture, int element) {
 			*/
 		// TODO need to get a list of default stats for stickers, for now we'll just put placeholders
-		// generates new sticker id when being added
+		// generates new sticker id when being add
+		Log.d("ability name", monster.name);
 		return new Sticker(-1, Hub.player.pid, monster.monsterId, monster.name, monster.element,
-				1, 0, monster.activeAbility.abilityId, monster.activeAbility.abilityId, 0, 0, 0, monster.hp, monster.attack, monster.defense, 
+				1, 0, 
+				monster.activeAbility.abilityId, 
+				monster.activeAbility.abilityId, 0, 0, 0, 
+				monster.hp, 
+				monster.attack, 
+				monster.defense, 
 				monster.speed, monster.capture);
 		
 		 
@@ -151,7 +159,7 @@ public class Parser {
 	public static Monster convertEnemyStickerToMonster(Sticker sticker, RouteMonsters routeMonster) {
 		
 		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, routeMonster.capture, sticker.element,
-				null, -1, -1, 0, routeMonster.level, sticker.evolve, sticker.sid);
+				getAbility(sticker), -1, -1, 0, routeMonster.level, sticker.evolve, sticker.sid);
 	}
 	
 	/**
@@ -172,17 +180,23 @@ public class Parser {
 	 */
 	private static Ability getAbility(Sticker sticker) {
 		Ability ability;
-		switch (sticker.saaid) {
-		// damage ability
+		MetaAbility meta = Hub.refAbilities.get(sticker.saaid - 1);
+		switch (meta.type) {
+		// group attack
 		case 1:
-			// TODO need to have some table of all ability so that it can be used to get the needed data
-			//"Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2
-			ability = new DamageAbility("Damage All", "Does moderate damage to one enemy", 1, 10, 200.0, 2, 1);
+			// String name, String description, int level, int steps, double damage, int attributes, int abilityId
+			// TODO need to use modifier
+			// TOOD need to switch steps to make it easier
+			ability = new DamageAbility(meta.name, meta.description, 1, meta.steps, meta.modifier, meta.attribute, sticker.saaid);
 			break;
+		// support ability
 		case 2:
 			//"Increase attack", "Moderately increase attack", 1, 50, 1.5, 1,3
-			ability = new SupportAbility("Increase attack", "Modterately increase attack", 1, 50, 1.5, 1, 3, 2);
+			ability = new SupportAbility(meta.name, meta.description, 1, meta.steps, meta.modifier, meta.attribute, meta.duration, sticker.saaid);
 			break;
+		case 3:
+		// single attack
+			ability = new DamageAbility(meta.name + " temp", meta.description, 1, meta.steps, meta.modifier, meta.attribute, sticker.saaid);
 		default:
 			throw new Error("ability id is not within the acceptable range, crashed at " + sticker.name + " with ability id: "
 					 + sticker.saaid);

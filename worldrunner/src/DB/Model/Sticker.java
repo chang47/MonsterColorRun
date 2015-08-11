@@ -26,9 +26,9 @@ public class Sticker {
 	public Sticker(int pstid, int pid, int sid, String name, int element,
 			int current_level, int current_exp, int spaid, int saaid, int evolve, int equipped, int position,
 			int hp, int attack, int defense, int speed, double capture) {
-		super();
 		this.pstid = pstid;
 		this.pid = pid;
+		this.sid = sid;
 		this.name = name;
 		this.element = element;
 		this.current_level = current_level;
@@ -43,7 +43,6 @@ public class Sticker {
 		this.defense = defense;
 		this.speed = speed;
 		this.capture = capture;
-		this.element = element;
 	}
 	
 	public Sticker() { }

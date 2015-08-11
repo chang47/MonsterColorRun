@@ -101,9 +101,9 @@ public class MonsterManager {
 		if (cursor.moveToFirst()) {
 			do {
 				Sticker sticker = new Sticker();
-				sticker.pstid = -1;
+				sticker.pstid = cursor.getInt(0);
 				sticker.pid = -1;
-				sticker.sid = cursor.getInt(1);
+				sticker.sid = cursor.getInt(1); // then what's 1?
 				sticker.name = cursor.getString(2);
 				sticker.element = cursor.getInt(3);
 				sticker.current_level = -1;

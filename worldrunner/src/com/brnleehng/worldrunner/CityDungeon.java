@@ -25,7 +25,7 @@ public class CityDungeon extends Fragment {
 		
 		
 		// lists dungeons
-		for (final Dungeon dungeon : city.dungeons) {
+		for (final Dungeon dungeon : Hub.refDungeons.get(city.cityId)) {
 			Button button = new Button(getActivity());
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			button.setText(dungeon.dungeonName);

@@ -11,7 +11,9 @@ public class DamageAbility extends Ability {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
+	
+	// TODO 
 	public double activateAbility() {
 		
 		
