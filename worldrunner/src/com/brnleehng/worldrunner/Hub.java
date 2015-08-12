@@ -355,6 +355,7 @@ public class Hub extends Activity {
 	
 	public static void startRun() {
 		FragmentTransaction ft = setFT();
+		enemyList = util.Parser.enemyDungeonStickersToEnemyMonsters(refMonsters, refDungeonMonsters.get(1));
 		FreeRun run = new FreeRun();
 		ft.remove(header);
 		ft.remove(footer);

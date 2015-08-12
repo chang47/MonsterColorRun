@@ -16,9 +16,18 @@
         android:id="@+id/createDB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="121dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/deleteDB"
+        android:layout_marginTop="40dp"
         android:text="Create database and all references" />
+
+    <Button
+        android:id="@+id/freeRunTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createDB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Test using free run with super class" />
 
 </RelativeLayout>

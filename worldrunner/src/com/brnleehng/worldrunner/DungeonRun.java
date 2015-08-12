@@ -62,7 +62,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
     private Button btnLog;
     private LinearLayout enemyPartyLayout;
     private LinearLayout playerPartyLayout;
-    
+    public int exp = 0;
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
     private ArrayList<Monster> found;
@@ -321,9 +321,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
     		
        	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-       	 	enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
-       	   			Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
-    		
+    		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
 		}
     	
     	//While might work better here, but depends on how the effectiveness of that.
@@ -390,7 +388,8 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         		Log.d("size", "size of list is" + enemyProgressBarList.size());
     			partyMonstersSize++;
     			// TODO Quick hack, but needs to be fixed properly.
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
+    			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
     		}
     		
     		playerPartyLayout.addView(relLayout);
@@ -425,7 +424,8 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
     private void reviveParty(int size) {
     	deadPartyMonsters = 0;
     	for (int i = 0; i < size; i++) {
-    		partyMonsterBattleList.get(i).currentHp = partyMonsterBattleList.get(i).monster.hp;
+    		if (partyMonsterBattleList.get(i) != null)
+    			partyMonsterBattleList.get(i).resetHp();
     	}
     }
 
@@ -452,11 +452,11 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         for (int i = 0;i < enemyPartySize; i++) {
         	//Attacks Regularly
         	if (enemyMonsterBattleList.get(i).currentHp > 0) {
-		        if (steps % enemyMonsterBattleList.get(i).currentStep == 0) {
+		        if (steps % enemyMonsterBattleList.get(i).step == 0) {
 		        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
 
 		        	if (iPartyAttacked == -1) {
-		        		Log.d("failure", "monster index attacked is -1!!!");
+		        		throw new Error("attacked index is -1, impossible!");
 		        	}
 		        	
 		        	partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked));
@@ -527,22 +527,15 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         // user party attacks
         for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
-	        	if (steps % partyMonsterBattleList.get(i).currentStep == 0) {
+	        	if (steps % partyMonsterBattleList.get(i).step == 0) {
 	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 	        		
-	        		Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).currentStep);
-	        		Log.d("index problems", "" + iEnemyAttacked);
+	        		//Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).step);
+	        		//Log.d("index problems", "" + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
 //	        		list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
-
-	        		if (enemyMonsterBattleList.get(iEnemyAttacked).currentHp <= 0) {
-		        		deadEnemies++;
-    					list.add("enemy " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " has been defeated!");
-    					
-    					captureMonster(iEnemyAttacked);
-    					checkEnemyMonsterAllDead();
-	        		}
+	        		checkEnemyDead(iEnemyAttacked);
 	        		
 	        		Iterator iterator = partyMonsterBattleList.get(i).buffs.entrySet().iterator();
 	        		// decrease buff of monsters
@@ -563,7 +556,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
 	        				// important to be after, becauase recalculate checks for the attribute key
 	        				if (attribute == 3) {
 	        					partyMonsterBattleList.get(i).RecalculateSpeed();
-	        	        		Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
+	        	        		//Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
 	        				}
 	        				//partyBattleList.get(i).buffs.remove(iterator);
 	        			}
@@ -574,42 +567,30 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
 	        	// check monster status
 	        	//Log.d("buff size", ""+ partyBattleList.get(0).buffs.size());
 	        	
-	        	Log.d("party crash", "at index: " + i);
 	        	// checks for user's party's ability
 	        	if (steps % partyMonsterBattleList.get(i).monster.activeAbility.steps == 0) { 
 	        		//Applies ability to attack enemy
 	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
-		        		int partyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-	        			double damage = partyMonsterBattleList.get(i).monster.activeAbility.activateAbility();
-	        			enemyMonsterBattleList.get(partyAttack).currentHp -= damage;
+		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
+	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
 	            		
 	            		//Checks if all enemies are dead 
-		        		if (enemyMonsterBattleList.get(partyAttack).currentHp <= 0) {
-			        		list.add(enemyMonsterBattleList.get(partyAttack).monster.name + " has been defeated!");
-			        		deadEnemies++;
-			        		captureMonster(partyAttack);
-			        		checkEnemyMonsterAllDead();
-		        		}
+	        			checkEnemyDead(iEnemyAttack);
+
 	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
 	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.activeAbility;
 	        	        for (int b = 0; b < partyMonsterBattleList.size(); b++) {
 	        	        	if (partyMonsterBattleList.get(b) != null) {
 		        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
-		        	        	BattleMonster monster = partyMonsterBattleList.get(b);
-		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);
-		        	        	
-		/*            	        Log.d("buffs", monster.monster.name + " received the buff" + partyBattleList.get(i).monster.ability.name + " from " + 
-		            	        		partyBattleList.get(i).monster.name + " size of party list " + partyBattleList.size());
-		            	        Log.d("party", "" + partyBattleList.get(0) + " " + partyBattleList.get(1) + " " + partyBattleList.get(2) + " " +partyBattleList.get(3) 
-		            	        		+ " " + partyBattleList.get(4));*/
-		            	        		
-		            	        
+		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);           	        
 		        	        	if (support.attribute == 3) {
 		        	        		partyMonsterBattleList.get(b).RecalculateSpeed();
-		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).currentStep + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
+		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).step + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
 		            	        }
 	        	        	}
 	        	        }
@@ -620,12 +601,22 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         }
     }
     
-    private void captureMonster(int partyAttack) {
-    	if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(partyAttack).monster.capture) {
+    private void checkEnemyDead(int iPartyAttack) {
+		if (enemyMonsterBattleList.get(iPartyAttack).currentHp <= 0) {
+			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp;
+    		list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
+    		deadEnemies++;
+    		captureMonster(iPartyAttack);
+    		checkEnemyMonsterAllDead();
+		}
+    }
+    
+    private void captureMonster(int iPartyAttack) {
+    	if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(iPartyAttack).monster.capture) {
 			
-			list.add(enemyMonsterBattleList.get(partyAttack).monster.name + " has been captured!");
+			list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been captured!");
 			
-			found.add(enemyMonsterBattleList.get(partyAttack).monster);
+			found.add(enemyMonsterBattleList.get(iPartyAttack).monster);
 			caughtAlready = true;
 		}
     }

@@ -41,6 +41,18 @@ public class Database extends Fragment {
 				Toast.makeText(getActivity(), "deleted database", Toast.LENGTH_LONG).show();
 			}
 		});
+		
+		Button freeRun = (Button) view.findViewById(R.id.freeRunTest);
+		freeRun.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				// Free Run.java
+				Hub.startRun();
+				
+			}
+		});
 		return view;
 	}  
 }
