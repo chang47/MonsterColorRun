@@ -321,7 +321,7 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
     		
        	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-    		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
+    		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen))); //
 		}
     	
     	//While might work better here, but depends on how the effectiveness of that.
