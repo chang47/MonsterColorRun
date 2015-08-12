@@ -263,6 +263,8 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
         return view;
     }
     
+
+    
     // The function to create a new random monster
     // use your list of monster to generate a new monster to fight
     protected void generateEnemies() {
