@@ -54,33 +54,33 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
     private Sensor accel;
     
     // setup the layout files
-    private TextView tvDistance;
-    private TextView tvTime;
-    private TextView tvPace;
-    private TextView tvCoin;
-    private Button stopMission;
-    private Button btnLog;
-    private LinearLayout enemyPartyLayout;
-    private LinearLayout playerPartyLayout;
+    public TextView tvDistance;
+    public TextView tvTime;
+    public TextView tvPace;
+    public TextView tvCoin;
+    public Button stopMission;
+    public Button btnLog;
+    public LinearLayout enemyPartyLayout;
+    public LinearLayout playerPartyLayout;
     public int exp = 0;
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
-    private ArrayList<Monster> found;
+    public ArrayList<Monster> found;
     //private ArrayList<Monster> found;
     
    
-    private long startTime;
-    private long countUp;
+    public long startTime;
+    public long countUp;
    
     // calculate running metrics
-    private int steps;
-    private double distance;
-    private int coins;
-    private int iPartyAttacked;
+    public int steps;
+    public double distance;
+    public int coins;
+    public int iPartyAttacked;
     
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
-    private DBManager db;
+    public DBManager db;
     
     // Ignore
     private static final double FRIEND1 = 1.1;
@@ -94,14 +94,14 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
 
     
     //For logging purposes
-	private ArrayList<String> list = new ArrayList<String>();
+	public ArrayList<String> list = new ArrayList<String>();
 
     
     // list of messages that are used to display the progress
     // made in the game. You just add it into an adapter and it'll do everything for you
     //private List<String> list; 
-    private ArrayAdapter<String> adapter;
-    private Handler mHandler = new Handler();
+    public ArrayAdapter<String> adapter;
+    public Handler mHandler = new Handler();
     
     //Sets the list of monsters for various purposes
     public ArrayList<Monster> monsterList;
@@ -132,6 +132,58 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
 	public boolean finishEnabled = false;
 	
 	public boolean caughtAlready = false;
+	
+	
+	private TextView getTvTime() {
+		return tvTime;
+	}
+
+	private TextView getTvPace() {
+		return tvPace;
+	}
+
+	private TextView getTvCoin() {
+		return tvCoin;
+	}
+
+	private Button getStopMission() {
+		return stopMission;
+	}
+
+	private LinearLayout getPlayerPartyLayout() {
+		return playerPartyLayout;
+	}
+
+	private long getStartTime() {
+		return startTime;
+	}
+
+	private int getSteps() {
+		return steps;
+	}
+	private ArrayList<Monster> getPartyList() {
+		return partyList;
+	}
+
+	private ArrayList<BattleMonster> getPartyMonsterBattleList() {
+		return partyMonsterBattleList;
+	}
+
+	private ProgressBar[] getPlayerProgressBarList() {
+		return playerProgressBarList;
+	}
+
+	private void setPlayerProgressBarList(ProgressBar[] playerProgressBarList) {
+		this.playerProgressBarList = playerProgressBarList;
+	}
+
+	private int getPartyMonstersSize() {
+		return partyMonstersSize;
+	}
+
+	private int getMonsterPartiesNeeded() {
+		return monsterPartiesNeeded;
+	}
     
   
     @Override
@@ -184,38 +236,10 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
         
         //partyMonstersSize = partyBattleList.size();
         
-        // Once you're done with your run you can save all of the
-        // new monsters that you've caught. Ignore for now
-		btnLog.setOnClickListener(new View.OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						
-						Bundle bundle = new Bundle();
-						bundle.putStringArrayList("Log", list);
-						
-						
-						RunLogDialog newFragment = new RunLogDialog();
-						
-						newFragment.setArguments(bundle);
-						
-						newFragment.show(getFragmentManager(), "Run Log");
-					}
-				});
+        // sets the intherited class that can be overrided depending
+        // on the type of inherited class
+		btnLog = setFinishButton(btnLog);
 		
-		// TODO for super class, pass in a function that can be overwrited 
-        stopMission.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO add sticker and then once we move out, we would re-load the 
-				// the sticker list
-				db.addStickers(found);
-				found.clear();
-				Hub.backToCity();
-			}
-		});      
-       
         
         
         // setup the timer that just displays passage of time
@@ -250,7 +274,6 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
                 	if (partyMonsterBattleList.get(iPlayer) != null)
                 		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).monster.hp * 100));
                 }
-                
             }
         });
         stopWatch.start();
@@ -263,7 +286,21 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
         return view;
     }
     
-
+    public Button setFinishButton(Button stopMission) {
+		// TODO for super class, pass in a function that can be overwrited 
+        stopMission.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO add sticker and then once we move out, we would re-load the 
+				// the sticker list
+				db.addStickers(found);
+				found.clear();
+				Hub.backToCity();
+			}
+		});      
+        return stopMission;
+    }
     
     // The function to create a new random monster
     // use your list of monster to generate a new monster to fight
