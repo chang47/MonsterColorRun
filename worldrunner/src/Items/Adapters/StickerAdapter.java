@@ -48,7 +48,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 		TextView txtTitle;
 		ImageView imageView;
 		TextView lvl;
-		TextView spd;
+		TextView exp;
 		TextView rch;
 	}
 	
@@ -63,7 +63,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
  			holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.imageView = (ImageView) view.findViewById(R.id.icon);
  			holder.lvl = (TextView) view.findViewById(R.id.textView1);
- 			holder.spd = (TextView) view.findViewById(R.id.textView2);
+ 			holder.exp = (TextView) view.findViewById(R.id.textView2);
  			holder.rch = (TextView) view.findViewById(R.id.textView3);
  			view.setTag(holder);
  		} else {
@@ -77,7 +77,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 			holder.txtTitle.setText(monsterList.get(position).name);
 			holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
 			holder.lvl.setText("lvl: " + monsterList.get(position).level);
-			holder.spd.setText("spd: " + monsterList.get(position).attack);
+			holder.exp.setText("exp: " + monsterList.get(position).exp);
 			holder.rch.setText("rch: " + monsterList.get(position).speed);
 			if (mSelectedItemsIds.get(position)) {
 				view.setBackgroundColor(Color.BLUE);

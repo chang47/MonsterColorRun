@@ -271,8 +271,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
                 
                 // sets the enemy's hp
                 // @TODO change it so that the hp gets updated when they get hit and not by the second?
-                for (int b = 0; b < enemyProgressBarList.size(); b++) {
-                	enemyProgressBarList.get(b).setProgress((enemyMonsterBattleList.get(b).currentHp * 100 / enemyMonsterBattleList.get(b).monster.hp));
+                for (int iEnemy = 0; iEnemy < enemyProgressBarList.size(); iEnemy++) {
+                	enemyProgressBarList.get(iEnemy).setProgress((enemyMonsterBattleList.get(iEnemy).currentHp * 100 / enemyMonsterBattleList.get(iEnemy).monster.hp));
                 }
                 
                 for (int iPlayer = 0; iPlayer < partyMonsterBattleList.size(); iPlayer++) {
@@ -353,7 +353,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
        	 	//enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
        	   	//		Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
     		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
-    		
+    		Log.d("enemy health", "current: " + enemyMonsterBattleList.get(i).currentHp + " max: " +
+    				enemyMonsterBattleList.get(i).hp);
     		
 		}
     	
@@ -423,6 +424,9 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     			// TODO Quick hack, but needs to be fixed properly.
     			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
     			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
+    			Log.d("party health", "current: " + partyMonsterBattleList.get(i).currentHp + " max: " +
+        				partyMonsterBattleList.get(i).hp);
+        	
     		}
     		
     		playerPartyLayout.addView(relLayout);
@@ -567,7 +571,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 	        		//Log.d("index problems", "" + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
-//	        		list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
+	        		list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
 	        		checkEnemyDead(iEnemyAttacked);
 	        		
 	        		Iterator iterator = partyMonsterBattleList.get(i).buffs.entrySet().iterator();

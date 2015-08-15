@@ -38,7 +38,7 @@ public class ImageAdapter extends ArrayAdapter<String> {
 		TextView txtTitle;
 		ImageView imageView;
 		TextView lvl;
-		TextView spd;
+		TextView exp;
 		TextView rch;
 	}
 	
@@ -52,7 +52,7 @@ public class ImageAdapter extends ArrayAdapter<String> {
  			holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.imageView = (ImageView) view.findViewById(R.id.icon);
  			holder.lvl = (TextView) view.findViewById(R.id.textView1);
- 			holder.spd = (TextView) view.findViewById(R.id.textView2);
+ 			holder.exp = (TextView) view.findViewById(R.id.textView2);
  			holder.rch = (TextView) view.findViewById(R.id.textView3);
  			view.setTag(holder);
  		} else {
@@ -63,7 +63,7 @@ public class ImageAdapter extends ArrayAdapter<String> {
 		//@todo get data from array list or 2D array
 		holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
 		holder.lvl.setText("lvl: " + list.get(position));
-		holder.spd.setText("spd: " + list.get(position));
+		holder.exp.setText("exp: " + list.get(position));
 		holder.rch.setText("rch: " + list.get(position));
 		return view;
  	}
