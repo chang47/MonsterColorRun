@@ -12,6 +12,7 @@ import android.R.color;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,8 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
  	// Creates the actual object that the user sees
  	public View getView(int position,View view,ViewGroup parent) {
  		final ViewHolder holder;
+ 		
+ 		// TODO what's the point of this?
  		if (view == null) {
  			holder = new ViewHolder();
  			view = inflater.inflate(R.layout.mylist, null);
@@ -75,7 +78,13 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 			holder.imageView.setImageResource(R.drawable.icon);
 		} else {
 			holder.txtTitle.setText(monsterList.get(position).name);
-			holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
+			int resId = context.getResources().getIdentifier("head" + monsterList.get(position).monsterId, "drawable", context.getPackageName());
+			
+			if (resId != 0) {
+				holder.imageView.setImageResource(resId);
+			} else {
+				holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
+			}
 			holder.lvl.setText("lvl: " + monsterList.get(position).level);
 			holder.exp.setText("exp: " + monsterList.get(position).exp);
 			holder.rch.setText("rch: " + monsterList.get(position).speed);

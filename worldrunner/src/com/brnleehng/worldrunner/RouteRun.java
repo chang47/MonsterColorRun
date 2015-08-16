@@ -150,7 +150,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvCoin = (TextView) view.findViewById(R.id.tvCoin);
 
-        monsterList = Hub.monsterList;
+        //monsterList = Hub.monsterList;
         partyList = Hub.equippedStickers;
         partyMonsterBattleList = new ArrayList<BattleMonster>();
         enemyMonsterBattleList = new ArrayList<BattleMonster>();
@@ -275,9 +275,12 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
                 	enemyProgressBarList.get(iEnemy).setProgress((enemyMonsterBattleList.get(iEnemy).currentHp * 100 / enemyMonsterBattleList.get(iEnemy).monster.hp));
                 }
                 
-                for (int iPlayer = 0; iPlayer < partyMonsterBattleList.size(); iPlayer++) {
-                	if (partyMonsterBattleList.get(iPlayer) != null)
-                		playerProgressBarList[iPlayer].setProgress((partyMonsterBattleList.get(iPlayer).currentHp * 100 / partyMonsterBattleList.get(iPlayer).monster.hp));
+                for (int iPlayer = 0; iPlayer < playerProgressBarList.length; iPlayer++) {
+                	if (partyMonsterBattleList.get(iPlayer) != null) {
+                		Log.d("party Monster", partyMonsterBattleList.get(iPlayer).monster.name + " cur " + partyMonsterBattleList.get(iPlayer).currentHp +
+                				" max " + partyMonsterBattleList.get(iPlayer).hp );
+                		playerProgressBarList[iPlayer].setProgress((partyMonsterBattleList.get(iPlayer).currentHp * 100 / partyMonsterBattleList.get(iPlayer).hp));
+                	}
                 }
                 
             }
@@ -323,7 +326,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     		progBar.setId((i + 1) * 100);
     		progBar.setProgress(100);
     		
-    		imgView.setBackgroundResource(R.drawable.ic_launcher);
+
     		
     		txt.setText("text");
     		txt.setTextColor(Color.RED);
@@ -348,7 +351,13 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 
     		int monsterGen = (int) (Math.random() * Hub.enemyList.size());
     		
-       	   	//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
+    		int resId = getResources().getIdentifier("head" + Hub.enemyList.get(monsterGen).monsterId, "drawable", getActivity().getPackageName());
+    		if (resId != 0) {
+    			imgView.setImageResource(resId);
+    		} else {
+    			imgView.setImageResource(R.drawable.ic_launcher);
+    		}
+    		//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
        	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
        	 	//enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
        	   	//		Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
@@ -410,8 +419,14 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
         		progBar.setId((i + 1) * 101);
         		progBar.setProgress(100);
         		txt.setText("monster");
-        		imgView.setBackgroundResource(R.drawable.ic_launcher);
         		
+        		int resId = getResources().getIdentifier("head" + partyList.get(i).monsterId, "drawable", getActivity().getPackageName());
+        		Log.d("imageId", partyList.get(i).name + " id is: " + partyList.get(i).monsterId + " id got was: " + resId);
+        		if (resId != 0) {
+        			imgView.setBackgroundResource(resId);;
+        		} else {
+        			imgView.setBackgroundResource(R.drawable.ic_launcher);
+        		}
         		progBar.setLayoutParams(relLayoutParamProg);
         		
         		// sets the progress bar
@@ -640,7 +655,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     
     private void checkEnemyDead(int iPartyAttack) {
 		if (enemyMonsterBattleList.get(iPartyAttack).currentHp <= 0) {
-			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp;
+			// TODO add to other
+			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp * enemyMonsterBattleList.get(iPartyAttack).monster.level / 2;
     		list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
     		deadEnemies++;
     		captureMonster(iPartyAttack);

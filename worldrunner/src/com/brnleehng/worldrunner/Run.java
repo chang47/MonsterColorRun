@@ -192,16 +192,22 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
 		super.onCreate(savedInstanceState);
 		
 		//TODO seperated routes!!!!
-		View view = inflater.inflate(R.layout.routeingame_activity, container, false);
-		
-        // setup intitial objects
+		View view = inflateFragment(R.layout.routeingame_activity, inflater, container); 
+        return view;
+    }
+    
+    public View inflateFragment(int resId, LayoutInflater inflater, ViewGroup container) {
+    	View view = inflater.inflate(resId, container, false);
+    	
+    	
+    	// setup intitial objects
         startTime = SystemClock.elapsedRealtime();
         tvDistance = (TextView) view.findViewById(R.id.tvDistance);
         tvPace = (TextView) view.findViewById(R.id.tvPage);
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvCoin = (TextView) view.findViewById(R.id.tvCoin);
 
-        monsterList = Hub.monsterList;
+        //monsterList = Hub.monsterList;
         partyList = Hub.equippedStickers;
         partyMonsterBattleList = new ArrayList<BattleMonster>();
         enemyMonsterBattleList = new ArrayList<BattleMonster>();
@@ -283,7 +289,8 @@ public abstract class Run extends Fragment implements SensorEventListener, StepL
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
-        return view;
+    	
+    	return view;
     }
     
     public Button setFinishButton(Button stopMission) {

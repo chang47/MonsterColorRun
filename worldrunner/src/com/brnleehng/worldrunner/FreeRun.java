@@ -40,6 +40,18 @@ import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 public class FreeRun extends Run {
 	
+	public FreeRun() {
+		
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	        Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		View view = inflateFragment(R.layout.routeingame_activity, inflater, container); 
+        return view;
+	}
+	
 	@Override
 	public Button setFinishButton(Button stopMission) {
 		// TODO for super class, pass in a function that can be overwrited 

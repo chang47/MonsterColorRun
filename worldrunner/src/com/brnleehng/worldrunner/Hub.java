@@ -66,7 +66,6 @@ public class Hub extends Activity {
 	public static int currentStickerPosition;
 	// current location usually stored in the player model?
 	public static City currentCity;
-	public static ArrayList<Monster> monsterList;
 	public static ArrayList<Monster> partyList;
 	//public static ArrayList<BattleMonster> partyBattleList;
 	public static List<Monster> unequippedMonster;
@@ -194,7 +193,7 @@ public class Hub extends Activity {
 		equippedStickers = db.getEquippedStickers();
 		//equippedStickers = db.getFakeEquippedParty();
 		
-		monsterList = db.getMonsters();
+		//monsterList = db.getMonsters();
 		//partyList = db.getParty();
 		
 		unequippedMonster = new ArrayList<Monster>();

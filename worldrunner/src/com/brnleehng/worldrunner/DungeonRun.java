@@ -149,7 +149,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvCoin = (TextView) view.findViewById(R.id.tvCoin);
 
-        monsterList = Hub.monsterList;
+        //monsterList = Hub.monsterList;
         partyList = Hub.equippedStickers;
         partyMonsterBattleList = new ArrayList<BattleMonster>();
         enemyMonsterBattleList = new ArrayList<BattleMonster>();
@@ -248,7 +248,7 @@ public class DungeonRun extends Fragment implements SensorEventListener, StepLis
                 
                 for (int iPlayer = 0; iPlayer < partyMonsterBattleList.size(); iPlayer++) {
                 	if (partyMonsterBattleList.get(iPlayer) != null)
-                		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).monster.hp * 100));
+                		playerProgressBarList[iPlayer].setProgress((int) (partyMonsterBattleList.get(iPlayer).currentHp / partyMonsterBattleList.get(iPlayer).hp * 100));
                 }
                 
             }

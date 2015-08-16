@@ -29,6 +29,18 @@ public class BattleMonster {
 		// this.step = 30000 / (5 * this.spd);
 	}
 	
+	public BattleMonster(Monster monster, boolean fake) {
+			this.monster = monster;
+			buffs = new HashMap<Integer, Buff>();
+			this.hp = 1000;
+			this.currentHp = 1000;
+			this.atk = 300;
+			this.def = 300;
+			this.spd = 200;
+			this.step = 1000 / this.spd;	
+		
+	}
+	
 	/**
 	 * Recalculates the speed for monsters in response to buffs (Or the removal of buffs)
 	 */

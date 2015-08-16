@@ -265,7 +265,7 @@ public class DBManager extends SQLiteOpenHelper {
 	 */
 	
 	//id,hp,attack,defense,speed,capture
-	public ArrayList<Monster> getMonsters() {
+/*	public ArrayList<Monster> getMonsters() {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		
 		list.add(RABBIT);
@@ -275,7 +275,7 @@ public class DBManager extends SQLiteOpenHelper {
 		list.add(SEAHORSE);
 		list.add(SNAKE);
 		return list;
-	}
+	}*/
 	
 
 }
