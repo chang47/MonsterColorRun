@@ -110,12 +110,15 @@ public class EquipItem extends Fragment {
 		}
 		
 		// Adds in sticker image
+		// TODO no need, but we need a default empty picture
 		for (int i = 0; i < equippedMonsters.size(); i++) {
 			if (equippedMonsters.get(i) != null) {
-				stickerViews[i].setImageResource(R.drawable.ic_launcher);
+				int resId = getResources().getIdentifier("head" + equippedMonsters.get(i).monsterId, "drawable", getActivity().getPackageName());
+	    		if (resId != 0) {
+	    			stickerViews[i].setImageResource(resId);
+	    		}
 			}
 		}
-		
 		
 		equipment1.setOnClickListener(new OnClickListener() {
 			
@@ -168,7 +171,7 @@ public class EquipItem extends Fragment {
 		
 		*/
 	
-	// no listeners for the pictures. You can see them, but you go somewhere else to select them
+		// no listeners for the pictures. You can see them, but you go somewhere else to select them
 		for (int i = 0; i < stickerViews.length; i++) {
 			final int temp = i;
 			stickerViews[i].setOnClickListener(new View.OnClickListener() {
@@ -180,57 +183,6 @@ public class EquipItem extends Fragment {
 				}
 			});
 		}
-		
-		// loop through all stickers
-		for (int i = 0; i < equippedMonsters.size(); i++) {
-			if (equippedMonsters.get(i) != null) {
-				Log.d("equipped sticker", "" + i + " " + equippedMonsters.get(i).name);
-			} else {
-				Log.d("equipped sticker", i + " empty");
-			}
-		}
-		/**
-		stickerViews[0].setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// Calls the hub to switch sticker on slot 1
-				Hub.equipSticker(1, stickerMapping.get(0));
-			}
-		});
-		
-		stickerViews[1].setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Hub.equipSticker(2, stickerMapping.get(1));
-			}
-		});
-		
-		stickerViews[2].setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Hub.equipSticker(3, stickerMapping.get(2));
-			}
-		});
-		
-		stickerViews[3].setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Hub.equipSticker(4, stickerMapping.get(3));
-			}
-		});
-		
-		stickerViews[4].setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Hub.equipSticker(5, stickerMapping.get(4));
-			}
-		});
-*/
 		return view;
 	}
 }

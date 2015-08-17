@@ -287,7 +287,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	 * @return a SparseArray that contains all of the mapping of monsters to their dungeons
 	 * 		   in the form of dungeonId -> list of monsters
 	 */
-	public SparseArray<ArrayList<Integer>> getDungeonMonsters() {
+/*	public SparseArray<ArrayList<Integer>> getDungeonMonsters() {
 		SparseArray<ArrayList<Integer>> map = new SparseArray<ArrayList<Integer>>();
 		ArrayList<Integer> dungeon1Monsters = new ArrayList<Integer>();
 		ArrayList<Integer> dungeon2Monsters = new ArrayList<Integer>();
@@ -298,7 +298,7 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		map.put(1, dungeon1Monsters);
 		map.put(2, dungeon2Monsters);
 		return map;
-	}
+	}*/
 
 	
 }

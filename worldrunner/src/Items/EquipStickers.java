@@ -19,6 +19,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 
+/**
+ * outdated and not used
+ * @author JoshDesktop
+ *
+ */
 public class EquipStickers extends Fragment {
 	GridView gridview;	
 	ArrayList<Monster> unequippedSticker;

@@ -22,6 +22,7 @@ public class MonsterManager {
 	private static final String ATK = "atk";
 	private static final String DEF = "def";
 	private static final String SPD = "spd";
+	private static final String BASE_EXP = "base_exp";
 	
 	/**
 	 * Creates the Table for Stickers
@@ -31,23 +32,24 @@ public class MonsterManager {
 		String CREATE_STICKER_TABLE = "CREATE TABLE " + MONSTERS_REFERENCE + "("
                 + UID + "INTEGER PRIMARY KEY," + SID + " INTEGER," + NAME + " TEXT," + ELEMENT + " INTEGER," +
                  SPAID + " INTEGER, " + SAAID + " INTEGER," + EVOLVE + " INTEGER," + 
-                HP + " INTEGER," + ATK + " INTEGER," + DEF + " INTEGER, " + SPD + " INTEGER" + ")";
+                HP + " INTEGER," + ATK + " INTEGER," + DEF + " INTEGER, " + SPD  + " INTEGER,"+ 
+                 BASE_EXP +" INTEGER" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
         // id, name, element, spaid, saaid, evolve, hp, atk, def, spd,
-        createInitial(db, createReferenceMonster(1, "Firtin", 0, 1, 1, 1, 45, 60, 50, 55));
-        createInitial(db, createReferenceMonster(2, "Artabbit", 1, 2, 2, 1, 50, 55, 55, 60));
-        createInitial(db, createReferenceMonster(3, "Roseer", 2, 3, 3, 1, 55, 50, 60, 50));
-        createInitial(db, createReferenceMonster(4, "Roly", 3, 4, 4, 1, 60, 45, 50, 60));
-        createInitial(db, createReferenceMonster(5, "Barat", 4, 5, 5, 1, 50, 65, 65, 50));
-        createInitial(db, createReferenceMonster(6, "Aqurtle", 1, 6, 6, 1, 45, 30, 65, 40));
-        createInitial(db, createReferenceMonster(7, "Grake", 2, 7, 7, 1, 40, 50, 45, 65));
-        createInitial(db, createReferenceMonster(8, "Serse", 1, 8, 8, 1, 35, 65, 35, 40));
-        createInitial(db, createReferenceMonster(9, "Brewster", 0, 9, 9, 1, 40, 50, 50, 50));
+        createInitial(db, createReferenceMonster(1, "Firtin", 0, 1, 1, 1, 45, 60, 50, 55, 20));
+        createInitial(db, createReferenceMonster(2, "Artabbit", 1, 2, 2, 1, 50, 55, 55, 60, 20));
+        createInitial(db, createReferenceMonster(3, "Roseer", 2, 3, 3, 1, 55, 50, 60, 50, 20));
+        createInitial(db, createReferenceMonster(4, "Roly", 3, 4, 4, 1, 60, 45, 50, 60, 20));
+        createInitial(db, createReferenceMonster(5, "Barat", 4, 5, 5, 1, 50, 65, 65, 50, 20));
+        createInitial(db, createReferenceMonster(6, "Aqurtle", 1, 6, 6, 1, 45, 30, 65, 40, 14));
+        createInitial(db, createReferenceMonster(7, "Grake", 2, 7, 7, 1, 40, 50, 45, 65, 16));
+        createInitial(db, createReferenceMonster(8, "Serse", 1, 8, 8, 1, 35, 65, 35, 40, 18));
+        createInitial(db, createReferenceMonster(9, "Pyrig", 0, 9, 9, 1, 40, 50, 50, 50, 20));
 	}
 	
 	private static Sticker createReferenceMonster(int sid, String name, int element, int spaid, int saaid, int evo,
-			int hp, int atk, int def, int spd) {
-		return new Sticker(-1, -1, sid, name, element, -1, -1, spaid, saaid, evo, -1, -1, hp, atk, def, spd, -1);
+			int hp, int atk, int def, int spd, int baseExp) {
+		return new Sticker(-1, -1, sid, name, element, -1, baseExp, spaid, saaid, evo, -1, -1, hp, atk, def, spd, -1);
 	}
 	
 	/**

@@ -220,10 +220,13 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 				for (Monster monster : partyList) {
 					if (monster != null && monster.level != 100) {
 						monster.exp += exp / partyMonstersSize;
+						Log.d("monsterexp", "added " + (exp / partyMonstersSize) + "" + exp + "exp to " + monster.name
+								+ " who has" + monster.exp);
 						int[] exp;
 						// level 1, would need index 1 ie level 2 info
 						for (int i = monster.level; i < Hub.expTable.size(); i++) {
 							exp = Hub.expTable.get(i);
+							Log.d("exp table1", "" + exp[0]);
 							if (monster.exp >= exp[0]) {
 								monster.level++;
 							}
@@ -438,7 +441,8 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     			partyMonstersSize++;
     			// TODO Quick hack, but needs to be fixed properly.
     			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
+    			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), true));
     			Log.d("party health", "current: " + partyMonsterBattleList.get(i).currentHp + " max: " +
         				partyMonsterBattleList.get(i).hp);
         	
@@ -475,6 +479,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     
     private void reviveParty(int size) {
     	deadPartyMonsters = 0;
+    	list.add("Your party was wiped");
     	for (int i = 0; i < size; i++) {
     		if (partyMonsterBattleList.get(i) != null)
     			partyMonsterBattleList.get(i).resetHp();
@@ -654,7 +659,9 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     }
     
     private void checkEnemyDead(int iPartyAttack) {
+    	Log.d("into check", "checking if " + enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
 		if (enemyMonsterBattleList.get(iPartyAttack).currentHp <= 0) {
+			Log.d("dead check", enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
 			// TODO add to other
 			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp * enemyMonsterBattleList.get(iPartyAttack).monster.level / 2;
     		list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
@@ -665,13 +672,13 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     }
     
     private void captureMonster(int iPartyAttack) {
-    	if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(iPartyAttack).monster.capture) {
-			
+    	//if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(iPartyAttack).monster.capture) {
+			Log.d("capture monster", "caught " + enemyMonsterBattleList.get(iPartyAttack).monster.name );
 			list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been captured!");
 			
 			found.add(enemyMonsterBattleList.get(iPartyAttack).monster);
 			caughtAlready = true;
-		}
+		//}
     }
     
     private void checkEnemyMonsterAllDead() {

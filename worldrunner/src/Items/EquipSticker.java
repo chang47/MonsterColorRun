@@ -76,9 +76,12 @@ public class EquipSticker extends Fragment {
 				// gets the user's selected equipment
 				Monster newMonster = adapter.getItem(position);
 				
-				// adding new monster to non-empty slot
+				// Adds new monster in, even if null
+				equippedMonsters.set(Hub.currentStickerPosition - 1, newMonster);
+				
+				// updates the monster that used to be equipped
 				if (currentSticker != null) {
-					equippedMonsters.remove(currentSticker);
+					//equippedMonsters.remove(currentSticker);
 					unequippedMonsters.add(currentSticker);
 					currentSticker.equipped = 0;
 					currentSticker.position = 0;
@@ -87,12 +90,13 @@ public class EquipSticker extends Fragment {
 					Hub.stickerList.add(currentSticker);
 				}
 				
-				// adds the new selected monster to the party
+				// if the monster selected wasn't the un-equipped null
+				// update the monster
 				if (newMonster != null) {
-					newMonster.equipped = 1;
+//					newMonster.equipped = 1;
 					newMonster.position = Hub.currentStickerPosition;
+					//equippedMonsters.set(newMonster.position - 1, newMonster);
 					unequippedMonsters.remove(newMonster);
-					equippedMonsters.set(newMonster.position - 1, newMonster);
 					//Hub.equippedStickers = equippedMonsters;
 					// TODO instead of relying on database for everything, store it all locally and then send it once it's ready
 					db.updateSticker(newMonster);
