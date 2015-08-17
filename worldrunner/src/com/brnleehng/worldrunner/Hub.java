@@ -31,6 +31,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -88,6 +89,8 @@ public class Hub extends Activity {
 	public static List<Sticker> refMonsters;
 	public static List<MetaAbility> refAbilities;
 	
+	private static Context context;
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -103,8 +106,9 @@ public class Hub extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d("onCreate", "ran hub create");
 		setContentView(R.layout.hub_activity);
-		
+		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
 		
 
@@ -370,6 +374,8 @@ public class Hub extends Activity {
 	
 	public static void backToCity() {
 		FragmentTransaction ft = setFT();
+		DBManager db = new DBManager(context);
+		getPlayerData(db);
 		CityHub townHub = new CityHub();
 		ft.replace(R.id.header, header);
 		ft.replace(R.id.footer, footer);
@@ -463,6 +469,7 @@ public class Hub extends Activity {
 	public static void moveCity(int newCity) {
 		//@TODO check if you need to subtract 1
 		setCurrentCity(refCities.get(newCity - 1));
+		Log.d("newCity", refCities.get(newCity - 1).cityName);
 		backToCity();
 	}
 	 

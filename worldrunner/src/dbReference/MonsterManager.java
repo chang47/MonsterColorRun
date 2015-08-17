@@ -35,7 +35,7 @@ public class MonsterManager {
                 HP + " INTEGER," + ATK + " INTEGER," + DEF + " INTEGER, " + SPD  + " INTEGER,"+ 
                  BASE_EXP +" INTEGER" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
-        // id, name, element, spaid, saaid, evolve, hp, atk, def, spd,
+        // id, name, element, spaid, saaid, evolve, hp, atk, def, spd, exp
         createInitial(db, createReferenceMonster(1, "Firtin", 0, 1, 1, 1, 45, 60, 50, 55, 20));
         createInitial(db, createReferenceMonster(2, "Artabbit", 1, 2, 2, 1, 50, 55, 55, 60, 20));
         createInitial(db, createReferenceMonster(3, "Roseer", 2, 3, 3, 1, 55, 50, 60, 50, 20));
@@ -80,6 +80,7 @@ public class MonsterManager {
 		values.put(ATK, sticker.attack);
 		values.put(DEF, sticker.defense);
 		values.put(SPD, sticker.speed);
+		values.put(BASE_EXP, sticker.current_exp);
 		return values;
 	}
 	
@@ -109,7 +110,7 @@ public class MonsterManager {
 				sticker.name = cursor.getString(2);
 				sticker.element = cursor.getInt(3);
 				sticker.current_level = -1;
-				sticker.current_exp = -1;
+				sticker.current_exp = cursor.getInt(11); // exp
 				sticker.spaid = cursor.getInt(4);
 				sticker.saaid = cursor.getInt(5);
 				sticker.evolve = cursor.getInt(6);
