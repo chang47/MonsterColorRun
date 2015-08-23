@@ -77,7 +77,7 @@ public class EquipSticker extends Fragment {
 				Monster newMonster = adapter.getItem(position);
 				
 				// Adds new monster in, even if null
-				equippedMonsters.set(Hub.currentStickerPosition - 1, newMonster);
+				equippedMonsters.set(currentPosition - 1, newMonster);
 				
 				// updates the monster that used to be equipped
 				if (currentSticker != null) {
@@ -93,8 +93,8 @@ public class EquipSticker extends Fragment {
 				// if the monster selected wasn't the un-equipped null
 				// update the monster
 				if (newMonster != null) {
-//					newMonster.equipped = 1;
-					newMonster.position = Hub.currentStickerPosition;
+					newMonster.equipped = 1;
+					newMonster.position = currentPosition;
 					//equippedMonsters.set(newMonster.position - 1, newMonster);
 					unequippedMonsters.remove(newMonster);
 					//Hub.equippedStickers = equippedMonsters;
