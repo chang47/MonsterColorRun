@@ -83,17 +83,6 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
     // the controller (Hub), but we'll just have it here anyways for now
     private DBManager db;
     
-    // Ignore
-    private static final double FRIEND1 = 1.1;
-    private static final double FRIEND2 = 1.1;
-    private static final double FRIEND3 = 1.1;
-    private static final double FRIEND4 = 1.1;
-    private static final double FRIEND5 = 1.1;
-   
-    // Ignore until sticker fixed
-    //private Sticker monster;
-
-    
     //For logging purposes
 	private ArrayList<String> list = new ArrayList<String>();
 
