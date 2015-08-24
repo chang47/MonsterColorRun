@@ -63,8 +63,6 @@ public class BattleInfo {
     public static ArrayList<Monster> partyList;
     public static ArrayList<BattleMonster> partyMonsterBattleList;
     public static ArrayList<BattleMonster> enemyMonsterBattleList;
-    public static ArrayList<ProgressBar> enemyProgressBarList;
-    public static ProgressBar[] playerProgressBarList;
     
     //Shows the player's log
     public static Dialog showLog;
@@ -126,7 +124,6 @@ public class BattleInfo {
     	deadEnemies = 0;
     	enemyPartySize = (int) ((Math.random() * 3.0) + 1);
     	list.add("new enemy party with " + enemyPartySize + " monsters");
-		enemyProgressBarList.clear();
 		enemyMonsterBattleList.clear();
 		
 		//Creates the monsters and adds the UI elements for them
@@ -148,7 +145,6 @@ public class BattleInfo {
 			
     		if (partyList.get(i) == null) {
     			partyMonsterBattleList.add(null);
-    			playerProgressBarList[i] = null;
     		} else {
     			// setup real monsters, only creates progress bar if real monster exists        		
     			partyMonstersSize++;

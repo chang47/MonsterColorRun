@@ -47,9 +47,10 @@ public class Database extends Fragment {
 			
 			@Override
 			public void onClick(View arg0) {
-				
-				// Free Run.java
-				Hub.startRun();
+				if (Hub.partySize() > 0) {
+				// TestRun.java
+					Hub.startRun();
+				}
 				
 			}
 		});

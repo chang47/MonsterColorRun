@@ -69,8 +69,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	public void onCreate() {
 		// init values
 
-		// sets the time
-
+		BattleInfo.startCombat();
         intent = new Intent(BROADCAST_ACTION);        
         
 		// start detecting steps
