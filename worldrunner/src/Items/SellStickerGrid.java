@@ -36,7 +36,14 @@ public class SellStickerGrid extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.sellequipmentgrid_activity, container, false);
-		list = Hub.stickerList;
+		list = new ArrayList<Monster>();
+		for (Monster monster : Hub.stickerList) {
+			if (monster.equipped == 0) {
+				list.add(monster);
+			}
+		}
+		 
+		//list = Hub.stickerList;
 		db = new DBManager(getActivity());
 		
 		sellList = new ArrayList<Monster>();
