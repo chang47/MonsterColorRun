@@ -150,38 +150,13 @@ public class BattleInfo {
     			partyMonsterBattleList.add(null);
     			playerProgressBarList[i] = null;
     		} else {
-    			// setup real monsters, only creates progress bar if real monster exists
-        		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
-        		progBar.setId((i + 1) * 101);
-        		progBar.setProgress(100);
-        		txt.setText("monster");
-        		
-        		int resId = getResources().getIdentifier("head" + partyList.get(i).monsterId, "drawable", getActivity().getPackageName());
-        		Log.d("imageId", partyList.get(i).name + " id is: " + partyList.get(i).monsterId + " id got was: " + resId);
-        		if (resId != 0) {
-        			imgView.setBackgroundResource(resId);;
-        		} else {
-        			imgView.setBackgroundResource(R.drawable.ic_launcher);
-        		}
-        		progBar.setLayoutParams(relLayoutParamProg);
-        		
-        		// sets the progress bar
-        		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 11);
-    			
-        		relLayout.addView(progBar);
-        		playerProgressBarList[i] = progBar;
-        		Log.d("size", "size of list is" + enemyProgressBarList.size());
+    			// setup real monsters, only creates progress bar if real monster exists        		
     			partyMonstersSize++;
-    			// TODO Quick hack, but needs to be fixed properly.
-    			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i), partyList.get(i).hp, 1000 / partyList.get(i).speed));
-    			//partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
     			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), true));
     			Log.d("party health", "current: " + partyMonsterBattleList.get(i).currentHp + " max: " +
-        				partyMonsterBattleList.get(i).hp);
-        	
+        				partyMonsterBattleList.get(i).hp);        	
     		}
     		
-    		playerPartyLayout.addView(relLayout);
     	}
     }
 }
