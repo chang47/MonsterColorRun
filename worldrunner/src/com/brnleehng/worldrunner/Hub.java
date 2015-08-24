@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import test.TestRun;
 import dbReference.ReferenceManager;
 import metaModel.City;
 import metaModel.Dungeon;
@@ -359,7 +360,7 @@ public class Hub extends Activity {
 	public static void startRun() {
 		FragmentTransaction ft = setFT();
 		enemyList = util.Parser.enemyDungeonStickersToEnemyMonsters(refMonsters, refDungeonMonsters.get(1));
-		FreeRun run = new FreeRun();
+		TestRun run = new TestRun();
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, run).commit();

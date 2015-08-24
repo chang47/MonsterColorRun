@@ -25,6 +25,8 @@
             android:required="true" />
 
     <application android:label="@string/app_name" android:icon="@drawable/icon">
+        <service android:name="test.TestStepService"
+            android:enabled="true" />
         <activity android:name="Pregame"
                   android:label="@string/app_name">
         </activity>
