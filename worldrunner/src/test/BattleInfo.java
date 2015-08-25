@@ -90,7 +90,7 @@ public class BattleInfo {
 	 * Should only be called at the start of a battle and never again 
 	 * anywhere else
 	 */
-	public static void startCombat() {
+	public static void combatStart() {
 		if (!battleStarted) {
 			// ensures that method can't be called again
 			battleStarted = true;
@@ -117,6 +117,17 @@ public class BattleInfo {
 
 		}
 	} 
+	
+	// only calls this when the battle finishes otherwise you can't start
+	// a new combat session and the game will crash
+	// good time to null and get rid of unnecessary variables
+	public static void combatFinish() {
+		if (battleStarted) {
+			found.clear();
+			found = null;
+			battleStarted = false;
+		}
+	}
 	
 	public static void generateEnemies() {
 		BackgroundChecker.newEnemies = true;

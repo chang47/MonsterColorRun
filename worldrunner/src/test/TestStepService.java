@@ -69,7 +69,6 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	public void onCreate() {
 		// init values
 
-		BattleInfo.startCombat();
         intent = new Intent(BROADCAST_ACTION);        
         
 		// start detecting steps
@@ -129,7 +128,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 		        	if (iPartyAttacked == -1) {
 		        		throw new Error("attacked index is -1, impossible!");
 		        	}
-		        	BackgroundChecker.monsterWasAttacked = true;
+		        	BackgroundChecker.playerMonsterWasAttacked = true;
 		        	BattleInfo.partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(BattleInfo.enemyMonsterBattleList.get(i), 
 		        			BattleInfo.partyMonsterBattleList.get(iPartyAttacked));
 		        	
