@@ -131,16 +131,19 @@ public class BattleInfo {
 	
 	public static void generateEnemies() {
 		BackgroundChecker.newEnemies = true;
+		BackgroundChecker.monsterWasAttacked = false;
     	caughtAlready = false;
     	deadEnemies = 0;
     	enemyPartySize = (int) ((Math.random() * 3.0) + 1);
-    	list.add("new enemy party with " + enemyPartySize + " monsters");
+    	
+    	// TODO remove
+    	if (list.size() < 100)
+    		list.add("new enemy party with " + enemyPartySize + " monsters");
 		enemyMonsterBattleList.clear();
 		
 		//Creates the monsters and adds the UI elements for them
 		for (int i = 0; i < enemyPartySize; i++) {
     		int monsterGen = (int) (Math.random() * Hub.enemyList.size());
-    		
     		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
     		Log.d("enemy health", "current: " + enemyMonsterBattleList.get(i).currentHp + " max: " +
     				enemyMonsterBattleList.get(i).hp);
@@ -152,8 +155,8 @@ public class BattleInfo {
      * Generates the player's party
      */
     private static void generateParty() {
+    	BackgroundChecker.playerMonsterWasAttacked = false;
     	for (int i = 0; i < partyList.size(); i++) {
-			
     		if (partyList.get(i) == null) {
     			partyMonsterBattleList.add(null);
     		} else {

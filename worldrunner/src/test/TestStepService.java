@@ -68,7 +68,6 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	@Override
 	public void onCreate() {
 		// init values
-
         intent = new Intent(BROADCAST_ACTION);        
         
 		// start detecting steps
@@ -131,8 +130,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 		        	BackgroundChecker.playerMonsterWasAttacked = true;
 		        	BattleInfo.partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(BattleInfo.enemyMonsterBattleList.get(i), 
 		        			BattleInfo.partyMonsterBattleList.get(iPartyAttacked));
-		        	
-		            BattleInfo.list.add("Enemy " + BattleInfo.enemyMonsterBattleList.get(i).monster.name + " Attacks " + 
+		        	// TODO remove
+		        	if (BattleInfo.list.size() < 100) 
+		        		BattleInfo.list.add("Enemy " + BattleInfo.enemyMonsterBattleList.get(i).monster.name + " Attacks " + 
 		            BattleInfo.partyMonsterBattleList.get(iPartyAttacked).monster.name + " For " + 
 		            BattleHelper.Attack(BattleInfo.enemyMonsterBattleList.get(i), BattleInfo.partyMonsterBattleList.get(iPartyAttacked)));
 		
@@ -160,7 +160,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        		//Log.d("index problems", "" + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(BattleInfo.partyMonsterBattleList.get(i), BattleInfo.enemyMonsterBattleList.get(iEnemyAttacked));
 	        		BattleInfo.enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
-	        		BattleInfo.list.add(BattleInfo.partyMonsterBattleList.get(i).monster.name + " Attacks " + BattleInfo.enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
+	        		// TODO remove
+	        		if (BattleInfo.list.size() < 10)
+	        			BattleInfo.list.add(BattleInfo.partyMonsterBattleList.get(i).monster.name + " Attacks " + BattleInfo.enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
 	        		checkEnemyDead(iEnemyAttacked);
 	        		
 	        		Iterator iterator = BattleInfo.partyMonsterBattleList.get(i).buffs.entrySet().iterator();
@@ -246,7 +248,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	
 	private void reviveParty(int size) {
 		BattleInfo.deadPartyMonsters = 0;
-	    BattleInfo.list.add("Your party was wiped");
+		// TODO remove
+		if (BattleInfo.list.size() < 100)
+			BattleInfo.list.add("Your party was wiped");
 	    for (int i = 0; i < size; i++) {
 	    if (BattleInfo.partyMonsterBattleList.get(i) != null)
 	    	BattleInfo.partyMonsterBattleList.get(i).resetHp();
@@ -269,17 +273,21 @@ public class TestStepService extends Service implements SensorEventListener, Ste
     private void captureMonster(int iPartyAttack) {
     	//if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(iPartyAttack).monster.capture) {
 			Log.d("capture monster", "caught " + BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name );
-			BattleInfo.list.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been captured!");
-			
-			BattleInfo.found.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster);
+			// TODO remove
+			if (BattleInfo.found.size() < 10) {
+				if (BattleInfo.list.size() < 10) 
+					BattleInfo.list.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been captured!");
+				BattleInfo.found.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster);
+			}
 			BattleInfo.caughtAlready = true;
 		//}
     }
     
     private void checkEnemyMonsterAllDead() {
     	if (BattleInfo.deadEnemies >= BattleInfo.enemyPartySize) {
-			//deadMonsters++;	
-    		BattleInfo.list.add("Defeated all enemies");
+    		// TODO remove
+    		if (BattleInfo.list.size() < 100)
+    			BattleInfo.list.add("Defeated all enemies");
 			BattleInfo.monsterPartiesNeeded--;	
 			if (BattleInfo.monsterPartiesNeeded <= 0) {
 				BattleInfo.finishEnabled = true;

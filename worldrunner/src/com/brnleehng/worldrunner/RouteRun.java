@@ -264,7 +264,7 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
                 // sets the enemy's hp
                 // @TODO change it so that the hp gets updated when they get hit and not by the second?
                 for (int iEnemy = 0; iEnemy < enemyProgressBarList.size(); iEnemy++) {
-                	enemyProgressBarList.get(iEnemy).setProgress((enemyMonsterBattleList.get(iEnemy).currentHp * 100 / enemyMonsterBattleList.get(iEnemy).monster.hp));
+                	enemyProgressBarList.get(iEnemy).setProgress((enemyMonsterBattleList.get(iEnemy).currentHp * 100 / enemyMonsterBattleList.get(iEnemy).hp));
                 }
                 
                 for (int iPlayer = 0; iPlayer < playerProgressBarList.length; iPlayer++) {

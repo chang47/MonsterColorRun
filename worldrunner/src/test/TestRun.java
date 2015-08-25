@@ -71,6 +71,7 @@ public class TestRun extends Fragment {
 		
 		// start early so we can load player monsters without being redundant
 		BattleInfo.combatStart();
+		
         // setup intitial objects
         tvDistance = (TextView) view.findViewById(R.id.tvDistance);
         tvPace = (TextView) view.findViewById(R.id.tvPage);
@@ -83,6 +84,10 @@ public class TestRun extends Fragment {
         btnLog = (Button) view.findViewById(R.id.btnLog);
         stopMission = (Button) view.findViewById(R.id.stopMission);
                 
+        // loads the screens for the user
+        createNewMonsters();
+        createPartyMonsters();
+        
         // initialize fields
         steps = 0;
 
@@ -92,15 +97,10 @@ public class TestRun extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				
 				Bundle bundle = new Bundle();
 				bundle.putStringArrayList("Log", BattleInfo.list);
-				
-				
 				RunLogDialog newFragment = new RunLogDialog();
-				
 				newFragment.setArguments(bundle);
-				
 				newFragment.show(getFragmentManager(), "Run Log");
 			}
 		});
@@ -158,17 +158,7 @@ public class TestRun extends Fragment {
     	BackgroundChecker.isBackground = false;
     	tvPace.setText("Step: " + BattleInfo.steps);
     	// TODO same thing with the onReceive 
-    	if (BackgroundChecker.newEnemies) {
-			createNewMonsters();
-		}
-		
-		if (BackgroundChecker.monsterWasAttacked) {
-			updateMonsterHealth();
-		}
-		
-		if (BackgroundChecker.playerMonsterWasAttacked) {
-			updatePlayerMonsterHealth();
-		}
+    	updateUI();
     }
     
     public void onPause() {
@@ -183,19 +173,7 @@ public class TestRun extends Fragment {
 			steps = mService.getStep();
 			tvPace.setText("steps: " + steps);
 			
-			// adds new monsters
-			if (BackgroundChecker.newEnemies) {
-				createNewMonsters();
-			}
-			
-			// changes the hp
-			if (BackgroundChecker.monsterWasAttacked) {
-				updateMonsterHealth();
-			}
-			
-			if (BackgroundChecker.playerMonsterWasAttacked) {
-				updatePlayerMonsterHealth();
-			}
+			updateUI();
 		}
 	};
     
@@ -225,14 +203,88 @@ public class TestRun extends Fragment {
     	
     };
     
-    private void updateMonsterHealth() {
-    	BackgroundChecker.monsterWasAttacked = false;
+    private void updateUI() {
+    	// adds new monsters
+		if (BackgroundChecker.newEnemies) {
+			createNewMonsters();
+		}
+		
+		// changes the hp
+		if (BackgroundChecker.monsterWasAttacked) {
+			updateMonsterHealth();
+		}
+		
+		if (BackgroundChecker.playerMonsterWasAttacked) {
+			updatePlayerMonsterHealth();
+		}
     }
     
+    /**
+     * 1. Creates a new view of monster for the user when they first load the app, 
+     * 2. defeat an enemy when they're either in the background and came back 
+     * or 3. when they finish off the enemy with the app open on the phone
+     */
     private void createNewMonsters() {
+    	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
-		for (int i = 0; i < enemyPartySize; i++) {
-			RelativeLayout relLayout = new RelativeLayout(getActivity());
+		enemyProgressBarList.clear();
+		for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
+			BattleMonster battleMonster = BattleInfo.enemyMonsterBattleList.get(i);
+			if (battleMonster != null) {
+				RelativeLayout relLayout = new RelativeLayout(getActivity());
+				
+	    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+	    		relLayout.setLayoutParams(linLayoutParam);
+				
+	    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+	    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+	    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+	    		
+	    		// Assigned id for enemy ui
+	    		TextView txt = new TextView(getActivity());
+	    		txt.setId((i + 1));
+	    		ImageView imgView = new ImageView(getActivity());
+	    		imgView.setId((i + 1) * 10 );
+	    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
+	    		progBar.setId((i + 1) * 100);
+	    		txt.setText("text");
+	    		txt.setTextColor(Color.RED);
+	    		txt.setGravity(Gravity.CENTER);
+	
+	    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1));
+	    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 10);
+	
+	    		txt.setLayoutParams(relLayoutParamTxt);
+	    		imgView.setLayoutParams(relLayoutParamImg);
+	    		progBar.setLayoutParams(relLayoutParamProg);
+	    		progBar.setProgress((battleMonster.currentHp * 100 / battleMonster.hp));
+	    		
+	    		relLayout.addView(txt);
+	    		relLayout.addView(imgView);
+	    		relLayout.addView(progBar);
+	    		
+	    		enemyProgressBarList.add(progBar);
+	    		Log.d("size", "size of list is" + enemyProgressBarList.size());
+	    		
+	    		enemyPartyLayout.addView(relLayout);
+	
+	    		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
+	    		if (resId != 0) {
+	    			imgView.setImageResource(resId);
+	    		} else {
+	    			imgView.setImageResource(R.drawable.ic_launcher);
+	    		}
+			}
+		}
+    }
+    
+    /**
+     * Creates a new view of the user's party when they first load the run 
+     */
+    private void createPartyMonsters() {
+    	playerPartyLayout.removeAllViews();
+    	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
+    		RelativeLayout relLayout = new RelativeLayout(getActivity());
 			
     		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
     		relLayout.setLayoutParams(linLayoutParam);
@@ -241,58 +293,84 @@ public class TestRun extends Fragment {
     		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		
-    		// Assigned id for enemy ui
+    		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
-    		txt.setId((i + 1));
+    		txt.setId((i + 10));
     		ImageView imgView = new ImageView(getActivity());
-    		imgView.setId((i + 1) * 10 );
-    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
-    		progBar.setId((i + 1) * 100);
-    		progBar.setProgress(100);
+    		imgView.setId((i + 1) * 11 );
     		
-
-    		
-    		txt.setText("text");
+    		// assigns text
     		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
-
-    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1));
-    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 10);
-
-    		txt.setLayoutParams(relLayoutParamTxt);
-    		imgView.setLayoutParams(relLayoutParamImg);
-    		progBar.setLayoutParams(relLayoutParamProg);
     		
+    		// assigns the rule for pictures
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
+    		
+       		txt.setLayoutParams(relLayoutParamTxt);
+    		imgView.setLayoutParams(relLayoutParamImg);
     		
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
-    		relLayout.addView(progBar);
-    		
-    		enemyProgressBarList.add(progBar);
-    		Log.d("size", "size of list is" + enemyProgressBarList.size());
-    		
-    		enemyPartyLayout.addView(relLayout);
-
-    		int monsterGen = (int) (Math.random() * Hub.enemyList.size());
-    		
-    		int resId = getResources().getIdentifier("head" + Hub.enemyList.get(monsterGen).monsterId, "drawable", getActivity().getPackageName());
-    		if (resId != 0) {
-    			imgView.setImageResource(resId);
+    		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
+    		if (battleMonster == null) {
+    			txt.setText("empty");
+    			imgView.setBackgroundResource(R.drawable.colorworld);
+    			playerProgressBarList[i] = null;
     		} else {
-    			imgView.setImageResource(R.drawable.ic_launcher);
+    			// setup real monsters, only creates progress bar if real monster exists
+        		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
+        		progBar.setId((i + 1) * 101);
+        		progBar.setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
+        		txt.setText("monster");
+        		
+        		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
+        		Log.d("imageId", battleMonster.monster.name + " id is: " + battleMonster.monster.monsterId + " id got was: " + resId);
+        		if (resId != 0) {
+        			imgView.setBackgroundResource(resId);;
+        		} else {
+        			imgView.setBackgroundResource(R.drawable.ic_launcher);
+        		}
+        		progBar.setLayoutParams(relLayoutParamProg);
+        		
+        		// sets the progress bar
+        		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 11);
+    			
+        		relLayout.addView(progBar);
+        		playerProgressBarList[i] = progBar;
     		}
-    		//monster = new BattleMonster(Hub.currentRoute.monsters.get(monsterGen), 
-       	   			//Hub.currentRoute.monsters.get(monsterGen).hp, 1000 / Hub.currentRoute.monsters.get(monsterGen).speed);
-       	 	//enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen), 
-       	   	//		Hub.enemyList.get(monsterGen).hp, 1000 / Hub.enemyList.get(monsterGen).speed));
-    		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
-    		Log.d("enemy health", "current: " + enemyMonsterBattleList.get(i).currentHp + " max: " +
-    				enemyMonsterBattleList.get(i).hp);
-		}
+    		
+    		playerPartyLayout.addView(relLayout);
+    	}
     }
     
+    /**
+     * Updates the user's monster's hp bar whenever they get hit either when the user
+     * first opens the background or when the app is open on the screen and the
+     * user walks
+     */
     private void updatePlayerMonsterHealth() {
     	BackgroundChecker.playerMonsterWasAttacked = false;
+    	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
+    		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
+    		if (battleMonster != null) {
+    			playerProgressBarList[i].setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
+    		}
+    	}
+    }
+    
+    /**
+     * Updates the enemies hp bar whenever they get hit either when the user
+     * first opens the background or when the app is open on the screen and the
+     * user walks
+     */
+    private void updateMonsterHealth() {
+    	BackgroundChecker.monsterWasAttacked = false;
+    	for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
+    		BattleMonster battleMonster = BattleInfo.enemyMonsterBattleList.get(i);
+    		if (battleMonster != null) {
+    			enemyProgressBarList.get(i).setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
+    		}
+    	}
     }
     
 }
