@@ -263,7 +263,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 			Log.d("dead check", BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
 			// TODO add to other
 			BattleInfo.exp += BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.exp * BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.level / 2;
-    		BattleInfo.list.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
+    		//BattleInfo.list.add(BattleInfo.enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
     		BattleInfo.deadEnemies++;
     		captureMonster(iPartyAttack);
     		checkEnemyMonsterAllDead();

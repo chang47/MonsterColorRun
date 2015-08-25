@@ -156,6 +156,7 @@ public class BattleInfo {
      */
     private static void generateParty() {
     	BackgroundChecker.playerMonsterWasAttacked = false;
+    	partyMonsterBattleList.clear();
     	for (int i = 0; i < partyList.size(); i++) {
     		if (partyList.get(i) == null) {
     			partyMonsterBattleList.add(null);
