@@ -15,6 +15,7 @@ public class BattleMonster {
 	public int def;
 	public int spd;
 	public int currentHp;
+	public int abilityStep;
 	
 	public BattleMonster(Monster monster) {
 		this.monster = monster;
@@ -25,6 +26,7 @@ public class BattleMonster {
 		this.def = monster.defense * 10 * monster.level / 100;
 		this.spd = monster.speed * 10 * monster.level / 100;
 		this.step = 1000 / this.spd;
+		this.abilityStep = monster.activeAbility.steps;
 		// real one
 		// this.step = 30000 / (5 * this.spd);
 	}
@@ -38,7 +40,7 @@ public class BattleMonster {
 			this.def = 300;
 			this.spd = 200;
 			this.step = 1000 / this.spd;	
-		
+			this.abilityStep = monster.activeAbility.steps;
 	}
 	
 	/**
@@ -56,5 +58,9 @@ public class BattleMonster {
 	
 	public void resetHp() {
 		this.currentHp = this.hp;
+	}
+	
+	public void resetAbilityStep() {
+		this.abilityStep = monster.activeAbility.steps;
 	}
 }

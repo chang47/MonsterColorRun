@@ -1,11 +1,18 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 
 import test.TestStepService.StepBinder;
+import util.BattleHelper;
+import Abilities.Buff;
+import Abilities.DamageAbility;
+import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
@@ -43,6 +50,7 @@ public class BattleInfo {
     public static double distance;
     public static int coins;
     public static int iPartyAttacked;
+    public static int battleSteps;
     
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
@@ -110,6 +118,7 @@ public class BattleInfo {
 	        distance = 0;
 	        coins = 0;
 			countUp = 0;
+			battleSteps = 0;
 			found = new ArrayList<Monster>();
 			
 	        generateEnemies();
@@ -130,6 +139,9 @@ public class BattleInfo {
 	}
 	
 	public static void generateEnemies() {
+		// TODO issue because monster can attack again?
+		BackgroundChecker.finishedCurrentBattle = true;
+		battleSteps = 0;
 		BackgroundChecker.newEnemies = true;
 		BackgroundChecker.monsterWasAttacked = false;
     	caughtAlready = false;
@@ -169,5 +181,184 @@ public class BattleInfo {
     		}
     		
     	}
+    }
+    
+    public static void enemyTurn() {
+    	for (int i = 0; i < enemyPartySize; i++) {
+        	//Attacks Regularly
+        	if (enemyMonsterBattleList.get(i).currentHp > 0) {
+		        if (battleSteps % enemyMonsterBattleList.get(i).step == 0) {
+		        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
+
+		        	if (iPartyAttacked == -1) {
+		        		throw new Error("attacked index is -1, impossible!");
+		        	}
+		        	// for ui update
+		        	BackgroundChecker.playerMonsterWasAttacked = true;
+		        	partyMonsterBattleList.get(iPartyAttacked).currentHp -= BattleHelper.Attack(enemyMonsterBattleList.get(i), 
+		        			partyMonsterBattleList.get(iPartyAttacked));
+		        	// TODO remove
+		        	if (list.size() < 100) 
+		        		list.add("Enemy " + enemyMonsterBattleList.get(i).monster.name + " Attacks " + 
+		            partyMonsterBattleList.get(iPartyAttacked).monster.name + " For " + 
+		            BattleHelper.Attack(enemyMonsterBattleList.get(i), partyMonsterBattleList.get(iPartyAttacked)));
+		
+					if (partyMonsterBattleList.get(iPartyAttacked).currentHp <= 0) {
+						deadPartyMonsters++;
+						if (deadPartyMonsters >= partyMonstersSize) {
+							//Entire Party is dead, resurrect them and change monsters
+							reviveParty(partyMonsterBattleList.size());
+							generateEnemies();
+							return;
+						}
+					}
+		        }
+        	}
+        }
+    }
+    
+    public static void playerTurn() {
+    	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
+        	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
+	        	if (battleSteps % partyMonsterBattleList.get(i).step == 0) {
+	        		BackgroundChecker.monsterWasAttacked = true;
+	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+	        		
+	        		//Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).step);
+	        		//Log.d("index problems", "" + iEnemyAttacked);
+	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
+	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
+	        		// TODO remove
+	        		if (list.size() < 10)
+	        			list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
+	        		checkEnemyDead(iEnemyAttacked);
+	        		
+	        		Iterator iterator = partyMonsterBattleList.get(i).buffs.entrySet().iterator();
+	        		// decrease buff of monsters
+	        		while (iterator.hasNext()) {
+	        			Map.Entry<Integer, Buff> pair = (Entry<Integer, Buff>) iterator.next();
+	        			int attribute = pair.getKey();
+	        			Buff buff = pair.getValue();
+	        			//Log.d("buff with duration at: ", "" + buff.duration);
+	        			buff.duration--;
+	        			Log.d("duration", "" + partyMonsterBattleList.get(i).monster.name + " buff " + buff.name + " has duration " + buff.duration);
+	        			//partyBattleList.get(i).buffs.get(iterator).duration--;
+	        			//Check if above code actually decreases
+	        			if (buff.duration <= 0) {
+	        				//Log.d("removed attribute", "" + iterator);
+	        				// partyBattleList.get(b).buffs.get(3).duration
+	        				iterator.remove();
+	        				
+	        				// important to be after, becauase recalculate checks for the attribute key
+	        				if (attribute == 3) {
+	        					partyMonsterBattleList.get(i).RecalculateSpeed();
+	        	        		//Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
+	        				}
+	        				//partyBattleList.get(i).buffs.remove(iterator);
+	        			}
+	        		}
+	        		if (BackgroundChecker.finishedCurrentBattle)
+	        			return;
+	        	}
+	        	// checks for user's party's ability
+	        	// TODO need to check seperately and have a decreasing limit, can't rely on steps
+	        	
+        	}
+        }
+    }
+    
+    public static void playerAbilityTurn(int step) {
+    	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
+        	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
+        		partyMonsterBattleList.get(i).abilityStep--;
+        		if (partyMonsterBattleList.get(i).abilityStep < 0) { 
+        			partyMonsterBattleList.get(i).resetAbilityStep();
+	        		//Applies ability to attack enemy
+	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
+	        			BackgroundChecker.monsterWasAttacked = true;
+		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
+	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
+//	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
+//	            				" For " + damage + "!");
+	            		
+	            		//Checks if all enemies are dead 
+	        			checkEnemyDead(iEnemyAttack);
+	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
+	        			//Applies party buffs
+	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.activeAbility;
+	        	        for (int b = 0; b < partyMonsterBattleList.size(); b++) {
+	        	        	if (partyMonsterBattleList.get(b) != null) {
+		        	        	Buff newBuff = new Buff(support.name, support.description, support.duration, support.attribute, support.modifier);
+		        	        	partyMonsterBattleList.get(b).buffs.put(support.attribute, newBuff);           	        
+		        	        	if (support.attribute == 3) {
+		        	        		partyMonsterBattleList.get(b).RecalculateSpeed();
+		        	        		Log.d("Speed","New Speed Calculated for : " + partyMonsterBattleList.get(b).monster.name + " is " + partyMonsterBattleList.get(b).step + " duration is: " + partyMonsterBattleList.get(b).buffs.get(3).duration);
+		            	        }
+	        	        	}
+	        	        }
+//	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + "!");
+	        		}
+	        		if (BackgroundChecker.finishedCurrentBattle)
+	        			return;
+	        	}
+        		
+        	}
+    	}
+
+    }
+    
+    private static void reviveParty(int size) {
+		deadPartyMonsters = 0;
+		BackgroundChecker.finishedCurrentBattle = true;
+		// TODO issue because they can attack again immediately?
+		battleSteps = 0;
+		// TODO remove
+		if (list.size() < 100)
+			list.add("Your party was wiped");
+	    for (int i = 0; i < size; i++) {
+	    if (partyMonsterBattleList.get(i) != null)
+	    	partyMonsterBattleList.get(i).resetHp();
+	    }
+	}
+	
+    private static void checkEnemyDead(int iPartyAttack) {
+    	Log.d("into check", "checking if " + enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
+		if (enemyMonsterBattleList.get(iPartyAttack).currentHp <= 0) {
+			Log.d("dead check", enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
+			// TODO add to other
+			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp * enemyMonsterBattleList.get(iPartyAttack).monster.level / 2;
+    		//list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
+    		deadEnemies++;
+    		captureMonster(iPartyAttack);
+    		checkEnemyMonsterAllDead();
+		}
+    }
+    
+    private static void captureMonster(int iPartyAttack) {
+    	//if (!caughtAlready && (double) ((Math.random() * 100.0) + 1) > enemyMonsterBattleList.get(iPartyAttack).monster.capture) {
+			Log.d("capture monster", "caught " + enemyMonsterBattleList.get(iPartyAttack).monster.name );
+			// TODO remove
+			if (found.size() < 10) {
+				if (list.size() < 10) 
+					list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been captured!");
+				found.add(enemyMonsterBattleList.get(iPartyAttack).monster);
+			}
+			caughtAlready = true;
+		//}
+    }
+    
+    private static void checkEnemyMonsterAllDead() {
+    	if (deadEnemies >= enemyPartySize) {
+    		// TODO remove
+    		if (list.size() < 100)
+    			list.add("Defeated all enemies");
+			monsterPartiesNeeded--;	
+			if (monsterPartiesNeeded <= 0) {
+				finishEnabled = true;
+			}
+			generateEnemies();
+		}
     }
 }
