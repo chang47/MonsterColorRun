@@ -109,6 +109,7 @@ public class Hub extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d("onCreate", "ran hub create");
 		setContentView(R.layout.hub_activity);
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
 		
