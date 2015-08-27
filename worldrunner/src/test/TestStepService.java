@@ -1,50 +1,17 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import util.BattleHelper;
-
-import com.brnleehng.worldrunner.Hub;
-import com.brnleehng.worldrunner.R;
-import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
-import Abilities.Buff;
-import Abilities.DamageAbility;
-import Abilities.SupportAbility;
-import DB.DBManager;
-import DB.Model.BattleMonster;
-import DB.Model.Monster;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Chronometer.OnChronometerTickListener;
-import android.widget.LinearLayout.LayoutParams;
 
 public class TestStepService extends Service implements SensorEventListener, StepListener {
 	private TestSimpleStepDetector simpleStepDetector;
@@ -109,6 +76,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 		
 	}
 
+	/**
+	 * Calls everytime a step is detected. This is where all the battle logic goes
+	 */
 	@Override
 	public void step(long timeNs) {
 		if (Math.random() < 0.5) {
@@ -120,8 +90,14 @@ public class TestStepService extends Service implements SensorEventListener, Ste
         
         // monster turn
         BattleInfo.enemyTurn();
+        
+        // stops monsters from attacking, resets their steps (except abilities)
+        // when monsters are dead and if the screen is on updates screen
         if (BackgroundChecker.finishedCurrentBattle) {
         	BackgroundChecker.finishedCurrentBattle = false;
+        	if (!BackgroundChecker.isBackground) {
+    			sendBroadcast(intent);
+    		}
         	return;
         }
         
@@ -129,8 +105,22 @@ public class TestStepService extends Service implements SensorEventListener, Ste
         BattleInfo.playerTurn();
         if (BackgroundChecker.finishedCurrentBattle) {
         	BackgroundChecker.finishedCurrentBattle = false;
+        	if (!BackgroundChecker.isBackground) {
+    			sendBroadcast(intent);
+    		}
         	return;
         }
+        
+        // user party ability
+        BattleInfo.playerAbilityTurn();
+        if (BackgroundChecker.finishedCurrentBattle) {
+        	BackgroundChecker.finishedCurrentBattle = false;
+        	if (!BackgroundChecker.isBackground) {
+    			sendBroadcast(intent);
+    		}
+        	return;
+        }
+        
 		// sends ui updates to the user when their phones are on
 		if (!BackgroundChecker.isBackground) {
 			sendBroadcast(intent);

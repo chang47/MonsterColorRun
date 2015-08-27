@@ -29,21 +29,24 @@
                 android:text="KM"
                 android:layout_weight=".33"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textSize="24dp">
         </TextView>
         <TextView
             	android:id="@+id/tvTime"
                 android:text="TIME"
                 android:layout_weight=".33"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textSize="24dp">
         </TextView>
         <TextView
             	android:id="@+id/tvPage"
                 android:text="PACE (KM)"
                 android:layout_weight=".33"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textSize="24dp">
         </TextView>
     </LinearLayout>
     <LinearLayout

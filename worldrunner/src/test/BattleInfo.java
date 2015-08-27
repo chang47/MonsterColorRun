@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.brnleehng.worldrunner.Hub;
-import com.brnleehng.worldrunner.R;
-
-import test.TestStepService.StepBinder;
 import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAbility;
@@ -18,19 +15,9 @@ import DB.Model.BattleMonster;
 import DB.Model.Monster;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class BattleInfo {
 
@@ -138,8 +125,12 @@ public class BattleInfo {
 		}
 	}
 	
+	/**
+	 * Creates a list of new monsters to fight with
+	 */
 	public static void generateEnemies() {
-		// TODO issue because monster can attack again?
+		
+		// resets conditions for UI the battle logic
 		BackgroundChecker.finishedCurrentBattle = true;
 		battleSteps = 0;
 		BackgroundChecker.newEnemies = true;
@@ -167,22 +158,24 @@ public class BattleInfo {
      * Generates the player's party
      */
     private static void generateParty() {
+    	// sets ui flags
     	BackgroundChecker.playerMonsterWasAttacked = false;
     	partyMonsterBattleList.clear();
+    	
     	for (int i = 0; i < partyList.size(); i++) {
     		if (partyList.get(i) == null) {
     			partyMonsterBattleList.add(null);
     		} else {
-    			// setup real monsters, only creates progress bar if real monster exists        		
     			partyMonstersSize++;
     			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), true));
-    			Log.d("party health", "current: " + partyMonsterBattleList.get(i).currentHp + " max: " +
-        				partyMonsterBattleList.get(i).hp);        	
     		}
-    		
     	}
     }
     
+    /**
+     * The enemy attacks the users. In the event that the player monster dies. 
+     * Their steps and abilities are restarted
+     */
     public static void enemyTurn() {
     	for (int i = 0; i < enemyPartySize; i++) {
         	//Attacks Regularly
@@ -217,15 +210,19 @@ public class BattleInfo {
         }
     }
     
+    /**
+     * Player monsters attack the enemies. If the enemies are killed they have 
+     * to start over in the attacking steps, but retains ability steps
+     */
     public static void playerTurn() {
     	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
 	        	if (battleSteps % partyMonsterBattleList.get(i).step == 0) {
+	        		partyMonsterBattleList.get(i).abilityStep--;
 	        		BackgroundChecker.monsterWasAttacked = true;
+	        		
 	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 	        		
-	        		//Log.d("Speed","Current step speed for " + partyMonsterBattleList.get(i).monster.name + " is " + partyMonsterBattleList.get(i).step);
-	        		//Log.d("index problems", "" + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
 	        		// TODO remove
@@ -249,7 +246,7 @@ public class BattleInfo {
 	        				// partyBattleList.get(b).buffs.get(3).duration
 	        				iterator.remove();
 	        				
-	        				// important to be after, becauase recalculate checks for the attribute key
+	        				// important to be after, because recalculate checks for the attribute key
 	        				if (attribute == 3) {
 	        					partyMonsterBattleList.get(i).RecalculateSpeed();
 	        	        		//Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
@@ -260,20 +257,23 @@ public class BattleInfo {
 	        		if (BackgroundChecker.finishedCurrentBattle)
 	        			return;
 	        	}
-	        	// checks for user's party's ability
-	        	// TODO need to check seperately and have a decreasing limit, can't rely on steps
-	        	
         	}
         }
     }
     
-    public static void playerAbilityTurn(int step) {
+    /**
+     * Player uses their party's abilities. If they win, their steps get restarted
+     * but maintains their ability step
+     * 1) Damage all
+     * 2) Support
+     */
+    public static void playerAbilityTurn() {
     	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
-        		partyMonsterBattleList.get(i).abilityStep--;
         		if (partyMonsterBattleList.get(i).abilityStep < 0) { 
         			partyMonsterBattleList.get(i).resetAbilityStep();
 	        		//Applies ability to attack enemy
+        			// TODO make sure it attacks ALL enemies
 	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
 	        			BackgroundChecker.monsterWasAttacked = true;
 		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
@@ -283,7 +283,6 @@ public class BattleInfo {
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
 	            		
-	            		//Checks if all enemies are dead 
 	        			checkEnemyDead(iEnemyAttack);
 	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
@@ -306,9 +305,12 @@ public class BattleInfo {
         		
         	}
     	}
-
     }
     
+    /**
+     * Brings the party back to life reseting all of their hp and ability steps
+     * @param size - the size of the party list (always 5)
+     */
     private static void reviveParty(int size) {
 		deadPartyMonsters = 0;
 		BackgroundChecker.finishedCurrentBattle = true;
@@ -318,8 +320,10 @@ public class BattleInfo {
 		if (list.size() < 100)
 			list.add("Your party was wiped");
 	    for (int i = 0; i < size; i++) {
-	    if (partyMonsterBattleList.get(i) != null)
-	    	partyMonsterBattleList.get(i).resetHp();
+		    if (partyMonsterBattleList.get(i) != null) {
+		    	partyMonsterBattleList.get(i).resetHp();
+		    	partyMonsterBattleList.get(i).resetAbilityStep();
+		    }
 	    }
 	}
 	
