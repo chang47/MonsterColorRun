@@ -23,7 +23,7 @@ import metaModel.RouteMonsters;
 import dbReference.CityManager;
 import dbReference.DungeonManager;
 import Abilities.Ability;
-import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.Model.BattleMonster;
 import DB.Model.Equipment;

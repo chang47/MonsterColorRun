@@ -12,6 +12,7 @@ import test.TestStepService.StepBinder;
 import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
@@ -274,17 +275,21 @@ public class BattleInfo {
         		if (partyMonsterBattleList.get(i).abilityStep < 0) { 
         			partyMonsterBattleList.get(i).resetAbilityStep();
 	        		//Applies ability to attack enemy
-	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
+	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAllAbility.class) {
 	        			BackgroundChecker.monsterWasAttacked = true;
-		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+		        		//int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
 	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
-	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
+	        			for (int j = 0; i < enemyMonsterBattleList.size(); i++) {
+	        				BattleMonster monster = enemyMonsterBattleList.get(i);
+	        				if (monster != null) {
+	        					monster.currentHp -= damage;
+	        					checkEnemyDead(j);
+	        				}
+	        			}	        					
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
 	            		
-	            		//Checks if all enemies are dead 
-	        			checkEnemyDead(iEnemyAttack);
 	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
 	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.activeAbility;
@@ -299,6 +304,17 @@ public class BattleInfo {
 	        	        	}
 	        	        }
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + "!");
+	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
+	        			BackgroundChecker.monsterWasAttacked = true;
+		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
+	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
+//	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
+//	            				" For " + damage + "!");
+	            		
+	            		//Checks if all enemies are dead 
+	        			checkEnemyDead(iEnemyAttack);
 	        		}
 	        		if (BackgroundChecker.finishedCurrentBattle)
 	        			return;
@@ -306,7 +322,6 @@ public class BattleInfo {
         		
         	}
     	}
-
     }
     
     private static void reviveParty(int size) {

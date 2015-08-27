@@ -38,7 +38,7 @@ import dbReference.CityManager;
 import dbReference.DungeonManager;
 import dbReference.RouteManager;
 import Abilities.Ability;
-import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.Model.BattleMonster;
 import DB.Model.Equipment;
@@ -71,11 +71,11 @@ public class DBManager extends SQLiteOpenHelper {
 	// int uid, String name, int hp, int attack, int defense, int speed, double capture, int element, Ability ability, 
 	// int position, int equipped, int exp, int level, int evolve, int monsterId
 	private static final Monster RABBIT  = new Monster(1, "Artic Babbit" , HP, ATTACK, 125, 100, 0.0,2, 
-			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1);
+			new DamageAllAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1);
 	private static final Monster DEER = new Monster(2, "Rose Deer", HP, ATTACK, 100, 150, 0.0,3, 
-			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3, 1), 0, 0, 0, 1, 0, 2);
+			new DamageAllAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 3, 1), 0, 0, 0, 1, 0, 2);
 	private static final Monster MARTIN = new Monster(3, "Fire Martin", HP, ATTACK, 150, 125, 0.0,1, 
-			new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1, 1), 0, 0, 0, 1, 0, 3);
+			new DamageAllAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 1, 1), 0, 0, 0, 1, 0, 3);
 	private static final Monster TURTLE = new Monster(4, "Turtle", HP, ATTACK, 100, 100, 50.0,2, 
 			new SupportAbility("Increase attack", "Moderately increase attack", 1, 50, 1.5, 1, 3, 2), 0, 0, 0, 1, 0, 4);
 	private static final Monster SEAHORSE = new Monster(5, "Sea Horse",HP, ATTACK, 50, 130, 50.0,2, 

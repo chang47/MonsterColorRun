@@ -24,12 +24,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.LinearLayout.LayoutParams;
 
 import com.brnleehng.worldrunner.Hub;
@@ -147,6 +149,22 @@ public class TestRun extends Fragment {
 				}
 			}
 		});      
+		
+		Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
+        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
+                String asText = (countUp / 60) + ":";
+                if (countUp % 60 < 10) {
+                	asText += "0" + countUp % 60;
+                } else {
+                	asText += "" + countUp % 60;
+                }
+                tvTime.setText(asText);            
+            }
+        });
+        stopWatch.start();
         
         return view;
     }

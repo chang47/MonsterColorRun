@@ -12,6 +12,7 @@ import com.brnleehng.worldrunner.Hub;
 
 import Abilities.Ability;
 import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.Model.Monster;
 import DB.Model.Sticker;
@@ -199,7 +200,7 @@ public class Parser {
 			// String name, String description, int level, int steps, double damage, int attributes, int abilityId
 			// TODO need to use modifier
 			// TOOD need to switch steps to make it easier
-			ability = new DamageAbility(meta.name, meta.description, 1, meta.steps, meta.modifier, meta.attribute, sticker.saaid);
+			ability = new DamageAllAbility(meta.name, meta.description, 1, meta.steps, meta.modifier, meta.attribute, sticker.saaid);
 			break;
 		// support ability
 		case 2:

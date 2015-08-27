@@ -13,7 +13,7 @@ import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 import Abilities.Buff;
-import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
