@@ -2,14 +2,6 @@ package test;
 
 import com.brnleehng.worldrunner.StepDetector.StepListener;
 
-
-import Abilities.Buff;
-import Abilities.DamageAllAbility;
-import Abilities.SupportAbility;
-import DB.DBManager;
-import DB.Model.BattleMonster;
-import DB.Model.Monster;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -89,6 +81,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	 */
 	@Override
 	public void step(long timeNs) {
+		stepCopy();/*
 		if (Math.random() < 0.5) {
             BattleInfo.coins++;
         }
@@ -132,7 +125,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 		// sends ui updates to the user when their phones are on
 		if (!BackgroundChecker.isBackground) {
 			sendBroadcast(intent);
-		}
+		}*/
 	}
 	
 	public long getTime() {
@@ -141,6 +134,55 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	
 	public int getStep() {
 		return BattleInfo.steps;
+	}
+	
+	public void stepCopy() {
+		for (int i = 0; i < 10000; i++) {
+			if (Math.random() < 0.5) {
+	            BattleInfo.coins++;
+	        }
+			BattleInfo.battleSteps++;
+	    	BattleInfo.steps++;
+	    	BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
+	        
+	        // monster turn
+	        BattleInfo.enemyTurn();
+	        
+	        // stops monsters from attacking, resets their steps (except abilities)
+	        // when monsters are dead and if the screen is on updates screen
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	//return;
+	        }
+	        
+	        // user party attacks
+	        BattleInfo.playerTurn();
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	//return;
+	        }
+	        
+	        // user party ability
+	        BattleInfo.playerAbilityTurn();
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	//return;
+	        }
+	        
+			// sends ui updates to the user when their phones are on
+			if (!BackgroundChecker.isBackground) {
+				sendBroadcast(intent);
+			}
+		}
 	}
 	
 	

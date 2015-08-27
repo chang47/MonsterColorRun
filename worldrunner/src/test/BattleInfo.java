@@ -223,7 +223,8 @@ public class BattleInfo {
 	        		BackgroundChecker.monsterWasAttacked = true;
 	        		
 	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-	        		
+	        		Log.d("fight size", "size of enemy is: " + enemyMonsterBattleList.size() + " size of user party is: " + partyMonsterBattleList.size());
+	        		Log.d("index attack", "attack index is: " + iEnemyAttacked);
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
 	        		// TODO remove
@@ -289,6 +290,7 @@ public class BattleInfo {
 	        			}	        					
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
 //	            				" For " + damage + "!");
+
 	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == SupportAbility.class) {
 	        			//Applies party buffs
 	        			SupportAbility support = (SupportAbility)partyMonsterBattleList.get(i).monster.activeAbility;
