@@ -1,6 +1,6 @@
 package Abilities;
 
-public class DamageAbility extends Ability {
+public class DamageAbility extends Ability{
 	public double damage;
 	public int attributes;
 
@@ -19,5 +19,4 @@ public class DamageAbility extends Ability {
 		
 		return damage * level;
 	}
-	
 }

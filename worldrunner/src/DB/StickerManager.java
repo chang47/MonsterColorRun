@@ -3,7 +3,7 @@ package DB;
 import java.util.ArrayList;
 import java.util.List;
 
-import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import DB.Model.Equipment;
 import DB.Model.Sticker;
 import android.content.ContentValues;

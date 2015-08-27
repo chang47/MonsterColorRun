@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import metaModel.Route;
 import util.BattleHelper;
 import Abilities.Buff;
-import Abilities.DamageAbility;
+import Abilities.DamageAllAbility;
 import Abilities.SupportAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
@@ -616,9 +616,9 @@ public class RouteRun extends Fragment implements SensorEventListener, StepListe
 	        	// checks for user's party's ability
 	        	if (steps % partyMonsterBattleList.get(i).monster.activeAbility.steps == 0) { 
 	        		//Applies ability to attack enemy
-	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
+	        		if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAllAbility.class) {
 		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
-		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
 	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
 	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
