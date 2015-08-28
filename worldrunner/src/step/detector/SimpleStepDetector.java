@@ -1,4 +1,4 @@
-package com.brnleehng.worldrunner.StepDetector;
+package step.detector;
 /**
  * Created by JoshDesktop on 2/12/2015.
  */

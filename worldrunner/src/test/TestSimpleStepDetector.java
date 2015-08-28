@@ -1,11 +1,10 @@
 package test;
 
+import step.detector.SensorFusionMath;
+import step.detector.StepListener;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-
-import com.brnleehng.worldrunner.StepDetector.SensorFusionMath;
-import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 /**
  * Created by JoshDesktop on 2/12/2015.

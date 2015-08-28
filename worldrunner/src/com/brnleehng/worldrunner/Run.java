@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import metaModel.Route;
+import step.detector.SimpleStepDetector;
+import step.detector.StepListener;
 import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAllAbility;
@@ -43,9 +45,6 @@ import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
-
-import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
-import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 public abstract class Run extends Fragment implements SensorEventListener, StepListener {
 	// setup the step detectors

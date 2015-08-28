@@ -91,8 +91,6 @@ public class BattleHelper {
 				}
 			}
 		}
-
-        Log.d("Final Comparison","Final Index: " + largestIndex + " With a max size of: " + largest);
 		return largestIndex;
 	}
 

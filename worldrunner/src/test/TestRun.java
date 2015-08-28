@@ -33,6 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.LinearLayout.LayoutParams;
+import battleHelper.BackgroundChecker;
+import battleHelper.BattleInfo;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
@@ -202,6 +204,13 @@ public class TestRun extends Fragment {
     	intent = new Intent(getActivity(), TestStepService.class); // this?
     	getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     	getActivity().startService(intent);
+    }
+    
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	getActivity().unbindService(mConnection);
+    	getActivity().stopService(intent);
     }
     
 	private ServiceConnection mConnection = new ServiceConnection() {

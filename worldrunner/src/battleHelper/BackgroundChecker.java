@@ -1,4 +1,4 @@
-package test;
+package battleHelper;
 
 public class BackgroundChecker {
 	// used to update ui when player switch from background to foreground

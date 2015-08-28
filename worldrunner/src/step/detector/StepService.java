@@ -1,4 +1,4 @@
-package test;
+package step.detector;
 
 import step.detector.StepListener;
 import battleHelper.BackgroundChecker;
@@ -14,8 +14,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class TestStepService extends Service implements SensorEventListener, StepListener {
-	private TestSimpleStepDetector simpleStepDetector;
+public class StepService extends Service implements SensorEventListener, StepListener {
+	private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
     public static final String BROADCAST_ACTION = "joshchang";
@@ -27,8 +27,8 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	// Creates a binder that gives access to Test Step Service that we can
 	// access anywhere from the acitivities
 	public class StepBinder extends Binder {
-		public TestStepService getService() {
-			return TestStepService.this;
+		public StepService getService() {
+			return StepService.this;
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 		// start detecting steps
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        simpleStepDetector = new TestSimpleStepDetector();
+        simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
 	}
@@ -82,7 +82,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	 */
 	@Override
 	public void step(long timeNs) {
-		stepCopy();if (Math.random() < 0.5) {
+		// for testing multiple steps only
+		//stepCopy();
+		if (Math.random() < 0.5) {
             BattleInfo.coins++;
         }
 		BattleInfo.battleSteps++;
@@ -123,9 +125,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
         }
         
 		// sends ui updates to the user when their phones are on
-		/*if (!BackgroundChecker.isBackground) {
+		if (!BackgroundChecker.isBackground) {
 			sendBroadcast(intent);
-		}*/
+		}
 	}
 	
 	public long getTime() {

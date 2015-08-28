@@ -1,4 +1,4 @@
-package test;
+package battleHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;

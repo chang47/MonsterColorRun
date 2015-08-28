@@ -2,6 +2,8 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 
+import step.detector.SimpleStepDetector;
+import step.detector.StepListener;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
@@ -34,9 +36,6 @@ import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
-
-import com.brnleehng.worldrunner.StepDetector.SimpleStepDetector;
-import com.brnleehng.worldrunner.StepDetector.StepListener;
 
 public class FreeRun extends Run {
 	
