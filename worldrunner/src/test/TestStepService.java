@@ -155,7 +155,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 	        // user party attacks
@@ -165,7 +165,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 	        // user party ability
@@ -175,15 +175,13 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 			// sends ui updates to the user when their phones are on
-			if (!BackgroundChecker.isBackground) {
+			/*if (!BackgroundChecker.isBackground) {
 				sendBroadcast(intent);
-			}
+			}*/
 		}
-	}
-	
-	
+	}	
 }

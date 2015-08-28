@@ -74,7 +74,7 @@ public class BattleInfo {
 	public static int enemyPartySize;
 	
 	//Sets how many monsters are needed to be beaten
-	public static int monsterPartiesNeeded = 1;
+	public static int fightObjective = 1;
 	
 	//Sets if the finish button can be used
 	public static boolean finishEnabled = false;
@@ -185,7 +185,7 @@ public class BattleInfo {
 		        	iPartyAttacked = BattleHelper.AIAttack(enemyMonsterBattleList.get(i), partyMonsterBattleList);
 
 		        	if (iPartyAttacked == -1) {
-		        		throw new Error("attacked index is -1, impossible!");
+		        		throw new Error("attacked index is -1 for attacking user party, impossible!");
 		        	}
 		        	// for ui update
 		        	BackgroundChecker.playerMonsterWasAttacked = true;
@@ -224,14 +224,17 @@ public class BattleInfo {
 	        		
 	        		int iEnemyAttacked = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 	        		Log.d("fight size", "size of enemy is: " + enemyMonsterBattleList.size() + " size of user party is: " + partyMonsterBattleList.size());
-	        		Log.d("index attack", "attack index is: " + iEnemyAttacked);
+	        		Log.d("index attack", "attack index is: " + iEnemyAttacked + " alive enemey is: " + deadEnemies);
+	        		if (iEnemyAttacked == -1) {
+	        			generateEnemies();
+	        			return;
+		        		//throw new Error("attacked index is -1 when attacking enemies with attack, impossible!");
+		        	}
 	        		double damage = BattleHelper.Attack(partyMonsterBattleList.get(i), enemyMonsterBattleList.get(iEnemyAttacked));
 	        		enemyMonsterBattleList.get(iEnemyAttacked).currentHp -= damage;
 	        		// TODO remove
 	        		if (list.size() < 10)
 	        			list.add(partyMonsterBattleList.get(i).monster.name + " Attacks " + enemyMonsterBattleList.get(iEnemyAttacked).monster.name + " For " + damage + "!");
-	        		checkEnemyDead(iEnemyAttacked);
-	        		
 	        		Iterator iterator = partyMonsterBattleList.get(i).buffs.entrySet().iterator();
 	        		// decrease buff of monsters
 	        		while (iterator.hasNext()) {
@@ -256,6 +259,8 @@ public class BattleInfo {
 	        				//partyBattleList.get(i).buffs.remove(iterator);
 	        			}
 	        		}
+	        		checkEnemyDead(iEnemyAttacked);
+	        		
 	        		if (BackgroundChecker.finishedCurrentBattle)
 	        			return;
 	        	}
@@ -281,11 +286,13 @@ public class BattleInfo {
 		        		//int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
 		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
 	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
-	        			for (int j = 0; i < enemyMonsterBattleList.size(); i++) {
-	        				BattleMonster monster = enemyMonsterBattleList.get(i);
+	        			for (int j = 0; j < enemyMonsterBattleList.size(); j++) {
+	        				BattleMonster monster = enemyMonsterBattleList.get(j);
 	        				if (monster != null) {
 	        					monster.currentHp -= damage;
 	        					checkEnemyDead(j);
+	        					if (BackgroundChecker.finishedCurrentBattle)
+	        	        			return;
 	        				}
 	        			}	        					
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 
@@ -308,6 +315,9 @@ public class BattleInfo {
 	        		} else if (partyMonsterBattleList.get(i).monster.activeAbility.getClass() == DamageAbility.class) {
 	        			BackgroundChecker.monsterWasAttacked = true;
 		        		int iEnemyAttack = BattleHelper.AIAttack(partyMonsterBattleList.get(i), enemyMonsterBattleList);
+		        		if (iEnemyAttack == -1) {
+		        			throw new Error("Damage ability attack index is -1, impossible!");
+		        		}
 		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
 	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
 	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
@@ -376,8 +386,8 @@ public class BattleInfo {
     		// TODO remove
     		if (list.size() < 100)
     			list.add("Defeated all enemies");
-			monsterPartiesNeeded--;	
-			if (monsterPartiesNeeded <= 0) {
+			fightObjective--;	
+			if (fightObjective <= 0) {
 				finishEnabled = true;
 			}
 			generateEnemies();
