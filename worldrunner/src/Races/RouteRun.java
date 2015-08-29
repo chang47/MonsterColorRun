@@ -54,7 +54,8 @@ public class RouteRun extends Fragment {
     private long countUp;
     public ArrayList<ProgressBar> enemyProgressBarList;
     public ProgressBar[] playerProgressBarList;
-    
+    public TextView[] playerMonsterStepCounters;
+    public TextView[] enemyMonsterStepCounters;
     // calculate running metrics
     private int steps;
     Intent intent;
@@ -87,7 +88,6 @@ public class RouteRun extends Fragment {
         playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
         btnLog = (Button) view.findViewById(R.id.btnLog);
         stopMission = (Button) view.findViewById(R.id.stopMission);
-        
         // loads the screens for the user
         createNewMonsters();
         createPartyMonsters();
@@ -287,6 +287,7 @@ public class RouteRun extends Fragment {
      * Creates a new view of the user's party when they first load the run 
      */
     private void createPartyMonsters() {
+    	playerMonsterStepCounters = new TextView[5];
     	playerPartyLayout.removeAllViews();
     	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
     		RelativeLayout relLayout = new RelativeLayout(getActivity());
@@ -303,26 +304,35 @@ public class RouteRun extends Fragment {
     		txt.setId((i + 10));
     		ImageView imgView = new ImageView(getActivity());
     		imgView.setId((i + 1) * 11 );
+    		TextView monsterStep = new TextView(getActivity());
+    		playerMonsterStepCounters[i] = monsterStep;
     		
     		// assigns text
     		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
+    		
+    		monsterStep.setTextColor(Color.RED);
+    		monsterStep.setGravity(Gravity.CENTER);
+    		
     		
     		// assigns the rule for pictures
     		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
     		
        		txt.setLayoutParams(relLayoutParamTxt);
     		imgView.setLayoutParams(relLayoutParamImg);
-    		
+    		relLayout.addView(monsterStep);
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
     		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
     		if (battleMonster == null) {
     			txt.setText("empty");
+    			monsterStep.setText("");
     			imgView.setBackgroundResource(R.drawable.colorworld);
     			playerProgressBarList[i] = null;
+    			playerMonsterStepCounters[i] = null;
     		} else {
     			// setup real monsters, only creates progress bar if real monster exists
+    			monsterStep.setText(battleMonster.step % BattleInfo.steps);
         		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
         		progBar.setId((i + 1) * 101);
         		progBar.setProgress(battleMonster.currentHp * 100 / battleMonster.hp);

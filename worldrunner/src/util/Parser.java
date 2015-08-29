@@ -210,9 +210,10 @@ public class Parser {
 		case 3:
 		// single attack
 			ability = new DamageAbility(meta.name + " temp", meta.description, 1, meta.steps, meta.modifier, meta.attribute, sticker.saaid);
+			break;
 		default:
 			throw new Error("ability id is not within the acceptable range, crashed at " + sticker.name + " with ability id: "
-					 + sticker.saaid);
+					 + sticker.saaid + " and type " + meta.type);
 		}
 		return ability;
 	}

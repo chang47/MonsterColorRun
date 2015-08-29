@@ -387,7 +387,7 @@ public class BattleInfo {
     		if (list.size() < 100)
     			list.add("Defeated all enemies");
 			fightObjective--;	
-			if (fightObjective <= 0) {
+			if (fightObjective > 5) {
 				finishEnabled = true;
 			}
 			generateEnemies();

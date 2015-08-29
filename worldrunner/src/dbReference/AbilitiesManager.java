@@ -31,7 +31,7 @@ public class AbilitiesManager {
 				+ NAME + " TEXT," + DESCRIPTION + " TEXT," + STEPS + " INTEGER, " + ATTRIBUTE 
 				+ " INTEGER," + MODIFIER + " REAL," + DURATION + " INTEGER" + ")";
         db.execSQL(CREATE_STICKER_TABLE);
-        
+        //int id, int type, String name, String description, int steps, int attribute, double modifier, int duration
         createInitial(db, new MetaAbility(1, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 0, 1.5, -1));
         createInitial(db, new MetaAbility(2, 1, "Water Storm", "Does 1.5 Times monster's attack to all enemies", 200, 1, 1.5, -1));
         createInitial(db, new MetaAbility(3, 1, "Fire Storm", "Does 1.5 Times monster's attack to all enemies", 200, 2, 1.5, -1));
