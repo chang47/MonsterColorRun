@@ -67,106 +67,111 @@ public class DungeonRun extends Fragment {
 	    @Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		        Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			
-			//TODO seperated routes!!!!
-			View view = inflater.inflate(R.layout.routeingame_activity, container, false);
-			
-			// initializes the game
-			BattleInfo.combatStart();
-			
-	        // setup intitial objects
-	        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
-	        tvPace = (TextView) view.findViewById(R.id.tvPage);
-	        tvTime = (TextView) view.findViewById(R.id.tvTime);
-	        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
-
-	        //monsterList = Hub.monsterList;
-	        enemyProgressBarList = new ArrayList<ProgressBar>();
-	        playerProgressBarList = new ProgressBar[5];
-	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
-	        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
-	        btnLog = (Button) view.findViewById(R.id.btnLog);
-	        stopMission = (Button) view.findViewById(R.id.stopMission);
-	        
-	        // loads the screens for the user
-	        createNewMonsters();
-	        createPartyMonsters();
-	        
-	        // initialize fields
-	        steps = 0;
-	        
-	        // Once you're done with your run you can save all of the
-	        // new monsters that you've caught. Ignore for now
-	        btnLog.setOnClickListener(new View.OnClickListener() {
+	    	try {
+				super.onCreate(savedInstanceState);
 				
-				@Override
-				public void onClick(View v) {
-					Bundle bundle = new Bundle();
-					bundle.putStringArrayList("Log", BattleInfo.list);
-					RunLogDialog newFragment = new RunLogDialog();
-					newFragment.setArguments(bundle);
-					newFragment.show(getFragmentManager(), "Run Log");
-				}
-			});
-			
-	    	// TODO for super class, pass in a function that can be overwrited 
-			stopMission.setOnClickListener(new OnClickListener() {
+				//TODO seperated routes!!!!
+				View view = inflater.inflate(R.layout.routeingame_activity, container, false);
 				
-				@Override
-				public void onClick(View v) {
-					// TODO add sticker and then once we move out, we would re-load the 
-					// the sticker list
+				// initializes the game
+				BattleInfo.combatStart();
+				
+		        // setup intitial objects
+		        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
+		        tvPace = (TextView) view.findViewById(R.id.tvPage);
+		        tvTime = (TextView) view.findViewById(R.id.tvTime);
+		        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
+	
+		        //monsterList = Hub.monsterList;
+		        enemyProgressBarList = new ArrayList<ProgressBar>();
+		        playerProgressBarList = new ProgressBar[5];
+		        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
+		        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
+		        btnLog = (Button) view.findViewById(R.id.btnLog);
+		        stopMission = (Button) view.findViewById(R.id.stopMission);
+		        
+		        // loads the screens for the user
+		        createNewMonsters();
+		        createPartyMonsters();
+		        
+		        // initialize fields
+		        steps = 0;
+		        
+		        // Once you're done with your run you can save all of the
+		        // new monsters that you've caught. Ignore for now
+		        btnLog.setOnClickListener(new View.OnClickListener() {
 					
-					// added the new stickers
-					DBManager db = new DBManager(getActivity());
-					db.addStickers(BattleInfo.found);
-					
-					// updating current monsters
-					for (Monster monster : BattleInfo.partyList) {
-						if (monster != null && monster.level != 100) {
-							monster.exp += BattleInfo.exp / BattleInfo.partyMonstersSize;
-							Log.d("monsterexp", "added " + (BattleInfo.exp / BattleInfo.partyMonstersSize) + "" + BattleInfo.exp + "exp to " + monster.name
-									+ " who has" + monster.exp);
-							int[] exp;
-							// level 1, would need index 1 ie level 2 info
-							for (int i = monster.level; i < Hub.expTable.size(); i++) {
-								exp = Hub.expTable.get(i);
-								Log.d("exp table1", "" + exp[0]);
-								if (monster.exp >= exp[0]) {
-									monster.level++;
-								}
-							}
-							// if they get to level 100
-							if (monster.level == 100)
-								monster.exp = Hub.expTable.get(99)[0];
-							db.updateSticker(monster);
-						}					
+					@Override
+					public void onClick(View v) {
+						Bundle bundle = new Bundle();
+						bundle.putStringArrayList("Log", BattleInfo.list);
+						RunLogDialog newFragment = new RunLogDialog();
+						newFragment.setArguments(bundle);
+						newFragment.show(getFragmentManager(), "Run Log");
 					}
-					BattleInfo.combatFinish();
-					// finishing the race
-					Hub.backToCity();
-				}
-			});         
-	       
-	        
-	        
-			Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
-	        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
-	            @Override
-	            public void onChronometerTick(Chronometer chronometer) {
-	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
-	                String asText = (countUp / 60) + ":";
-	                if (countUp % 60 < 10) {
-	                	asText += "0" + countUp % 60;
-	                } else {
-	                	asText += "" + countUp % 60;
-	                }
-	                tvTime.setText(asText);            
-	            }
-	        });
-	        stopWatch.start();
-	        return view;
+				});
+				
+		    	// TODO for super class, pass in a function that can be overwrited 
+				stopMission.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO add sticker and then once we move out, we would re-load the 
+						// the sticker list
+						
+						// added the new stickers
+						DBManager db = new DBManager(getActivity());
+						db.addStickers(BattleInfo.found);
+						
+						// updating current monsters
+						for (Monster monster : BattleInfo.partyList) {
+							if (monster != null && monster.level != 100) {
+								monster.exp += BattleInfo.exp / BattleInfo.partyMonstersSize;
+								Log.d("monsterexp", "added " + (BattleInfo.exp / BattleInfo.partyMonstersSize) + "" + BattleInfo.exp + "exp to " + monster.name
+										+ " who has" + monster.exp);
+								int[] exp;
+								// level 1, would need index 1 ie level 2 info
+								for (int i = monster.level; i < Hub.expTable.size(); i++) {
+									exp = Hub.expTable.get(i);
+									Log.d("exp table1", "" + exp[0]);
+									if (monster.exp >= exp[0]) {
+										monster.level++;
+									}
+								}
+								// if they get to level 100
+								if (monster.level == 100)
+									monster.exp = Hub.expTable.get(99)[0];
+								db.updateSticker(monster);
+							}					
+						}
+						BattleInfo.combatFinish();
+						// finishing the race
+						Hub.backToCity();
+					}
+				});         
+		       
+		        
+		        
+				Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
+		        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
+		            @Override
+		            public void onChronometerTick(Chronometer chronometer) {
+		                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
+		                String asText = (countUp / 60) + ":";
+		                if (countUp % 60 < 10) {
+		                	asText += "0" + countUp % 60;
+		                } else {
+		                	asText += "" + countUp % 60;
+		                }
+		                tvTime.setText(asText);            
+		            }
+		        });
+		        stopWatch.start();
+		        return view;
+	    	} catch (Exception e) {
+	    		Log.e("MonsterColorRun", e.getClass().getName(), e);
+	    		throw new Error(e);
+	    	}
 	    }
 	    
 	    @Override
@@ -221,7 +226,7 @@ public class DungeonRun extends Fragment {
 					updatePlayerMonsterHealth();
 				}
 			} catch (Exception e) {
-				Log.e(e.getClass().getName(), "exception", e);
+				Log.e("MonsterColorRun", e.getClass().getName(), e);
 	    		//e.printStackTrace();
 	    	}
 	    }

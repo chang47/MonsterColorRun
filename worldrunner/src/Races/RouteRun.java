@@ -67,109 +67,116 @@ public class RouteRun extends Fragment {
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		//TODO seperated routes!!!!
-		View view = inflater.inflate(R.layout.routeingame_activity, container, false);
-		
-		// initializes the game
-		BattleInfo.combatStart();
-		
-        // setup intitial objects
-        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
-        tvPace = (TextView) view.findViewById(R.id.tvPage);
-        tvTime = (TextView) view.findViewById(R.id.tvTime);
-        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
-
-        //monsterList = Hub.monsterList;
-        enemyProgressBarList = new ArrayList<ProgressBar>();
-        playerProgressBarList = new ProgressBar[5];
-        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
-        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
-        btnLog = (Button) view.findViewById(R.id.btnLog);
-        stopMission = (Button) view.findViewById(R.id.stopMission);
-        // loads the screens for the user
-        createNewMonsters();
-        createPartyMonsters();
-        
-        // initialize fields
-        steps = 0;
-        
-        // Once you're done with your run you can save all of the
-        // new monsters that you've caught. Ignore for now
-        btnLog.setOnClickListener(new View.OnClickListener() {
+	    try {
+			super.onCreate(savedInstanceState);
 			
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				bundle.putStringArrayList("Log", BattleInfo.list);
-				RunLogDialog newFragment = new RunLogDialog();
-				newFragment.setArguments(bundle);
-				newFragment.show(getFragmentManager(), "Run Log");
-			}
-		});
-		
-    	// TODO for super class, pass in a function that can be overwrited 
-		stopMission.setOnClickListener(new OnClickListener() {
+			//TODO seperated routes!!!!
+			View view = inflater.inflate(R.layout.routeingame_activity, container, false);
 			
-			@Override
-			public void onClick(View v) {
-				// TODO add sticker and then once we move out, we would re-load the 
-				// the sticker list
+			// initializes the game
+			BattleInfo.combatStart();
+			
+	        // setup intitial objects
+	        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
+	        tvPace = (TextView) view.findViewById(R.id.tvPage);
+	        tvTime = (TextView) view.findViewById(R.id.tvTime);
+	        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
+	
+	        //monsterList = Hub.monsterList;
+	        enemyProgressBarList = new ArrayList<ProgressBar>();
+	        playerProgressBarList = new ProgressBar[5];
+	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
+	        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
+	        btnLog = (Button) view.findViewById(R.id.btnLog);
+	        stopMission = (Button) view.findViewById(R.id.stopMission);
+	        // loads the screens for the user
+	        createNewMonsters();
+	        createPartyMonsters();
+	        
+	        // initialize fields
+	        steps = 0;
+	        
+	        // Once you're done with your run you can save all of the
+	        // new monsters that you've caught. Ignore for now
+	        btnLog.setOnClickListener(new View.OnClickListener() {
 				
-				// added the new stickers
-				DBManager db = new DBManager(getActivity());
-				db.addStickers(BattleInfo.found);
+				@Override
+				public void onClick(View v) {
+					Bundle bundle = new Bundle();
+					bundle.putStringArrayList("Log", BattleInfo.list);
+					RunLogDialog newFragment = new RunLogDialog();
+					newFragment.setArguments(bundle);
+					newFragment.show(getFragmentManager(), "Run Log");
+				}
+			});
+			
+	    	// TODO for super class, pass in a function that can be overwrited 
+			stopMission.setOnClickListener(new OnClickListener() {
 				
-				// updating current monsters
-				for (Monster monster : BattleInfo.partyList) {
-					if (monster != null && monster.level != 100) {
-						monster.exp += BattleInfo.exp / BattleInfo.partyMonstersSize;
-						Log.d("monsterexp", "added " + (BattleInfo.exp / BattleInfo.partyMonstersSize) + "" + BattleInfo.exp + "exp to " + monster.name
-								+ " who has" + monster.exp);
-						int[] exp;
-						// level 1, would need index 1 ie level 2 info
-						for (int i = monster.level; i < Hub.expTable.size(); i++) {
-							exp = Hub.expTable.get(i);
-							Log.d("exp table1", "" + exp[0]);
-							if (monster.exp >= exp[0]) {
-								monster.level++;
+				@Override
+				public void onClick(View v) {
+					// TODO add sticker and then once we move out, we would re-load the 
+					// the sticker list
+					
+					// added the new stickers
+					DBManager db = new DBManager(getActivity());
+					db.addStickers(BattleInfo.found);
+					
+					// updating current monsters
+					for (Monster monster : BattleInfo.partyList) {
+						if (monster != null && monster.level != 100) {
+							monster.exp += BattleInfo.exp / BattleInfo.partyMonstersSize;
+							Log.d("monsterexp", "added " + (BattleInfo.exp / BattleInfo.partyMonstersSize) + "" + BattleInfo.exp + "exp to " + monster.name
+									+ " who has" + monster.exp);
+							int[] exp;
+							// level 1, would need index 1 ie level 2 info
+							for (int i = monster.level; i < Hub.expTable.size(); i++) {
+								exp = Hub.expTable.get(i);
+								Log.d("exp table1", "" + exp[0]);
+								if (monster.exp >= exp[0]) {
+									monster.level++;
+								}
 							}
-						}
-						// if they get to level 100
-						if (monster.level == 100)
-							monster.exp = Hub.expTable.get(99)[0];
-						db.updateSticker(monster);
-					}					
+							// if they get to level 100
+							if (monster.level == 100)
+								monster.exp = Hub.expTable.get(99)[0];
+							db.updateSticker(monster);
+						}					
+					}
+					BattleInfo.combatFinish();
+					// finishing the race
+					if (BattleInfo.finishEnabled) {
+						Hub.moveCity(Hub.currentRoute.to);
+					} else {
+						Hub.backToCity();
+					}
 				}
-				BattleInfo.combatFinish();
-				// finishing the race
-				if (BattleInfo.finishEnabled) {
-					Hub.moveCity(Hub.currentRoute.to);
-				} else {
-					Hub.backToCity();
-				}
-			}
-		});         
-       
-        
-        
-		Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
-        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
-                String asText = (countUp / 60) + ":";
-                if (countUp % 60 < 10) {
-                	asText += "0" + countUp % 60;
-                } else {
-                	asText += "" + countUp % 60;
-                }
-                tvTime.setText(asText);            
-            }
-        });
-        stopWatch.start();
-        return view;
+			});         
+	       
+	        
+	        
+			Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
+	        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
+	            @Override
+	            public void onChronometerTick(Chronometer chronometer) {
+	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
+	                String asText = (countUp / 60) + ":";
+	                if (countUp % 60 < 10) {
+	                	asText += "0" + countUp % 60;
+	                } else {
+	                	asText += "" + countUp % 60;
+	                }
+	                tvTime.setText(asText);            
+	            }
+	        });
+	        stopWatch.start();
+	        return view;
+    	} catch (Exception e) {
+    		Log.e("MonsterColorRun", e.getClass().getName(), e);
+    		throw new Error(e);
+    		//e.printStackTrace();
+    		//return null;
+    	}
     }
     
     @Override
@@ -211,6 +218,7 @@ public class RouteRun extends Fragment {
     private void updateUI() {
     	// adds new monsters
     	try {
+    		//updateMonsterSteps();
 			if (BackgroundChecker.newEnemies) {
 				createNewMonsters();
 			}
@@ -223,9 +231,33 @@ public class RouteRun extends Fragment {
 			if (BackgroundChecker.playerMonsterWasAttacked) {
 				updatePlayerMonsterHealth();
 			}
+			updateMonsterSteps();
     	} catch (Exception e) {
-    		Log.e(e.getClass().getName(), "exception", e);
+    		Log.e("MonsterColorRun", e.getClass().getName(), e);
+    		throw new Error(e);
     		//e.printStackTrace();
+    	}
+    }
+    
+    private void updateMonsterSteps() {
+    	for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
+    		BattleMonster monster = BattleInfo.enemyMonsterBattleList.get(i);
+    		if (monster != null && monster.currentHp > 0) {
+    			Log.d("size of battle list", "" + BattleInfo.enemyMonsterBattleList.size());
+    			Log.d("size of battle list", "" + BattleInfo.battleSteps);
+    			Log.d("size of battle list", "" + monster.step);
+    			Log.d("enemy health", "index " + i + "monster" + monster.monster.name + " health " + monster.currentHp);
+    			int toGo = monster.step - (BattleInfo.battleSteps % monster.step);
+    			enemyMonsterStepCounters[i].setText("" + toGo);
+    		}
+    	}
+    	
+    	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
+    		BattleMonster monster = BattleInfo.partyMonsterBattleList.get(i);
+    		if (monster != null && monster.currentHp > 0) {
+    			int toGo = monster.step - (BattleInfo.battleSteps % monster.step);
+    			playerMonsterStepCounters[i].setText("" + toGo);
+    		}
     	}
     }
     
@@ -235,6 +267,7 @@ public class RouteRun extends Fragment {
      * or 3. when they finish off the enemy with the app open on the phone
      */
     private void createNewMonsters() {
+    	enemyMonsterStepCounters = new TextView[5];
     	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
 		enemyProgressBarList.clear();
@@ -249,6 +282,7 @@ public class RouteRun extends Fragment {
 	    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+	    		RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		
 	    		// Assigned id for enemy ui
 	    		TextView txt = new TextView(getActivity());
@@ -257,18 +291,26 @@ public class RouteRun extends Fragment {
 	    		imgView.setId((i + 1) * 10 );
 	    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
 	    		progBar.setId((i + 1) * 100);
+	    		TextView monsterStep = new TextView(getActivity());
+	    		
 	    		txt.setText("text");
 	    		txt.setTextColor(Color.RED);
 	    		txt.setGravity(Gravity.CENTER);
-	
+	    		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
+	    		monsterStep.setText("" + toGo);
+	    		monsterStep.setTextColor(Color.BLACK);
+	    		enemyMonsterStepCounters[i] = monsterStep;
+	    		
 	    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1));
 	    		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 10);
-	
+	    		relLayoutParamTxtStep.addRule(RelativeLayout.BELOW, (i + 1) * 100);
+	    		monsterStep.setLayoutParams(relLayoutParamTxtStep);
 	    		txt.setLayoutParams(relLayoutParamTxt);
 	    		imgView.setLayoutParams(relLayoutParamImg);
 	    		progBar.setLayoutParams(relLayoutParamProg);
 	    		progBar.setProgress((battleMonster.currentHp * 100 / battleMonster.hp));
 	    		
+	    		relLayout.addView(monsterStep);
 	    		relLayout.addView(txt);
 	    		relLayout.addView(imgView);
 	    		relLayout.addView(progBar);
@@ -284,6 +326,8 @@ public class RouteRun extends Fragment {
 	    		} else {
 	    			imgView.setImageResource(R.drawable.ic_launcher);
 	    		}
+			} else {
+				enemyMonsterStepCounters[i] = null;
 			}
 		}
     }
@@ -303,6 +347,7 @@ public class RouteRun extends Fragment {
     		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		
     		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
@@ -310,13 +355,12 @@ public class RouteRun extends Fragment {
     		ImageView imgView = new ImageView(getActivity());
     		imgView.setId((i + 1) * 11 );
     		TextView monsterStep = new TextView(getActivity());
-    		playerMonsterStepCounters[i] = monsterStep;
     		
     		// assigns text
     		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
     		
-    		monsterStep.setTextColor(Color.RED);
+    		monsterStep.setTextColor(Color.BLACK);
     		monsterStep.setGravity(Gravity.CENTER);
     		
     		
@@ -325,9 +369,9 @@ public class RouteRun extends Fragment {
     		
        		txt.setLayoutParams(relLayoutParamTxt);
     		imgView.setLayoutParams(relLayoutParamImg);
-    		relLayout.addView(monsterStep);
     		relLayout.addView(txt);
     		relLayout.addView(imgView);
+    		
     		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
     		if (battleMonster == null) {
     			txt.setText("empty");
@@ -337,11 +381,18 @@ public class RouteRun extends Fragment {
     			playerMonsterStepCounters[i] = null;
     		} else {
     			// setup real monsters, only creates progress bar if real monster exists
-    			monsterStep.setText(battleMonster.step % BattleInfo.steps);
+    			int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
+    			monsterStep.setText("" + toGo);
         		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
         		progBar.setId((i + 1) * 101);
         		progBar.setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
         		txt.setText("monster");
+        		
+        		relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
+        		monsterStep.setLayoutParams(relLayoutParamTxtStep);
+        		relLayout.addView(monsterStep);
+        		playerMonsterStepCounters[i] = monsterStep;
+        		
         		
         		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
         		Log.d("imageId", battleMonster.monster.name + " id is: " + battleMonster.monster.monsterId + " id got was: " + resId);
@@ -374,6 +425,9 @@ public class RouteRun extends Fragment {
     		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
     		if (battleMonster != null) {
     			playerProgressBarList[i].setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
+    			if (battleMonster.currentHp <= 0) {
+    				playerMonsterStepCounters[i].setText("");
+    			}
     		}
     	}
     }
@@ -389,6 +443,9 @@ public class RouteRun extends Fragment {
     		BattleMonster battleMonster = BattleInfo.enemyMonsterBattleList.get(i);
     		if (battleMonster != null) {
     			enemyProgressBarList.get(i).setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
+    			if (battleMonster.currentHp <= 0) {
+    				enemyMonsterStepCounters[i].setText("");
+    			}
     		}
     	}
     }
