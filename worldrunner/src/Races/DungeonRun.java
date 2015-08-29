@@ -1,6 +1,7 @@
 package Races;
 
 import java.util.ArrayList;
+
 import step.detector.StepService;
 import step.detector.StepService.StepBinder;
 import DB.DBManager;
@@ -206,18 +207,23 @@ public class DungeonRun extends Fragment {
 	     */
 	    private void updateUI() {
 	    	// adds new monsters
-			if (BackgroundChecker.newEnemies) {
-				createNewMonsters();
-			}
-			
-			// changes the hp
-			if (BackgroundChecker.monsterWasAttacked) {
-				updateMonsterHealth();
-			}
-			
-			if (BackgroundChecker.playerMonsterWasAttacked) {
-				updatePlayerMonsterHealth();
-			}
+			try {
+		    	if (BackgroundChecker.newEnemies) {
+					createNewMonsters();
+				}
+				
+				// changes the hp
+				if (BackgroundChecker.monsterWasAttacked) {
+					updateMonsterHealth();
+				}
+				
+				if (BackgroundChecker.playerMonsterWasAttacked) {
+					updatePlayerMonsterHealth();
+				}
+			} catch (Exception e) {
+				Log.e(e.getClass().getName(), "exception", e);
+	    		//e.printStackTrace();
+	    	}
 	    }
 	    
 	    /**

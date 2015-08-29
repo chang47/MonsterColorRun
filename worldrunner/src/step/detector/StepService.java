@@ -12,6 +12,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 public class StepService extends Service implements SensorEventListener, StepListener {
@@ -82,52 +83,57 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	 */
 	@Override
 	public void step(long timeNs) {
-		// for testing multiple steps only
-		//stepCopy();
-		if (Math.random() < 0.5) {
-            BattleInfo.coins++;
-        }
-		BattleInfo.battleSteps++;
-    	BattleInfo.steps++;
-    	BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
-        
-        // monster turn
-        BattleInfo.enemyTurn();
-        
-        // stops monsters from attacking, resets their steps (except abilities)
-        // when monsters are dead and if the screen is on updates screen
-        if (BackgroundChecker.finishedCurrentBattle) {
-        	BackgroundChecker.finishedCurrentBattle = false;
-        	if (!BackgroundChecker.isBackground) {
-    			sendBroadcast(intent);
-    		}
-        	return;
-        }
-        
-        // user party attacks
-        BattleInfo.playerTurn();
-        if (BackgroundChecker.finishedCurrentBattle) {
-        	BackgroundChecker.finishedCurrentBattle = false;
-        	if (!BackgroundChecker.isBackground) {
-    			sendBroadcast(intent);
-    		}
-        	return;
-        }
-        
-        // user party ability
-        BattleInfo.playerAbilityTurn();
-        if (BackgroundChecker.finishedCurrentBattle) {
-        	BackgroundChecker.finishedCurrentBattle = false;
-        	if (!BackgroundChecker.isBackground) {
-    			sendBroadcast(intent);
-    		}
-        	return;
-        }
-        
-		// sends ui updates to the user when their phones are on
-		if (!BackgroundChecker.isBackground) {
-			sendBroadcast(intent);
-		}
+		try {
+			// for testing multiple steps only
+			//stepCopy();
+			if (Math.random() < 0.5) {
+	            BattleInfo.coins++;
+	        }
+			BattleInfo.battleSteps++;
+	    	BattleInfo.steps++;
+	    	BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
+	        
+	        // monster turn
+	        BattleInfo.enemyTurn();
+	        
+	        // stops monsters from attacking, resets their steps (except abilities)
+	        // when monsters are dead and if the screen is on updates screen
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	return;
+	        }
+	        
+	        // user party attacks
+	        BattleInfo.playerTurn();
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	return;
+	        }
+	        
+	        // user party ability
+	        BattleInfo.playerAbilityTurn();
+	        if (BackgroundChecker.finishedCurrentBattle) {
+	        	BackgroundChecker.finishedCurrentBattle = false;
+	        	if (!BackgroundChecker.isBackground) {
+	    			sendBroadcast(intent);
+	    		}
+	        	return;
+	        }
+	        
+			// sends ui updates to the user when their phones are on
+			if (!BackgroundChecker.isBackground) {
+				sendBroadcast(intent);
+			}
+		} catch (Exception e) {
+    		Log.e(e.getClass().getName(), "exception", e);
+    		//e.printStackTrace();
+    	}
 	}
 	
 	public long getTime() {
