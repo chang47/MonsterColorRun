@@ -214,7 +214,7 @@ public class BattleInfo {
     /**
      * Player monsters attack the enemies. If the enemies are killed they have 
      * to start over in the attacking steps, but retains ability steps
-     */
+     */   
     public static void playerTurn() {
     	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {

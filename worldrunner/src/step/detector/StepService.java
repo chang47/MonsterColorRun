@@ -19,11 +19,13 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
-    public static final String BROADCAST_ACTION = "joshchang";
+    public static final String BROADCAST_ACTION = "joshchangreal";
     
     public static int iPartyAttacked;
 	private final IBinder mBinder = new StepBinder();
 	Intent intent;
+	
+	int mId;
     
 	// Creates a binder that gives access to Test Step Service that we can
 	// access anywhere from the acitivities
@@ -33,12 +35,18 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		}
 	}
 	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		mId = startId;
+		return super.onStartCommand(intent, flags, startId);
+	}
+	
 	// Sets up everything when created
 	@Override
 	public void onCreate() {
 		// init values
         intent = new Intent(BROADCAST_ACTION);        
-        
+        Log.d("disconnect", "on service created inside step service");
 		// start detecting steps
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -52,7 +60,16 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	// to get rid of the sensor manager
 	@Override
 	public void onDestroy() {
+		Log.d("disconnect", "step service closing");
+		stopSelf(mId);
 		Toast.makeText(this, "stopped", Toast.LENGTH_SHORT).show();
+		BackgroundChecker.endService = true;
+		// need to un-register otherwise service will continue to run forever
+		sensorManager.unregisterListener(this);
+		simpleStepDetector = null;
+	    sensorManager = null;
+	    accel = null;
+		//sendBroadcast(intent);
 	}
 	
 	// Gives access to other services so that they can access
@@ -95,7 +112,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	        
 	        // monster turn
 	        BattleInfo.enemyTurn();
-	        
+	        Log.d("disconnect", "inside step " + BattleInfo.steps);
 	        // stops monsters from attacking, resets their steps (except abilities)
 	        // when monsters are dead and if the screen is on updates screen
 	        if (BackgroundChecker.finishedCurrentBattle) {
@@ -195,4 +212,19 @@ public class StepService extends Service implements SensorEventListener, StepLis
 			}*/
 		}
 	}	
+	
+	@Override
+	public boolean onUnbind(Intent intent) {
+		super.onUnbind(intent);
+		stopSelf();
+		
+		Log.d("disconnect", "service called on unbind");
+		return true;
+	}
+	
+	@Override
+	public void onRebind(Intent intent) {
+		super.onRebind(intent);
+		Log.d("disconnect", "service called re-bind");
+	}
 }

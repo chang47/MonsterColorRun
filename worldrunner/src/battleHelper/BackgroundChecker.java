@@ -12,4 +12,7 @@ public class BackgroundChecker {
 	// used to notify the end of a battle. Prevents player monsters
 	// from carrying over their attacks
 	public static boolean finishedCurrentBattle = false;
+	
+	public static boolean boundStepService = false;
+	public static boolean endService = false;
 }

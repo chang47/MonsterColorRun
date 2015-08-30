@@ -60,8 +60,10 @@ public class RouteRun extends Fragment {
     private int steps;
     Intent intent;
     
-    StepService mService;
-    boolean mBound = false;
+    
+    // TODO add back? Probably not needed
+    //StepService mService;
+    //boolean mBound = false;
     
   
     @Override
@@ -182,7 +184,10 @@ public class RouteRun extends Fragment {
     @Override
     public void onResume() {
     	super.onResume();
-    	getActivity().registerReceiver(broadcastReceiver, new IntentFilter(StepService.BROADCAST_ACTION));
+    	if (!BackgroundChecker.boundStepService) {
+    		getActivity().getApplicationContext().registerReceiver(broadcastReceiver, new IntentFilter(StepService.BROADCAST_ACTION));
+    		BackgroundChecker.boundStepService = true;
+    	}
     	BackgroundChecker.isBackground = false;
     	tvPace.setText("Step: " + BattleInfo.steps);
     	// TODO same thing with the onReceive 
@@ -197,18 +202,25 @@ public class RouteRun extends Fragment {
     @Override
     public void onStart() {
     	super.onStart();
-    	intent = new Intent(getActivity(), StepService.class);
+    	intent = new Intent(getActivity().getApplicationContext(), StepService.class);
     	// TODO we don't really need to bind?
-    	getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    	getActivity().startService(intent);
+    	//getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    	getActivity().getApplicationContext().startService(intent);
     }
     
     @Override
     public void onDestroy() {
     	super.onDestroy();
-    	getActivity().unbindService(mConnection);
-    	getActivity().stopService(intent);
-    	getActivity().unregisterReceiver(broadcastReceiver);
+    	Log.d("destroy", "do we destroy?");
+    	//getActivity().unbindService(mConnection);
+    	Intent intent = new Intent(getActivity().getApplicationContext(), StepService.class);
+    	getActivity().getApplicationContext().startService(intent);
+    	getActivity().getApplicationContext().stopService(intent);
+    	getActivity().getApplicationContext().unregisterReceiver(broadcastReceiver);
+    	BackgroundChecker.boundStepService = false;
+    	broadcastReceiver = null;
+    	intent = null;
+    	//mService.stopSelf();
     }
     
     /**
@@ -458,15 +470,16 @@ public class RouteRun extends Fragment {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
-			Log.d("service1", "on service connected");
+			Log.d("disconnect", "on service connected");
 			StepBinder binder = (StepBinder) service;
-			mService = binder.getService();
-			mBound = true;
+			//mService = binder.getService();
+			BackgroundChecker.boundStepService = true;
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			mBound = false;
+			BackgroundChecker.boundStepService  = false;
+			Log.d("disconnect", "disconnect on close");
 		}
     	
     };
@@ -478,8 +491,9 @@ public class RouteRun extends Fragment {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		
 		@Override
-		public void onReceive(Context context, Intent intent) {
-			steps = mService.getStep();
+		public void onReceive(Context context, Intent newIntent) {
+			Log.d("disconnect", "added new steps " + BattleInfo.steps);
+			steps = BattleInfo.steps;
 			tvPace.setText("steps: " + steps);
 			updateUI();
 		}

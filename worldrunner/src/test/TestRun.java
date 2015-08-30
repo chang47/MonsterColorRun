@@ -191,7 +191,7 @@ public class TestRun extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			steps = mService.getStep();
-			tvPace.setText("steps: " + steps);
+			tvPace.setText("steps: " + BattleInfo.steps);
 			
 			updateUI();
 		}

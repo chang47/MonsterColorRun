@@ -82,7 +82,8 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	 */
 	@Override
 	public void step(long timeNs) {
-		stepCopy();if (Math.random() < 0.5) {
+		//stepCopy();
+		if (Math.random() < 0.5) {
             BattleInfo.coins++;
         }
 		BattleInfo.battleSteps++;
@@ -123,9 +124,9 @@ public class TestStepService extends Service implements SensorEventListener, Ste
         }
         
 		// sends ui updates to the user when their phones are on
-		/*if (!BackgroundChecker.isBackground) {
+		if (!BackgroundChecker.isBackground) {
 			sendBroadcast(intent);
-		}*/
+		}
 	}
 	
 	public long getTime() {
@@ -140,7 +141,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	 * Only to be used to test and speed up battles
 	 */
 	public void stepCopy() {
-		for (int i = 0; i < 10000; i++) {
+		//for (int i = 0; i < 10000; i++) {
 			if (Math.random() < 0.5) {
 	            BattleInfo.coins++;
 	        }
@@ -158,7 +159,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 	        // user party attacks
@@ -168,7 +169,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 	        // user party ability
@@ -178,7 +179,7 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 	        	if (!BackgroundChecker.isBackground) {
 	    			sendBroadcast(intent);
 	    		}
-	        	//return;
+	        	return;
 	        }
 	        
 			// sends ui updates to the user when their phones are on
@@ -186,5 +187,5 @@ public class TestStepService extends Service implements SensorEventListener, Ste
 				sendBroadcast(intent);
 			}*/
 		}
-	}	
+	//}	
 }

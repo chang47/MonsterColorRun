@@ -101,6 +101,12 @@ public class Hub extends Activity {
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d("disconnect", "hub got destroued");
+	}
+	
+	@Override
 	protected void onStop() {
 		super.onStop();
 	}
