@@ -15,7 +15,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Chronometer"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,9 +65,9 @@
                 android:layout_height="wrap_content">
         </TextView>
     
-    </LinearLayout>
+   </LinearLayout>
    <LinearLayout
-        android:id="@+id/enemyParty"
+        android:id="@+id/enemyPartyLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -137,7 +138,7 @@
     </LinearLayout>
 
     <LinearLayout 
-        android:id="@+id/playerParty"
+        android:id="@+id/playerPartyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/audio"

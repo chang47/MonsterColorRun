@@ -87,8 +87,8 @@ public class RouteRun extends Fragment {
 	        //monsterList = Hub.monsterList;
 	        enemyProgressBarList = new ArrayList<ProgressBar>();
 	        playerProgressBarList = new ProgressBar[5];
-	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyParty);
-	        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerParty);
+	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyPartyLayout);
+	        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerPartyLayout);
 	        btnLog = (Button) view.findViewById(R.id.btnLog);
 	        stopMission = (Button) view.findViewById(R.id.stopMission);
 	        // loads the screens for the user
@@ -375,7 +375,6 @@ public class RouteRun extends Fragment {
     		monsterStep.setTextColor(Color.BLACK);
     		monsterStep.setGravity(Gravity.CENTER);
     		
-    		
     		// assigns the rule for pictures
     		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
     		
@@ -393,14 +392,17 @@ public class RouteRun extends Fragment {
     			playerMonsterStepCounters[i] = null;
     		} else {
     			// setup real monsters, only creates progress bar if real monster exists
-    			int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
-    			monsterStep.setText("" + toGo);
         		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
         		progBar.setId((i + 1) * 101);
         		progBar.setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
         		txt.setText("monster");
         		
+        		// TODO if this doesn't work, let's just get rid of the monster name and 
+        		// replace it with the steps. Because we all know what our own monsters are
         		relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
+        		
+        		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
+    			monsterStep.setText("" + toGo);
         		monsterStep.setLayoutParams(relLayoutParamTxtStep);
         		relLayout.addView(monsterStep);
         		playerMonsterStepCounters[i] = monsterStep;
