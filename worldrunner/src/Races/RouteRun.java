@@ -359,7 +359,7 @@ public class RouteRun extends Fragment {
     		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-    		RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		//RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		
     		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
@@ -372,8 +372,8 @@ public class RouteRun extends Fragment {
     		txt.setTextColor(Color.RED);
     		txt.setGravity(Gravity.CENTER);
     		
-    		monsterStep.setTextColor(Color.BLACK);
-    		monsterStep.setGravity(Gravity.CENTER);
+    		//monsterStep.setTextColor(Color.BLACK);
+    		//monsterStep.setGravity(Gravity.CENTER);
     		
     		// assigns the rule for pictures
     		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
@@ -385,8 +385,8 @@ public class RouteRun extends Fragment {
     		
     		BattleMonster battleMonster = BattleInfo.partyMonsterBattleList.get(i);
     		if (battleMonster == null) {
-    			txt.setText("empty");
-    			monsterStep.setText("");
+    			txt.setText("");
+    			//monsterStep.setText("this does work!");
     			imgView.setBackgroundResource(R.drawable.colorworld);
     			playerProgressBarList[i] = null;
     			playerMonsterStepCounters[i] = null;
@@ -395,17 +395,18 @@ public class RouteRun extends Fragment {
         		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
         		progBar.setId((i + 1) * 101);
         		progBar.setProgress(battleMonster.currentHp * 100 / battleMonster.hp);
-        		txt.setText("monster");
+        		
+        		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
+        		txt.setText("" + toGo);
         		
         		// TODO if this doesn't work, let's just get rid of the monster name and 
         		// replace it with the steps. Because we all know what our own monsters are
-        		relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
+        		//relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
         		
-        		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
-    			monsterStep.setText("" + toGo);
-        		monsterStep.setLayoutParams(relLayoutParamTxtStep);
-        		relLayout.addView(monsterStep);
-        		playerMonsterStepCounters[i] = monsterStep;
+    			//monsterStep.setText("hi " + toGo);
+        		//monsterStep.setLayoutParams(relLayoutParamTxtStep);
+        		//relLayout.addView(monsterStep);
+        		playerMonsterStepCounters[i] = txt;
         		
         		
         		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
@@ -417,7 +418,7 @@ public class RouteRun extends Fragment {
         		}
         		progBar.setLayoutParams(relLayoutParamProg);
         		
-        		// sets the progress bar
+        		// positions the progress bar
         		relLayoutParamProg.addRule(RelativeLayout.BELOW, (i + 1) * 11);
     			
         		relLayout.addView(progBar);
