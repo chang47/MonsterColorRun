@@ -148,6 +148,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 				sendBroadcast(intent);
 			}
 		} catch (Exception e) {
+			// TODO in actual prod code we would just restart everything, chances are, users
+			// won't be looking on the screen anyways and something probably went wrong anyways
 			Log.e("MonsterColorRun", e.getClass().getName(), e);
     		//e.printStackTrace();
     	}

@@ -121,7 +121,8 @@ public class BattleInfo {
 	public static void combatFinish() {
 		if (battleStarted) {
 			found.clear();
-			found = null;
+			// TODO probably source of null pointer exception, to be discovered 
+			//found = null;
 			battleStarted = false;
 		}
 	}
