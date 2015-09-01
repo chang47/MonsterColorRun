@@ -59,7 +59,7 @@ public class RouteRun extends Fragment {
     // calculate running metrics
     private int steps;
     Intent intent;
-    
+    public TextView txtRouteName;
     
     // TODO add back? Probably not needed
     //StepService mService;
@@ -83,7 +83,8 @@ public class RouteRun extends Fragment {
 	        tvPace = (TextView) view.findViewById(R.id.tvPage);
 	        tvTime = (TextView) view.findViewById(R.id.tvTime);
 	        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
-	
+	        txtRouteName = (TextView) view.findViewById(R.id.CurrentRouteText);
+	        
 	        //monsterList = Hub.monsterList;
 	        enemyProgressBarList = new ArrayList<ProgressBar>();
 	        playerProgressBarList = new ProgressBar[5];
@@ -97,6 +98,7 @@ public class RouteRun extends Fragment {
 	        
 	        // initialize fields
 	        steps = 0;
+	        txtRouteName.setText(Hub.currentRoute.name);
 	        
 	        // Once you're done with your run you can save all of the
 	        // new monsters that you've caught. Ignore for now
