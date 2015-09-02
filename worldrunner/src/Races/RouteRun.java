@@ -47,6 +47,7 @@ public class RouteRun extends Fragment {
 	private TextView tvDistance;
     private TextView tvTime;
     private TextView tvPace;
+    private TextView tvCalories;
     private TextView tvCoin;
     private Button stopMission;
     private Button btnLog;
@@ -83,10 +84,11 @@ public class RouteRun extends Fragment {
 			BattleInfo.combatStart();
 			
 	        // setup intitial objects
-	        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
-	        tvPace = (TextView) view.findViewById(R.id.tvPage);
-	        tvTime = (TextView) view.findViewById(R.id.tvTime);
-	        tvCoin = (TextView) view.findViewById(R.id.tvCoin);
+	        tvDistance = (TextView) view.findViewById(R.id.routeRunDistanceTxt);
+	        tvPace = (TextView) view.findViewById(R.id.routeRunPaceTxt);
+	        tvTime = (TextView) view.findViewById(R.id.routeRunTimedTxt);
+	        tvCalories = (TextView) view.findViewById(R.id.routeRunCaloriesTxt);
+	        //tvCoin = (TextView) view.findViewById(R.id.tvCoin);
 	        txtRouteName = (TextView) view.findViewById(R.id.CurrentRouteText);
 	        
 	        //monsterList = Hub.monsterList;
