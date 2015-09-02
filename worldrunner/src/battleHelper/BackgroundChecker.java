@@ -16,4 +16,16 @@ public class BackgroundChecker {
 	public static boolean boundStepService = false;
 	public static boolean endService = false;
 	public static boolean battleStarted = false;
+	
+	public static void init(){
+		 isBackground = false;
+		 monsterWasAttacked = false;
+		 newEnemies = false;
+		 playerMonsterWasAttacked = false;
+		 finishedCurrentBattle = false;
+		 boundStepService = false;
+		 endService = false;
+		 battleStarted = false;
+			
+	}
 }

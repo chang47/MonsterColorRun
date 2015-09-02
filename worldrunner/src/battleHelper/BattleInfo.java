@@ -80,8 +80,6 @@ public class BattleInfo {
 	public static boolean finishEnabled = false;
 	public static boolean caughtAlready = false;
 	
-	public static boolean battleStarted = false;
-	
 	/**
 	 * Should only be called at the start of a battle and never again 
 	 * anywhere else
@@ -119,11 +117,12 @@ public class BattleInfo {
 	// a new combat session and the game will crash
 	// good time to null and get rid of unnecessary variables
 	public static void combatFinish() {
-		if (battleStarted) {
+		if (BackgroundChecker.battleStarted) {
 			found.clear();
 			// TODO probably source of null pointer exception, to be discovered 
 			//found = null;
-			BackgroundChecker.battleStarted = false;
+			BackgroundChecker.init();
+			//BackgroundChecker.battleStarted = false;
 		}
 	}
 	

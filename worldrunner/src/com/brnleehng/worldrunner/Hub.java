@@ -36,6 +36,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -122,7 +123,7 @@ public class Hub extends Activity {
 		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
 		
-
+		BackgroundChecker.init();
 		
 		refDb = new ReferenceManager(getApplicationContext());
 		
@@ -190,8 +191,11 @@ public class Hub extends Activity {
 	
 	@Override
 	public void onBackPressed() {
+		Log.d("back button", "the condition is " + BackgroundChecker.battleStarted);
 		if (!BackgroundChecker.battleStarted) {
-			super.onBackPressed();
+			finish();
+		} else {
+			//finish();
 		}
 	}
 	
@@ -400,6 +404,11 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, townHub).commit();
 	}
 	
+	public static void backToCity2() {
+		DBManager db = new DBManager(context);
+		getPlayerData(db);
+	}
+	
 	public static void equipItems() {
 		FragmentTransaction ft = setFT();
 		EquipItem equip = new EquipItem();
@@ -463,16 +472,27 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, dunRun).commit();
 	}
 	
+	// TODO, not needed 
 	public static void startRouteRun(Route route) {
 		// to be filledetFT();
 		FragmentTransaction ft = setFT();
 		RouteRun cityRun = new RouteRun();
-		currentRoute = route;
+				currentRoute = route;
 		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();
 		
+
+
+	}
+	
+	public static void startRouteRun2(Route route) {
+		currentRoute = route;
+		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
+		Intent intent = new Intent(context, RouteRun.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
 	}
 	
 	public static void addSticker(Monster monsterSticker) {

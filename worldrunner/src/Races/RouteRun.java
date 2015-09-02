@@ -7,6 +7,7 @@ import step.detector.StepService.StepBinder;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -69,13 +70,14 @@ public class RouteRun extends Fragment {
     
   
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 	    try {
 			super.onCreate(savedInstanceState);
 			
 			//TODO seperated routes!!!!
 			View view = inflater.inflate(R.layout.routeingame_activity, container, false);
+			//setContentView(R.layout.routeingame_activity);
 			
 			// initializes the game
 			BattleInfo.combatStart();
@@ -158,8 +160,6 @@ public class RouteRun extends Fragment {
 					}
 				}
 			});         
-	       
-	        
 	        
 			Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
 	        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
