@@ -1,6 +1,7 @@
 package Races;
 
 import java.util.ArrayList;
+
 import step.detector.StepService;
 import step.detector.StepService.StepBinder;
 import DB.DBManager;
@@ -19,6 +20,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

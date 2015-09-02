@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import battleHelper.BackgroundChecker;
 import test.TestRun;
 import dbReference.ReferenceManager;
 import metaModel.City;
@@ -184,6 +185,13 @@ public class Hub extends Activity {
 			ft.replace(R.id.footer, footer);
 			ft.replace(R.id.hub, cityHub);
 			ft.commit();
+		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (!BackgroundChecker.battleStarted) {
+			super.onBackPressed();
 		}
 	}
 	

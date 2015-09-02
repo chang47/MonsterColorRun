@@ -87,9 +87,9 @@ public class BattleInfo {
 	 * anywhere else
 	 */
 	public static void combatStart() {
-		if (!battleStarted) {
+		if (!BackgroundChecker.battleStarted) {
 			// ensures that method can't be called again
-			battleStarted = true;
+			BackgroundChecker.battleStarted = true;
 			
 			// initialize fields
 			partyList = Hub.equippedStickers;
@@ -123,7 +123,7 @@ public class BattleInfo {
 			found.clear();
 			// TODO probably source of null pointer exception, to be discovered 
 			//found = null;
-			battleStarted = false;
+			BackgroundChecker.battleStarted = false;
 		}
 	}
 	

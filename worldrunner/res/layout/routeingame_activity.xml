@@ -7,19 +7,23 @@
       android:id="@+id/currentRouteHolder"
       android:orientation="horizontal"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      >
       <TextView 
           android:id="@+id/CurrentRouteText"
           android:text="The Route Name"
           android:layout_height="wrap_content"
           android:layout_width="match_parent"
-          android:gravity="center"/>
+          android:gravity="center"
+          android:textSize="24sp"
+          android:textColor="#ffffff" />
   </LinearLayout>
+  
   <LinearLayout
             android:id="@+id/progress"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_alignParentTop="true"
             android:layout_height="wrap_content"
             android:layout_below="@+id/currentRouteHolder">      
 
