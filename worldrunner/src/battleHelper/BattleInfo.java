@@ -253,13 +253,13 @@ public class BattleInfo {
 	        			if (buff.duration <= 0) {
 	        				//Log.d("removed attribute", "" + iterator);
 	        				// partyBattleList.get(b).buffs.get(3).duration
-	        				iterator.remove();
 	        				
 	        				// important to be after, because recalculate checks for the attribute key
 	        				if (attribute == 3) {
 	        					partyMonsterBattleList.get(i).RecalculateSpeed();
 	        	        		//Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
 	        				}
+	        				iterator.remove();
 	        				//partyBattleList.get(i).buffs.remove(iterator);
 	        			}
 	        		}
