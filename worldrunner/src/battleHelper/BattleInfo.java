@@ -151,7 +151,6 @@ public class BattleInfo {
     		enemyMonsterBattleList.add(new BattleMonster(Hub.enemyList.get(monsterGen)));
     		Log.d("enemy health", "current: " + enemyMonsterBattleList.get(i).currentHp + " max: " +
     				enemyMonsterBattleList.get(i).hp);
-    		
 		}
     }
 	
@@ -216,8 +215,13 @@ public class BattleInfo {
      * to start over in the attacking steps, but retains ability steps
      */   
     public static void playerTurn() {
+    	if (partyMonsterBattleList == null) {
+    		Log.d("random crash", "partyMonsterBattleList is null");
+    		Log.d("random crash", "");
+    	}
     	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
-        	if (partyMonsterBattleList.get(i) != null && partyMonsterBattleList.get(i).currentHp > 0) {
+        	if (partyMonsterBattleList.get(i) != null && 
+        			partyMonsterBattleList.get(i).currentHp > 0) {
 	        	if (battleSteps % partyMonsterBattleList.get(i).step == 0) {
 	        		partyMonsterBattleList.get(i).abilityStep--;
 	        		BackgroundChecker.monsterWasAttacked = true;
@@ -342,7 +346,7 @@ public class BattleInfo {
     private static void reviveParty(int size) {
 		deadPartyMonsters = 0;
 		BackgroundChecker.finishedCurrentBattle = true;
-		// TODO issue because they can attack again immediately?
+		// TODO issue because  they can attack again immediately?
 		battleSteps = 0;
 		// TODO remove
 		if (list.size() < 100)

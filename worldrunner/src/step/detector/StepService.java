@@ -109,44 +109,47 @@ public class StepService extends Service implements SensorEventListener, StepLis
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
 	    	BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
-	        
-	        // monster turn
-	        BattleInfo.enemyTurn();
-	        Log.d("disconnect", "inside step " + BattleInfo.steps);
-	        // stops monsters from attacking, resets their steps (except abilities)
-	        // when monsters are dead and if the screen is on updates screen
-	        if (BackgroundChecker.finishedCurrentBattle) {
-	        	BackgroundChecker.finishedCurrentBattle = false;
-	        	if (!BackgroundChecker.isBackground) {
-	    			sendBroadcast(intent);
-	    		}
-	        	return;
-	        }
-	        
-	        // user party attacks
-	        BattleInfo.playerTurn();
-	        if (BackgroundChecker.finishedCurrentBattle) {
-	        	BackgroundChecker.finishedCurrentBattle = false;
-	        	if (!BackgroundChecker.isBackground) {
-	    			sendBroadcast(intent);
-	    		}
-	        	return;
-	        }
-	        
-	        // user party ability
-	        BattleInfo.playerAbilityTurn();
-	        if (BackgroundChecker.finishedCurrentBattle) {
-	        	BackgroundChecker.finishedCurrentBattle = false;
-	        	if (!BackgroundChecker.isBackground) {
-	    			sendBroadcast(intent);
-	    		}
-	        	return;
-	        }
-	        
-			// sends ui updates to the user when their phones are on
-			if (!BackgroundChecker.isBackground) {
-				sendBroadcast(intent);
-			}
+	    	
+	    	// prevents the possibility of running the code in an unexpected state
+			//if (BackgroundChecker.finishedCurrentBattle) {
+		        // monster turn
+		        BattleInfo.enemyTurn();
+		        Log.d("disconnect", "inside step " + BattleInfo.steps);
+		        // stops monsters from attacking, resets their steps (except abilities)
+		        // when monsters are dead and if the screen is on updates screen
+		        if (BackgroundChecker.finishedCurrentBattle) {
+		        	BackgroundChecker.finishedCurrentBattle = false;
+		        	if (!BackgroundChecker.isBackground) {
+		    			sendBroadcast(intent);
+		    		}
+		        	return;
+		        }
+		        
+		        // user party attacks
+		        BattleInfo.playerTurn();
+		        if (BackgroundChecker.finishedCurrentBattle) {
+		        	BackgroundChecker.finishedCurrentBattle = false;
+		        	if (!BackgroundChecker.isBackground) {
+		    			sendBroadcast(intent);
+		    		}
+		        	return;
+		        }
+		        
+		        // user party ability
+		        BattleInfo.playerAbilityTurn();
+		        if (BackgroundChecker.finishedCurrentBattle) {
+		        	BackgroundChecker.finishedCurrentBattle = false;
+		        	if (!BackgroundChecker.isBackground) {
+		    			sendBroadcast(intent);
+		    		}
+		        	return;
+		        }
+		        
+				// sends ui updates to the user when their phones are on
+				if (!BackgroundChecker.isBackground) {
+					sendBroadcast(intent);
+				}
+			//}
 		} catch (Exception e) {
 			// TODO in actual prod code we would just restart everything, chances are, users
 			// won't be looking on the screen anyways and something probably went wrong anyways

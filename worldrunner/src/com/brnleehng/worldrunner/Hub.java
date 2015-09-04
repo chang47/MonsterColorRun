@@ -40,6 +40,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.FrameLayout;
 
 /**
  * Central Hub activity that manages everything the user does in
@@ -58,6 +59,7 @@ public class Hub extends Activity {
 	public static ArrayList<Monster> stickerList;
 	private static HeaderBar header;
 	private static FooterBar footer;
+	public static FrameLayout hubContentContainer;
 	// contains the list of the equipment the player is currently using
 	private static ArrayList<Equipment> equippedEquipments;
 	// contains the list of the stickers the player is currently using
@@ -144,17 +146,10 @@ public class Hub extends Activity {
 		
 		// setup the user's data into the app
 		getPlayerData(db);
-		
-		//Iterator<City> iter = refCities.iterator();
-		
-		// probably in the future create the monster content in the routes and dungeons when you do
-		// a db call. 
-		// Probably not needed
-/*		while (iter.hasNext()) {
-			City city = iter.next();
-			city.routes = cityRouteList.get(city.cityId);
-			city.dungeons = cityDungeonList.get(city.cityId);
-		}*/
+
+		int resId = context.getResources().getIdentifier("background" + 0, "drawable", context.getPackageName());
+		if (resId != 0)
+			hubContentContainer.setBackgroundResource(resId);
 		currentCity = refCities.get(0);
 		db.close(); // necessary to close the db?
 		refDb.close();
@@ -508,8 +503,12 @@ public class Hub extends Activity {
 		//@TODO check if you need to subtract 1
 		setCurrentCity(refCities.get(newCity - 1));
 		Log.d("newCity", refCities.get(newCity - 1).cityName);
+		int resId = context.getResources().getIdentifier("background" + (newCity - 1), "drawable", context.getPackageName());
+		if (resId != 0)
+			hubContentContainer.setBackgroundResource(resId);
 		backToCity();
 	}
+	
 	 
 	public static int partySize() {
 		int count = 0;
