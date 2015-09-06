@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/footer"
         android:layout_below="@+id/header"
-        android:background="@drawable/background0" >
+        android:background="@drawable/background" >
 	    <util.SlidingLinearLayout android:id="@+id/hub"
 	        android:orientation="horizontal"
 	        android:layout_height="match_parent"

@@ -156,6 +156,7 @@ public class RouteRun extends Fragment {
 					BattleInfo.combatFinish();
 					// finishing the race
 					if (BattleInfo.finishEnabled) {
+						Log.d("objective finish", "finish is enabled");
 						Hub.moveCity(Hub.currentRoute.to);
 					} else {
 						Hub.backToCity();
@@ -168,12 +169,15 @@ public class RouteRun extends Fragment {
 	            @Override
 	            public void onChronometerTick(Chronometer chronometer) {
 	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
-	                String asText = (countUp / 60) + ":";
-	                if (countUp % 60 < 10) {
-	                	asText += "0" + countUp % 60;
-	                } else {
-	                	asText += "" + countUp % 60;
+	                String asText = (countUp / 3600) + ":"; 
+	                if (countUp / 60 < 10) {
+	                	asText += "0";
 	                }
+	                asText += (countUp / 60) + ":";	                		
+	                if (countUp % 60 < 10) {
+	                	asText += "0";
+	                }
+                	asText += (countUp % 60);
 	                tvTime.setText(asText);            
 	            }
 	        });
@@ -236,6 +240,16 @@ public class RouteRun extends Fragment {
     private void updateUI() {
     	// adds new monsters
     	try {
+    		/*
+    		 TODO
+    		 
+    		 In the future event where we need to re-update the GUI
+    		 we can probably have some sort of check with BackgroundChecker
+    		 and we can probably also get something from StepService to get
+    		 Everything we need
+    		 */
+    		
+    		
     		//updateMonsterSteps();
 			if (BackgroundChecker.newEnemies) {
 				createNewMonsters();
@@ -250,7 +264,7 @@ public class RouteRun extends Fragment {
 				updatePlayerMonsterHealth();
 			}
 			updateMonsterSteps();
-    	} catch (Exception e) {
+    	} catch (Exception e) {  
     		Log.e("MonsterColorRun", e.getClass().getName(), e);
     		throw new Error(e);
     		//e.printStackTrace();
@@ -294,9 +308,14 @@ public class RouteRun extends Fragment {
 			if (battleMonster != null) {
 				RelativeLayout relLayout = new RelativeLayout(getActivity());
 				
-	    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+				// adds the relative layout to the overall linear layout
+				enemyPartyLayout.addView(relLayout);
+				
+				// param for relative layout
+	    		LinearLayout.LayoutParams linLayoutParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); //1f = 1 weight
 	    		relLayout.setLayoutParams(linLayoutParam);
 				
+	    		// params for the other Uui
 	    		RelativeLayout.LayoutParams relLayoutParamTxt = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -314,6 +333,7 @@ public class RouteRun extends Fragment {
 	    		txt.setText("text");
 	    		txt.setTextColor(Color.RED);
 	    		txt.setGravity(Gravity.CENTER);
+	    		
 	    		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
 	    		monsterStep.setText("" + toGo);
 	    		monsterStep.setTextColor(Color.BLACK);
@@ -335,8 +355,6 @@ public class RouteRun extends Fragment {
 	    		
 	    		enemyProgressBarList.add(progBar);
 	    		Log.d("size", "size of list is" + enemyProgressBarList.size());
-	    		
-	    		enemyPartyLayout.addView(relLayout);
 	
 	    		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
 	    		if (resId != 0) {

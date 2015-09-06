@@ -37,7 +37,7 @@ public class SplashPage extends Activity {
 		display.getSize(size);
 		
 		Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-				getResources(), R.drawable.background0), size.x, size.y, true);
+				getResources(), R.drawable.background), size.x, size.y, true);
 		BitmapDrawable background = new BitmapDrawable(bmp);
 		
 		RelativeLayout screen = (RelativeLayout) findViewById(R.id.splashScreen);

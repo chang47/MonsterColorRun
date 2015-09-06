@@ -125,6 +125,8 @@ public class Hub extends Activity {
 		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
 		
+		hubContentContainer = (FrameLayout) findViewById(R.id.hubContentLayout);
+		
 		BackgroundChecker.init();
 		
 		refDb = new ReferenceManager(getApplicationContext());
@@ -147,12 +149,17 @@ public class Hub extends Activity {
 		// setup the user's data into the app
 		getPlayerData(db);
 
-		int resId = context.getResources().getIdentifier("background" + 0, "drawable", context.getPackageName());
-		if (resId != 0)
-			hubContentContainer.setBackgroundResource(resId);
 		currentCity = refCities.get(0);
 		db.close(); // necessary to close the db?
 		refDb.close();
+		
+		int resId = getResources().getIdentifier("background" + (currentCity.cityId - 1), "drawable", getPackageName());
+		Log.d("background res", "" + resId);
+		if (resId != 0) {
+			
+			hubContentContainer.setBackgroundResource(resId);
+			//hubContentContainer.setBackground(@);
+		}
 		
 		// set default values;
 		currentEquipment = null;

@@ -2,10 +2,12 @@ package battleHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.brnleehng.worldrunner.Hub;
+
 import util.BattleHelper;
 import Abilities.Buff;
 import Abilities.DamageAbility;
@@ -16,22 +18,23 @@ import DB.Model.BattleMonster;
 import DB.Model.Monster;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
 public class BattleInfo {
 
+	public static final String PREF_NAME = "BattleInfo";
+	
 	Intent intent;
 	
-    public static int exp = 0;
+    public static int exp;
     
     // list of stickers that were found, temporarily changed to be a list
     // of monsters
     public static ArrayList<Monster> found;
     
-    private long startTime;
-   
     // calculate running metrics
     public static int steps;
     public static long countUp;
@@ -51,8 +54,6 @@ public class BattleInfo {
     // list of messages that are used to display the progress
     // made in the game. You just add it into an adapter and it'll do everything for you
     //private List<String> list; 
-    private ArrayAdapter<String> adapter;
-    private Handler mHandler = new Handler();
     
     //Sets the list of monsters for various purposes
     public static ArrayList<Monster> monsterList;
@@ -74,7 +75,7 @@ public class BattleInfo {
 	public static int enemyPartySize;
 	
 	//Sets how many monsters are needed to be beaten
-	public static int fightObjective = 1;
+	public static int fightObjective;
 	
 	//Sets if the finish button can be used
 	public static boolean finishEnabled = false;
@@ -105,6 +106,10 @@ public class BattleInfo {
 	        coins = 0;
 			countUp = 0;
 			battleSteps = 0;
+			exp = 0;
+			fightObjective = 0;
+			finishEnabled = false;
+			caughtAlready = false;
 			found = new ArrayList<Monster>();
 			
 	        generateEnemies();
@@ -160,8 +165,8 @@ public class BattleInfo {
     private static void generateParty() {
     	// sets ui flags
     	BackgroundChecker.playerMonsterWasAttacked = false;
-    	partyMonsterBattleList.clear();
-    	
+    	//partyMonsterBattleList.clear();
+    	partyMonsterBattleList = new ArrayList<BattleMonster>();
     	for (int i = 0; i < partyList.size(); i++) {
     		if (partyList.get(i) == null) {
     			partyMonsterBattleList.add(null);
@@ -217,7 +222,25 @@ public class BattleInfo {
     public static void playerTurn() {
     	if (partyMonsterBattleList == null) {
     		Log.d("random crash", "partyMonsterBattleList is null");
-    		Log.d("random crash", "");
+    		Log.d("random crash", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
+    		Log.d("random crash", "has the combat started? " + BackgroundChecker.battleStarted);
+    		Log.d("random crash", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
+    		Log.d("random crash", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
+    		Log.d("random crash", "was in the background? " + BackgroundChecker.isBackground);
+    		Log.d("random crash", "Are there now new enemies? " + BackgroundChecker.newEnemies);
+    		Log.d("random crash", "number of steps " + steps);
+    		if (partyList == null) {
+    			Log.d("random crash", "partyList is null");
+    		} else {
+    			Log.d("random crash", "partyList is not null");	
+    		}
+    		
+    		List<Monster> list = Hub.partyList;
+    		if (list != null) {
+    			Log.d("random crash", "Hub partyList is null");
+    		} else {
+    			Log.d("random crash", "Hub partyList is not null");
+    		}
     	}
     	for (int i = 0; i < partyMonsterBattleList.size(); i++) {
         	if (partyMonsterBattleList.get(i) != null && 
@@ -397,4 +420,5 @@ public class BattleInfo {
 			generateEnemies();
 		}
     }
+	
 }

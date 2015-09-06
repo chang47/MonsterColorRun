@@ -71,7 +71,8 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 	        <TextView
 	            android:id="@+id/routeRunDistanceTxt"
 	            android:layout_width="match_parent"
@@ -89,7 +90,10 @@
 	            android:layout_height="wrap_content"
 	            android:text="mi"
 	            android:gravity="center"
-	            style="@style/OtherTextLabel"/>
+	            style="@style/OtherTextLabel"
+	            android:textColor="#ffffff" 
+	            android:background="@drawable/border"
+	            />
 		</LinearLayout>
 		
 		<LinearLayout android:id="@+id/routerunTimeLayout"
@@ -173,7 +177,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/routeRunOtherLayout"
-        android:layout_above="@+id/playerPartyLayout" />
+        android:layout_above="@+id/playerPartyLayout" 
+        android:background="@drawable/background"
+        android:gravity="center"/>
 
     
    <LinearLayout 
@@ -188,25 +194,20 @@
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
         <Button
-                android:text="Pause Clip"
-                android:layout_weight=".33"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-        </Button>
-        <Button
-                android:text="Display Combat Log"
+                android:text="Display Log"
             	android:id="@+id/btnLog"
-                android:layout_weight=".33"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </Button>
         <Button
-                android:text="Stop Mission"
+                android:text="Finish"
                 android:id="@+id/stopMission"
-                android:layout_weight=".33"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </Button>
     </LinearLayout>
