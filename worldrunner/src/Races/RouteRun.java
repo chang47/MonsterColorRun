@@ -168,12 +168,13 @@ public class RouteRun extends Fragment {
 	        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
 	            @Override
 	            public void onChronometerTick(Chronometer chronometer) {
+	            	// does time reset in event of crash? 
 	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
 	                String asText = (countUp / 3600) + ":"; 
 	                if (countUp / 60 < 10) {
 	                	asText += "0";
 	                }
-	                asText += (countUp / 60) + ":";	                		
+	                asText += (countUp / 60 % 60) + ":";	                		
 	                if (countUp % 60 < 10) {
 	                	asText += "0";
 	                }

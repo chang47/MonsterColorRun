@@ -18,8 +18,11 @@ import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.MediaPlayer;
 
 public class SplashPage extends Activity {
+	
+	MediaPlayer backgroundMusic;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -43,6 +46,9 @@ public class SplashPage extends Activity {
 		RelativeLayout screen = (RelativeLayout) findViewById(R.id.splashScreen);
 		screen.setBackground(background);
 		
+		backgroundMusic = MediaPlayer.create(this, R.raw.thecurtainrises);
+		backgroundMusic.setLooping(false);
+		backgroundMusic.start();
 		// sets the flashing start text
 		Animation animation = new AlphaAnimation(1, 0);
 		animation.setDuration(1000);
@@ -67,5 +73,23 @@ public class SplashPage extends Activity {
 			}
 		});
 		
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//backgroundMusic.release();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		backgroundMusic.pause();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		backgroundMusic.start();
 	}
 }

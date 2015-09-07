@@ -37,16 +37,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Central Hub activity that manages everything the user does in
  * the game and uses Fragment to help move players around
  */
 public class Hub extends Activity {
+	private static MediaPlayer backgroundMusic;
 	private static FragmentManager fm;
 	//Access to the game's DB
 	private static DBManager db;	
@@ -107,6 +110,9 @@ public class Hub extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		backgroundMusic.release();
+		
+		
 		Log.d("disconnect", "hub got destroued");
 	}
 	
@@ -126,7 +132,7 @@ public class Hub extends Activity {
 		db = new DBManager(getApplicationContext());
 		
 		hubContentContainer = (FrameLayout) findViewById(R.id.hubContentLayout);
-		
+
 		BackgroundChecker.init();
 		
 		refDb = new ReferenceManager(getApplicationContext());
@@ -156,11 +162,15 @@ public class Hub extends Activity {
 		int resId = getResources().getIdentifier("background" + (currentCity.cityId - 1), "drawable", getPackageName());
 		Log.d("background res", "" + resId);
 		if (resId != 0) {
-			
 			hubContentContainer.setBackgroundResource(resId);
-			//hubContentContainer.setBackground(@);
 		}
 		
+		int musicId = getResources().getIdentifier("music" + (currentCity.cityId - 1), "raw", getPackageName());
+		if (musicId != 0) {
+			backgroundMusic = MediaPlayer.create(this, musicId);
+			backgroundMusic.setLooping(true);
+			backgroundMusic.start();
+		}
 		// set default values;
 		currentEquipment = null;
 		currentCategory = 0;
@@ -239,13 +249,18 @@ public class Hub extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (backgroundMusic != null) {
+        	backgroundMusic.start();
+        }
 	}
 
     @Override
     public void onPause() {
         super.onPause();
+        if (backgroundMusic != null) {
+        	backgroundMusic.pause();
+        }
     }
-    
     
     /**
      * GET PLAYER INFO
@@ -401,6 +416,12 @@ public class Hub extends Activity {
 		DBManager db = new DBManager(context);
 		getPlayerData(db);
 		CityHub townHub = new CityHub();
+		int musicId = context.getResources().getIdentifier("music" + (currentCity.cityId - 1), "raw", context.getPackageName());
+		if (musicId != 0) {
+			backgroundMusic = MediaPlayer.create(context, musicId);
+			backgroundMusic.setLooping(true);
+			backgroundMusic.start();
+		}
 		ft.replace(R.id.header, header);
 		ft.replace(R.id.footer, footer);
 		ft.replace(R.id.hub, townHub).commit();
@@ -465,6 +486,7 @@ public class Hub extends Activity {
 	
 	public static void startDungeonRun(Dungeon dungeon) {
 		// to be filled
+		backgroundMusic.release();
 		FragmentTransaction ft = setFT();
 		DungeonRun dunRun = new DungeonRun();
 		currentDungeon = dungeon;
@@ -477,6 +499,7 @@ public class Hub extends Activity {
 	// TODO, not needed 
 	public static void startRouteRun(Route route) {
 		// to be filledetFT();
+		backgroundMusic.release();
 		FragmentTransaction ft = setFT();
 		RouteRun cityRun = new RouteRun();
 				currentRoute = route;
