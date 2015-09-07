@@ -111,8 +111,6 @@ public class Hub extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		backgroundMusic.release();
-		
-		
 		Log.d("disconnect", "hub got destroued");
 	}
 	
@@ -249,7 +247,7 @@ public class Hub extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (backgroundMusic != null) {
+		if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
         	backgroundMusic.start();
         }
 	}
@@ -257,7 +255,7 @@ public class Hub extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (backgroundMusic != null) {
+        if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
         	backgroundMusic.pause();
         }
     }

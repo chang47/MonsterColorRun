@@ -91,7 +91,6 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	public void onDestroy() {
 		Log.d("disconnect", "step service closing");
 		stopSelf(mId);
-		Toast.makeText(this, "stopped", Toast.LENGTH_SHORT).show();
 		BackgroundChecker.endService = true;
 		// need to un-register otherwise service will continue to run forever
 		sensorManager.unregisterListener(this);
