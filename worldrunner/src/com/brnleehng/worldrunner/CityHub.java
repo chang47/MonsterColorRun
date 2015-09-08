@@ -7,6 +7,8 @@ import metaModel.Route;
 import DB.Model.MapGraph;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -27,6 +29,11 @@ public class CityHub extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		final SoundPool sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+		final int soundIds[] = new int[2];
+		soundIds[0] = sp.load(getActivity().getBaseContext(), R.raw.click, 1);
+		soundIds[1] = sp.load(getActivity().getBaseContext(), R.raw.enterbattle, 1);
+		
 		View view = inflater.inflate(R.layout.cityhub_activity, container, false);
 		dungeon = (Button) view.findViewById(R.id.dungeonBut);
 		move = (Button) view.findViewById(R.id.moveBut);
@@ -35,16 +42,13 @@ public class CityHub extends Fragment {
 		Log.d("current city", "" + currentCity.cityName + " description " + currentCity.description );
 		TextView cityName = (TextView) view.findViewById(R.id.currentCity);
 		cityName.setText("Welcome to: " + currentCity.cityName);
-		
-		// finds the nearest city to travel to
-		// TODO crashes probably MapGraph not used anymore
-		//ArrayList<Integer> cityList = MapGraph.nearbyCities(currentCityID);
-		
+
 		// moves to screen with multiple dungeons
 		dungeon.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				sp.play(soundIds[0], 1, 1, 1, 0, 1);
 				Hub.selectDungeons();
 			}
 		});
@@ -54,30 +58,10 @@ public class CityHub extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
+				sp.play(soundIds[0], 1, 1, 1, 0, 1);
 				Hub.selectRoute();
 			}
 		});
-		/**
-		LinearLayout layout = (LinearLayout) view.findViewById(R.id.cityContainer);
-		for (int i : cityList) {
-			Button btn = new Button(getActivity());
-			btn.setId(i);
-			final int id_ = btn.getId();
-			btn.setText("Go to " + id_);
-			btn.setBackgroundColor(Color.rgb(70, 80, 90));
-			layout.addView(btn);
-			
-			// TODO: See if necessary to recall the button
-			Button btn1 = (Button) view.findViewById(id_);
-			btn1.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					Hub.changeCity(v.getId());
-				}
-			});
-		}
-		*/
 		return view;
 	}  
 	

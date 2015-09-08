@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,7 +19,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 
 public class SplashPage extends Activity {
 	
@@ -28,6 +31,12 @@ public class SplashPage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// sets up the sound effects to be used 
+		final SoundPool sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+		final int soundIds[] = new int[2];
+		soundIds[0] = sp.load(getBaseContext(), R.raw.click, 1);
+		soundIds[1] = sp.load(getBaseContext(), R.raw.enterbattle, 1);
 		
 		// Gets the window size so that it can be used to stretch and scale the image as needed
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -65,10 +74,10 @@ public class SplashPage extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "clicked on the screen", Toast.LENGTH_SHORT).show();
 				DBManager db = new DBManager(getApplicationContext());
 				db.close();
 				Intent intent = new Intent(getApplicationContext(), Hub.class);
+				sp.play(soundIds[1], 1, 1, 1, 0, 1);
 				startActivity(intent);
 			}
 		});
@@ -78,12 +87,13 @@ public class SplashPage extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		//backgroundMusic.release();
+		Log.d("destroy", "destroyed is call on splash");
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Log.d("destroy", "puased is call on splash");
 		backgroundMusic.pause();
 	}
 	

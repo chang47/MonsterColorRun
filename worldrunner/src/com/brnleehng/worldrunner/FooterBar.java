@@ -7,6 +7,8 @@ import com.brnleehng.worldrunner.R.layout;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

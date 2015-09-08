@@ -37,7 +37,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -101,6 +103,9 @@ public class Hub extends Activity {
 	
 	private static Context context;
 	
+	public static SoundPool sp;
+	static int soundIds[];
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -125,7 +130,13 @@ public class Hub extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d("onCreate", "ran hub create");
 		setContentView(R.layout.hub_activity);
-		//Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		
+		sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+		soundIds = new int[2];
+		soundIds[0] = sp.load(getBaseContext(), R.raw.click, 1);
+		soundIds[1] = sp.load(getBaseContext(), R.raw.enterbattle, 1);
+		
+		
 		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
 		
@@ -204,6 +215,8 @@ public class Hub extends Activity {
 		Log.d("back button", "the condition is " + BackgroundChecker.battleStarted);
 		if (!BackgroundChecker.battleStarted) {
 			finish();
+			Intent intent = new Intent(this, SplashPage.class);
+			startActivity(intent);
 		} else {
 			//finish();
 		}
@@ -328,6 +341,7 @@ public class Hub extends Activity {
      * FRAGMENT CHANGES
      */
     public static void friends() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
     	FragmentTransaction ft = setFT();
     	Friends friend = new Friends();
     	ft.replace(R.id.hub, friend).commit();
@@ -340,12 +354,14 @@ public class Hub extends Activity {
     }
     
     public static void items() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
     	FragmentTransaction ft = setFT();
     	Items items = new Items();
     	ft.replace(R.id.hub, items).commit();
     }
     
     public static void store() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
     	FragmentTransaction ft = setFT();
     	Store store = new Store();
     	ft.replace(R.id.hub, store).commit();
@@ -382,6 +398,7 @@ public class Hub extends Activity {
 	}
 	
 	public static void databaseOptions() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
 		FragmentTransaction ft = setFT();
     	Database database = new Database();
     	ft.replace(R.id.hub, database).commit();
@@ -410,6 +427,7 @@ public class Hub extends Activity {
 	}
 	
 	public static void backToCity() {
+		sp.play(soundIds[1], 1, 1, 1, 0, 1);
 		FragmentTransaction ft = setFT();
 		DBManager db = new DBManager(context);
 		getPlayerData(db);
@@ -465,6 +483,7 @@ public class Hub extends Activity {
 	}
 	
 	public static void cityHub() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
 		FragmentTransaction ft = setFT();
 		CityHub townHub = new CityHub();
 		ft.replace(R.id.hub, townHub).commit();
@@ -499,6 +518,7 @@ public class Hub extends Activity {
 		// to be filledetFT();
 		backgroundMusic.release();
 		FragmentTransaction ft = setFT();
+		sp.play(soundIds[1], 1, 1, 1, 0, 1);
 		RouteRun cityRun = new RouteRun();
 				currentRoute = route;
 		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
