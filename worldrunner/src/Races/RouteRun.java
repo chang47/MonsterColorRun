@@ -357,7 +357,7 @@ public class RouteRun extends Fragment {
 	    		enemyProgressBarList.add(progBar);
 	    		Log.d("size", "size of list is" + enemyProgressBarList.size());
 	
-	    		int resId = getResources().getIdentifier("head" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
+	    		int resId = getResources().getIdentifier("body" + battleMonster.monster.monsterId, "drawable", getActivity().getPackageName());
 	    		if (resId != 0) {
 	    			imgView.setImageResource(resId);
 	    		} else {
@@ -394,7 +394,7 @@ public class RouteRun extends Fragment {
     		TextView monsterStep = new TextView(getActivity());
     		
     		// assigns text
-    		txt.setTextColor(Color.RED);
+    		txt.setTextColor(Color.BLACK);
     		txt.setGravity(Gravity.CENTER);
     		
     		//monsterStep.setTextColor(Color.BLACK);
