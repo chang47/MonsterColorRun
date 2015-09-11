@@ -322,6 +322,11 @@ public class RouteRun extends Fragment {
 	    		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 	    		
+	    		relLayoutParamProg.addRule(RelativeLayout.CENTER_HORIZONTAL);
+	    		relLayoutParamImg.addRule(RelativeLayout.CENTER_HORIZONTAL);
+	    		relLayoutParamTxt.addRule(RelativeLayout.CENTER_HORIZONTAL);
+	    		relLayoutParamTxtStep.addRule(RelativeLayout.CENTER_HORIZONTAL);
+	    		
 	    		// Assigned id for enemy ui
 	    		TextView txt = new TextView(getActivity());
 	    		txt.setId((i + 1));
@@ -348,7 +353,6 @@ public class RouteRun extends Fragment {
 	    		imgView.setLayoutParams(relLayoutParamImg);
 	    		progBar.setLayoutParams(relLayoutParamProg);
 	    		progBar.setProgress((battleMonster.currentHp * 100 / battleMonster.hp));
-	    		
 	    		relLayout.addView(monsterStep);
 	    		relLayout.addView(txt);
 	    		relLayout.addView(imgView);
@@ -385,6 +389,10 @@ public class RouteRun extends Fragment {
     		RelativeLayout.LayoutParams relLayoutParamImg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		RelativeLayout.LayoutParams relLayoutParamProg = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     		//RelativeLayout.LayoutParams relLayoutParamTxtStep = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    		
+    		relLayoutParamProg.addRule(RelativeLayout.CENTER_HORIZONTAL);
+    		relLayoutParamImg.addRule(RelativeLayout.CENTER_HORIZONTAL);
+    		relLayoutParamTxt.addRule(RelativeLayout.CENTER_HORIZONTAL);
     		
     		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
