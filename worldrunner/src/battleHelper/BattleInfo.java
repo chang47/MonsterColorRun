@@ -143,8 +143,8 @@ public class BattleInfo {
 		BackgroundChecker.monsterWasAttacked = false;
     	caughtAlready = false;
     	deadEnemies = 0;
-    	enemyPartySize = (int) ((Math.random() * 3.0) + 1);
-    	
+    	enemyPartySize = (int) ((Math.random() * 3) + 3); // originally 3 and 1
+    	Log.d("size of enemy", "generated " + enemyPartySize);
     	// TODO remove
     	if (list.size() < 100)
     		list.add("new enemy party with " + enemyPartySize + " monsters");

@@ -304,6 +304,7 @@ public class RouteRun extends Fragment {
     	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
 		enemyProgressBarList.clear();
+		Log.d("size of enemy", "" + BattleInfo.enemyMonsterBattleList.size());
 		for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
 			BattleMonster battleMonster = BattleInfo.enemyMonsterBattleList.get(i);
 			if (battleMonster != null) {
@@ -336,7 +337,7 @@ public class RouteRun extends Fragment {
 	    		progBar.setId((i + 1) * 100);
 	    		TextView monsterStep = new TextView(getActivity());
 	    		
-	    		txt.setText("text");
+	    		txt.setText(battleMonster.monster.name);
 	    		txt.setTextColor(Color.RED);
 	    		txt.setGravity(Gravity.CENTER);
 	    		
