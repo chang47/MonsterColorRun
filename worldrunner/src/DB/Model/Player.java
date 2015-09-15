@@ -10,16 +10,15 @@ public class Player {
 	public int exp;
 	public int coin;
 	public int gem;
-	public int currentEquipment;
-	public int maxEquipment;
 	public int currentSticker;
 	public int maxSticker;
+	public int city;
 	
 	public Player() { }
 	
 	public Player(int pid, String username, String fname, String lname,
-			int level, int exp, int coin, int gem, int currentEquipment,
-			int maxEquipment, int currentSticker, int maxSticker) {
+			int level, int exp, int coin, int gem, int currentSticker, int maxSticker,
+			int city) {
 		super();
 		this.pid = pid;
 		this.username = username;
@@ -29,12 +28,11 @@ public class Player {
 		this.exp = exp;
 		this.coin = coin;
 		this.gem = gem;
-		this.currentEquipment = currentEquipment;
-		this.maxEquipment = maxEquipment;
 		this.currentSticker = currentSticker;
 		this.maxSticker = maxSticker;
+		this.city = city;
 	}
-	
+	/*
 	public int getPid() {
 		return pid;
 	}
@@ -75,38 +73,34 @@ public class Player {
 		return coin;
 	}
 	public void setCoin(String coin) {
-		this.coin = Integer.parseInt(coin);
+		this.coin = (coin);
 	}
 	public int getGem() {
 		return gem;
 	}
-	public void setGem(String gem) {
-		this.gem = Integer.parseInt(gem);
-	}
-	public int getCurrentEquipment() {
-		return currentEquipment;
-	}
-	public void setCurrentEquipment(String currentEquipment) {
-		this.currentEquipment = Integer.parseInt(currentEquipment);
-	}
-	public int getMaxEquipment() {
-		return maxEquipment;
-	}
-	public void setMaxEquipment(String maxEquipment) {
-		this.maxEquipment = Integer.parseInt(maxEquipment);
+	public void setGem(int gem) {
+		this.gem = gem;
 	}
 	public int getCurrentSticker() {
 		return currentSticker;
 	}
-	public void setCurrentSticker(String currentSticker) {
-		this.currentSticker = Integer.parseInt(currentSticker);
+	public void setCurrentSticker(int currentSticker) {
+		this.currentSticker = currentSticker;
 	}
 	public int getMaxSticker() {
 		return maxSticker;
 	}
-	public void setMaxSticker(String maxSticker) {
-		this.maxSticker = Integer.parseInt(maxSticker);
+	public void setMaxSticker(int maxSticker) {
+		this.maxSticker = maxSticker;
 	}
 	
+	public void setCity(int city) {
+		this.city = city;
+	}
+	
+	public int getCity() {
+		return city;
+	}
+	*/
 	
 }

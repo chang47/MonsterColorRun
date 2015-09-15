@@ -26,6 +26,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 
+/**
+ * Not used. Equipments have been discontinued
+ * @author JoshDesktop
+ *
+ */
 public class SellEquipmentGrid extends Fragment {
 	GridView gridview;
 	

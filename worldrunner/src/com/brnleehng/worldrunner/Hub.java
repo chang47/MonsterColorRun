@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import battleHelper.BackgroundChecker;
+import battleHelper.BattleInfo;
 import test.TestRun;
 import dbReference.ReferenceManager;
 import metaModel.City;
@@ -23,7 +24,6 @@ import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
 import Items.EquipSticker;
-import Items.EquipStickers;
 import Items.SellEquipmentGrid;
 import Items.SellStickerGrid;
 import Items.ViewEquipment;
@@ -44,7 +44,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 /**
  * Central Hub activity that manages everything the user does in
@@ -164,7 +163,7 @@ public class Hub extends Activity {
 		// setup the user's data into the app
 		getPlayerData(db);
 
-		currentCity = refCities.get(0);
+		currentCity = refCities.get(player.city - 1);
 		db.close(); // necessary to close the db?
 		refDb.close();
 		
@@ -429,7 +428,12 @@ public class Hub extends Activity {
 	public static void backToCity() {
 		sp.play(soundIds[1], 1, 1, 1, 0, 1);
 		FragmentTransaction ft = setFT();
+		
+		// updates the coin
+		player.coin += BattleInfo.coins;
 		DBManager db = new DBManager(context);
+		db.updatePlayer(player);
+		
 		getPlayerData(db);
 		CityHub townHub = new CityHub();
 		int musicId = context.getResources().getIdentifier("music" + (currentCity.cityId - 1), "raw", context.getPackageName());
@@ -473,12 +477,6 @@ public class Hub extends Activity {
 		currentSticker = sticker;
 		FragmentTransaction ft = setFT();
 		EquipSticker equip = new EquipSticker();
-		ft.replace(R.id.hub, equip).commit();
-	}
-	
-	public static void equipNewSticker() {
-		FragmentTransaction ft = setFT();
-		EquipStickers equip = new EquipStickers();
 		ft.replace(R.id.hub, equip).commit();
 	}
 	
@@ -549,6 +547,9 @@ public class Hub extends Activity {
 	 */
 	public static void moveCity(int newCity) {
 		//@TODO check if you need to subtract 1
+		
+		// updates the city
+		player.city = newCity;
 		setCurrentCity(refCities.get(newCity - 1));
 		Log.d("newCity", refCities.get(newCity - 1).cityName);
 		int resId = context.getResources().getIdentifier("background" + (newCity - 1), "drawable", context.getPackageName());

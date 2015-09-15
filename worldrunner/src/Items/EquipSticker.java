@@ -113,8 +113,6 @@ public class EquipSticker extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if (adapter.getItem(position) != null) {
-					Toast.makeText(getActivity(), adapter.getItem(position).name, Toast.LENGTH_LONG).show();
-			
 					Hub.viewSticker = adapter.getItem(position);
 					ViewStickerDialog newFragment = new ViewStickerDialog();
 					//newFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.ViewStickerDialog);

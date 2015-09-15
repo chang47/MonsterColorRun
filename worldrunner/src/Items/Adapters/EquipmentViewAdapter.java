@@ -37,18 +37,18 @@ public class EquipmentViewAdapter extends ArrayAdapter<String> {
  			rowView = inflater.inflate(R.layout.mylist, null);
  		}
 		 
- 		TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
+ 		//TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-		TextView lvl = (TextView) rowView.findViewById(R.id.textView1);
-		TextView spd = (TextView) rowView.findViewById(R.id.textView2);
-		TextView rch = (TextView) rowView.findViewById(R.id.textView3);
+		//TextView lvl = (TextView) rowView.findViewById(R.id.textView1);
+		//TextView spd = (TextView) rowView.findViewById(R.id.textView2);
+		//TextView rch = (TextView) rowView.findViewById(R.id.textView3);
 		
-		txtTitle.setText(itemname[position]);
+		//txtTitle.setText(itemname[position]);
 		//@todo get data from array list or 2D array
 		imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
-		lvl.setText("lvl: " + list.get(position));
-		spd.setText("lvl: " + list.get(position));
-		rch.setText("lvl: " + list.get(position));
+		//lvl.setText("lvl: " + list.get(position));
+		//spd.setText("lvl: " + list.get(position));
+		//rch.setText("lvl: " + list.get(position));
 		return rowView;
  	}
  	

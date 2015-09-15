@@ -7,27 +7,32 @@ import DB.DBManager;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
+import com.brnleehng.worldrunner.ViewStickerDialog;
 
 public class SellStickerGrid extends Fragment {
 	GridView gridview;
 
-	List<Monster> list;
-	private StickerAdapter adapter;
+	List<Monster> unequippedMonster;
+	//private StickerAdapter adapter;
 	private ArrayList<Monster> sellList;
 	DBManager db;
 	
@@ -36,10 +41,10 @@ public class SellStickerGrid extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.sellequipmentgrid_activity, container, false);
-		list = new ArrayList<Monster>();
+		unequippedMonster = new ArrayList<Monster>();
 		for (Monster monster : Hub.stickerList) {
 			if (monster.equipped == 0) {
-				list.add(monster);
+				unequippedMonster.add(monster);
 			}
 		}
 		 
@@ -47,11 +52,11 @@ public class SellStickerGrid extends Fragment {
 		db = new DBManager(getActivity());
 		
 		sellList = new ArrayList<Monster>();
-		adapter = new StickerAdapter(getActivity(), R.layout.mylist, list);
+		final StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, unequippedMonster);
 		
-		gridview = (GridView) view.findViewById(R.id.gridview);
+		gridview = (GridView) view.findViewById(R.id.gridview); // gridview 
 		gridview.setAdapter(adapter);
-		gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+		//gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 			
 			@Override
@@ -67,6 +72,25 @@ public class SellStickerGrid extends Fragment {
 					//view.setBackgroundColor(Color.BLUE);
 					sellList.add(monster);
 				}
+			}
+		});
+		
+		gridview.setOnItemLongClickListener(new OnItemLongClickListener() {
+			
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Log.d("long click", "made into the function");
+				if (adapter.getItem(position) != null) {
+					Log.d("long click", "made into if statement");
+					Hub.viewSticker = adapter.getItem(position);
+					ViewStickerDialog newFragment = new ViewStickerDialog();
+					//newFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.ViewStickerDialog);
+					newFragment.setStyle(DialogFragment.STYLE_NO_TITLE,android.R.style.Theme_Holo_Light);
+					newFragment.show(getFragmentManager(), "View Sticker");
+					Log.d("long click", "finished if statement");
+				}
+				return true;
 			}
 		});
 		
@@ -91,15 +115,6 @@ public class SellStickerGrid extends Fragment {
 					}
 				}
 				adapter.removeSelection();
-				//@TODO make the grid max size be the total # of items user can have
-				// with the new sparse position check, is this even necessary?
-				/*
-				for (int i = 0; i < gridview.getCount() * 3; i++) {
-					View item = gridview.getChildAt(i);
-					if (item != null) {
-						item.setBackgroundColor(Color.TRANSPARENT);
-					}
-				}*/
 			}
 		});
 		

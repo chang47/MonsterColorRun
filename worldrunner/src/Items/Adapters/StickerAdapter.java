@@ -46,11 +46,11 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 	// to store everything inside a class as oppose to calling
 	// them out individually
 	private class ViewHolder {
-		TextView txtTitle;
+		//TextView txtTitle;
 		ImageView imageView;
-		TextView lvl;
-		TextView exp;
-		TextView rch;
+		//TextView lvl;
+		//TextView exp;
+		//TextView rch;
 	}
 	
  	@Override
@@ -63,11 +63,11 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
  			holder = new ViewHolder();
  			view = inflater.inflate(R.layout.mylist, null);
  			
- 			holder.txtTitle = (TextView) view.findViewById(R.id.item);
+ 			//holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.imageView = (ImageView) view.findViewById(R.id.icon);
- 			holder.lvl = (TextView) view.findViewById(R.id.textView1);
- 			holder.exp = (TextView) view.findViewById(R.id.textView2);
- 			holder.rch = (TextView) view.findViewById(R.id.textView3);
+ 			//holder.lvl = (TextView) view.findViewById(R.id.textView1);
+ 			//holder.exp = (TextView) view.findViewById(R.id.textView2);
+ 			//holder.rch = (TextView) view.findViewById(R.id.textView3);
  			view.setTag(holder);
  		} else {
  			holder = (ViewHolder) view.getTag();
@@ -77,7 +77,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 		if (getItem(position) == null) {
 			holder.imageView.setImageResource(R.drawable.icon);
 		} else {
-			holder.txtTitle.setText(monsterList.get(position).name);
+			//holder.txtTitle.setText(monsterList.get(position).name);
 			int resId = context.getResources().getIdentifier("head" + monsterList.get(position).monsterId, "drawable", context.getPackageName());
 			
 			if (resId != 0) {
@@ -85,10 +85,10 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 			} else {
 				holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
 			}
-			holder.lvl.setText("lvl: " + monsterList.get(position).level);
+			/*holder.lvl.setText("lvl: " + monsterList.get(position).level);
 			holder.exp.setText("exp: " + monsterList.get(position).exp);
 			holder.rch.setText("rch: " + monsterList.get(position).speed);
-			if (mSelectedItemsIds.get(position)) {
+			*/if (mSelectedItemsIds.get(position)) {
 				view.setBackgroundColor(Color.BLUE);
 			} else {
 				view.setBackgroundColor(Color.TRANSPARENT);

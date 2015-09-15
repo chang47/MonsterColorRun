@@ -3,47 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    	<Button 
+   <!--  	<Button 
     	    android:id="@+id/viewEquipment"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="View Equipment"/>
-    	
+    --> 	
     	<Button 
     	    android:id="@+id/equipEquipment"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="Equip Equipment"/>
     	
- 	    <Button 
+ 	    <!-- <Button 
     	    android:id="@+id/sellEquipment"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="Sell Equipment"/>
-    	
+    	 -->
     	<Button 
     	    android:id="@+id/viewSticker"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="View Sticker"/>
     	
-    	<Button 
+    	<!-- <Button 
     	    android:id="@+id/equipSticker"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="Equip Sticker"/>
-    	
+    	 -->
     	<Button 
     	    android:id="@+id/sellSticker"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:text="Sell Sticker"/>
-    	
-        <ListView
-	        android:id="@+id/item_list"
-	        android:layout_width="fill_parent"
-	        android:layout_height="329dp"
-	        android:entries="@array/items_array" 
-        />
-        
+    	  
 </LinearLayout>

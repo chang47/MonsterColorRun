@@ -12,7 +12,7 @@ import android.widget.Button;
 // Framgent to display user's sticker/equipment options
 public class Items extends Fragment {
 	Button mViewEquipment;
-	Button mEquipEquipment;
+	Button mEquipItems;
 	Button mSellEquipment;
 	Button mViewSticker;
 	Button mEquipSticker;
@@ -23,21 +23,21 @@ public class Items extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.items_activity, container, false);
-		mViewEquipment = (Button) view.findViewById(R.id.viewEquipment);
-		mEquipEquipment = (Button) view.findViewById(R.id.equipEquipment);
-		mSellEquipment = (Button) view.findViewById(R.id.sellEquipment);
+		// mViewEquipment = (Button) view.findViewById(R.id.viewEquipment);
+		mEquipItems = (Button) view.findViewById(R.id.equipEquipment);
+		// mSellEquipment = (Button) view.findViewById(R.id.sellEquipment);
 		mViewSticker = (Button) view.findViewById(R.id.viewSticker);
-		mEquipSticker = (Button) view.findViewById(R.id.equipSticker);
+		// mEquipSticker = (Button) view.findViewById(R.id.equipSticker);
 		mSellSticker = (Button) view.findViewById(R.id.sellSticker);
 		
-		mViewEquipment.setOnClickListener(new View.OnClickListener() {
+/*		mViewEquipment.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Hub.viewEquipment();
 			}
 		});
-		
+		*/
 		mViewSticker.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -46,13 +46,13 @@ public class Items extends Fragment {
 			}
 		});
 		
-		mSellEquipment.setOnClickListener(new View.OnClickListener() {
+/*		mSellEquipment.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Hub.sellEquipment();
 			}
-		});
+		});*/
 		
 		mSellSticker.setOnClickListener(new View.OnClickListener() {
 			
@@ -62,7 +62,7 @@ public class Items extends Fragment {
 			}
 		});
 		
-		mEquipEquipment.setOnClickListener(new OnClickListener() {
+		mEquipItems.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

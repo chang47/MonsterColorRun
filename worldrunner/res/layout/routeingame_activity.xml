@@ -171,16 +171,40 @@
         </TextView>
    </LinearLayout>
  -->   
-   <LinearLayout
-        android:id="@+id/enemyPartyLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/routeRunOtherLayout"
-        android:layout_above="@+id/playerPartyLayout" 
-        android:background="@drawable/battle"
-        android:gravity="center"/>
-
+ 
+	<RelativeLayout 
+	    android:id="@+id/overallEnemyLayout"
+	    android:layout_below="@+id/routeRunOtherLayout"
+		android:layout_above="@+id/playerPartyLayout"
+		android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/battle">
+		
+		<RelativeLayout android:id="@+id/coinLayout"
+			   android:layout_height="wrap_content"
+			   android:layout_width="wrap_content"
+			   android:layout_gravity="top">
+			   
+			   <TextView  
+	           android:id="@+id/coinsEarned"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_alignParentRight="true"
+	           android:layout_alignParentTop="true"
+	           android:text="0 coin"
+	           android:textColor="#000000"
+	           android:textSize="20sp" />
+		</RelativeLayout>
+	   	<LinearLayout
+	        android:id="@+id/enemyPartyLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:gravity="center">
+	   </LinearLayout>
+   </RelativeLayout>
     
    <LinearLayout 
         android:id="@+id/playerPartyLayout"

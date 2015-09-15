@@ -1,14 +1,13 @@
 package step.detector;
 
+
 import java.util.ArrayList;
 
+import util.*;
 import step.detector.StepListener;
 import battleHelper.BackgroundChecker;
 import battleHelper.BattleInfo;
-import DB.DBManager;
-import DB.Model.BattleMonster;
-import DB.Model.Monster;
-import android.app.Dialog;
+import Abilities.Ability;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +19,8 @@ import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.Gson;;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StepService extends Service implements SensorEventListener, StepListener {
 	public static final String PREF_NAME = "RouteRunPref";
@@ -219,7 +217,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	 */
 	public void saveData() {
 		Log.d("crash data", "data is being saved in case of crash");
-		Gson gson = new Gson();
+		GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Ability.class, new InterfaceAdapter<Ability>());
+		Gson gson = builder.create();
 		SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
 		editor.putInt(EXP, BattleInfo.exp);
 		editor.putString(FOUND, gson.toJson(BattleInfo.found));
@@ -248,7 +247,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	// will probably have problems on the first load if there is a problem there
 	@SuppressWarnings("unchecked")
 	public void recoverFromLastPoint() {
-		Gson gson = new Gson();
+		GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Ability.class, new InterfaceAdapter<Ability>());
+		Gson gson = builder.create();
 		SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 		BattleInfo.exp = pref.getInt(EXP, 0);
 		BattleInfo.found = gson.fromJson(pref.getString(FOUND, null), ArrayList.class);

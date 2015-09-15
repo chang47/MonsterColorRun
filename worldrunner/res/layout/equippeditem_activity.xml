@@ -4,7 +4,7 @@
     android:layout_height="match_parent" 
     android:orientation="vertical">
 
-    <TextView 
+    <!-- <TextView 
         android:layout_marginTop="80dp"
         android:layout_marginLeft="10dp"
         android:id="@+id/equippedView"
@@ -53,7 +53,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:src="@drawable/colorworld" />
-	</LinearLayout>
+	</LinearLayout> -->
 	<TextView android:id="@+id/equippedSticker"
 	    android:text="Sticker"
 	    android:layout_marginTop="40dp"
@@ -98,14 +98,5 @@
 	        android:layout_height="wrap_content"
 	        android:src="@drawable/colorworld" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/equipStickerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stickerTable"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:text="Equip Stickers" />
 
 </RelativeLayout>

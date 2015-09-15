@@ -37,11 +37,11 @@ public class EquipmentAdapter extends ArrayAdapter<Equipment> {
 	}
 	
 	private class ViewHolder {
-		TextView txtTitle;
+		//TextView txtTitle;
 		ImageView imageView;
-		TextView lvl;
+		/*TextView lvl;
 		TextView spd;
-		TextView rch;
+		TextView rch;*/
 	}
 	
  	@Override
@@ -50,23 +50,23 @@ public class EquipmentAdapter extends ArrayAdapter<Equipment> {
  		if (view == null) {
  			holder = new ViewHolder();
  			view = inflater.inflate(R.layout.mylist, null);
- 			
- 			holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.imageView = (ImageView) view.findViewById(R.id.icon);
+ 			/*
+ 			holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.lvl = (TextView) view.findViewById(R.id.textView1);
  			holder.spd = (TextView) view.findViewById(R.id.textView2);
- 			holder.rch = (TextView) view.findViewById(R.id.textView3);
+ 			holder.rch = (TextView) view.findViewById(R.id.textView3);*/
  			view.setTag(holder);
  		} else {
  			holder = (ViewHolder) view.getTag();
  		}
-		 
+ 		holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
+		/*
 		holder.txtTitle.setText(list.get(position).getName());
-		holder.imageView.setImageResource(R.drawable.ic_launcher); // have the pictured ordered correctly
 		holder.lvl.setText("lvl: " + list.get(position).getCurrent_level());
 		holder.spd.setText("spd: " + list.get(position).getCurrent_speed());
 		holder.rch.setText("rch: " + list.get(position).getCurrent_reach());
-		return view;
+		*/return view;
  	}
  	
 	@Override

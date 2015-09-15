@@ -18,10 +18,7 @@ import DB.Model.BattleMonster;
 import DB.Model.Monster;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 public class BattleInfo {
 

@@ -29,16 +29,16 @@ public class HeaderBar extends Fragment {
 		
 		Player player = Hub.getPlayer();
 		TextView rank = (TextView) view.findViewById(R.id.Rank);
-		rank.setText("Rank: " + player.getLevel());
+		rank.setText("Rank: " + player.level);
 		
 		TextView gem = (TextView) view.findViewById(R.id.headerGem);
-		gem.setText("Gems: " + player.getGem());
+		gem.setText("Gems: " + player.gem);
 		
 		TextView coins = (TextView) view.findViewById(R.id.headerCoin);
-		coins.setText("Coin: " + player.getCoin());
+		coins.setText("Coin: " + player.coin);
 		
 		ProgressBar exp = (ProgressBar) view.findViewById(R.id.expBar);
-		exp.setProgress(player.getExp());
+		exp.setProgress(player.exp);
 		
 		return view;
 	}

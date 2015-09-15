@@ -88,13 +88,13 @@ public class RouteRun extends Fragment {
 	        tvPace = (TextView) view.findViewById(R.id.routeRunPaceTxt);
 	        tvTime = (TextView) view.findViewById(R.id.routeRunTimedTxt);
 	        tvCalories = (TextView) view.findViewById(R.id.routeRunCaloriesTxt);
-	        //tvCoin = (TextView) view.findViewById(R.id.tvCoin);
+	        tvCoin = (TextView) view.findViewById(R.id.coinsEarned);
 	        txtRouteName = (TextView) view.findViewById(R.id.CurrentRouteText);
 	        
 	        //monsterList = Hub.monsterList;
 	        enemyProgressBarList = new ArrayList<ProgressBar>();
 	        playerProgressBarList = new ProgressBar[5];
-	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyPartyLayout);
+	        enemyPartyLayout = (LinearLayout) view.findViewById(R.id.enemyPartyLayout1);
 	        playerPartyLayout = (LinearLayout) view.findViewById(R.id.playerPartyLayout);
 	        btnLog = (Button) view.findViewById(R.id.btnLog);
 	        stopMission = (Button) view.findViewById(R.id.stopMission);
@@ -105,6 +105,7 @@ public class RouteRun extends Fragment {
 	        // initialize fields
 	        steps = 0;
 	        txtRouteName.setText(Hub.currentRoute.name);
+	        tvDistance.setText("0.00");
 	        
 	        // Once you're done with your run you can save all of the
 	        // new monsters that you've caught. Ignore for now
@@ -154,7 +155,7 @@ public class RouteRun extends Fragment {
 						}					
 					}
 					BattleInfo.combatFinish();
-					// finishing the race
+					// finishing the race and also updates the player info
 					if (BattleInfo.finishEnabled) {
 						Log.d("objective finish", "finish is enabled");
 						Hub.moveCity(Hub.currentRoute.to);
@@ -518,7 +519,6 @@ public class RouteRun extends Fragment {
 			BackgroundChecker.boundStepService  = false;
 			Log.d("disconnect", "disconnect on close");
 		}
-    	
     };
     
     /**
@@ -532,6 +532,10 @@ public class RouteRun extends Fragment {
 			Log.d("disconnect", "added new steps " + BattleInfo.steps);
 			steps = BattleInfo.steps;
 			tvPace.setText("steps: " + steps);
+			tvDistance.setText("" + (double) Math.round(BattleInfo.distance * 100) / 100);
+			tvCoin.setText("" + BattleInfo.coins + " coin");
+			// TODO improve the calculation by letting the user save their weight and height
+			tvCalories.setText("" + Math.round(BattleInfo.distance * 100));
 			updateUI();
 		}
 	};

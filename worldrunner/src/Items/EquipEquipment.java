@@ -20,7 +20,7 @@ import com.brnleehng.worldrunner.R;
 
 /**
  * Equip equipments. Refer to Equip Sticker for almost exact same documentation.
- *
+ * Not used
  */
 public class EquipEquipment extends Fragment {
 	GridView gridview;	

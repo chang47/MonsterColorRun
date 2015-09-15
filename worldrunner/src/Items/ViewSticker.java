@@ -6,6 +6,7 @@ import java.util.List;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
+import com.brnleehng.worldrunner.ViewStickerDialog;
 
 // Not used?
 public class ViewSticker extends Fragment {
@@ -32,7 +34,7 @@ public class ViewSticker extends Fragment {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.viewitems_activity, container, false);
 		list = Hub.stickerList;
-		StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, list);
+		final StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, list);
 		
 		gridview = (GridView) view.findViewById(R.id.viewGridView);
 		gridview.setAdapter(adapter);
@@ -42,6 +44,24 @@ public class ViewSticker extends Fragment {
 					int position, long id) {
 				Monster SelectedItem = list.get(position);
 				Toast.makeText(getActivity(). getApplicationContext(), SelectedItem.name, Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			
+			@Override 
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (adapter.getItem(position) != null) {
+					Toast.makeText(getActivity(), adapter.getItem(position).name, Toast.LENGTH_LONG).show();
+			
+					Hub.viewSticker = adapter.getItem(position);
+					ViewStickerDialog newFragment = new ViewStickerDialog();
+					//newFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.ViewStickerDialog);
+					newFragment.setStyle(DialogFragment.STYLE_NO_TITLE,android.R.style.Theme_Holo_Light);
+					newFragment.show(getFragmentManager(), "View Sticker");
+				}
+				return true;
 			}
 		});
 		return view;

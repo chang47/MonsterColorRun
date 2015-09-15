@@ -22,6 +22,11 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Not used anymore
+ * @author JoshDesktop
+ *
+ */
 public class ViewEquipment extends Fragment {
 	GridView listview;	
 	ArrayList<Equipment> equipments;
@@ -34,7 +39,6 @@ public class ViewEquipment extends Fragment {
 		View view = inflater.inflate(R.layout.viewitems_activity, container, false);
 		equipments = Hub.getEquipment();
 		EquipmentAdapter adapter = new EquipmentAdapter(getActivity(), R.layout.mylist, equipments);
-		//Toast.makeText(getActivity().getApplicationContext(), " " + equipments.size(), Toast.LENGTH_SHORT).show();
 		listview = (GridView) view.findViewById(R.id.viewGridView);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
