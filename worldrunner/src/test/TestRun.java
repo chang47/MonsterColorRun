@@ -145,7 +145,7 @@ public class TestRun extends Fragment {
 				BattleInfo.combatFinish();
 				// finishing the race
 				if (BattleInfo.finishEnabled) {
-					Hub.moveCity(Hub.currentRoute.to);
+					//Hub.moveCity(Hub.currentRoute.to);
 				} else {
 					Hub.backToCity();
 				}

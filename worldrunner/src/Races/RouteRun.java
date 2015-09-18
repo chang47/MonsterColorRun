@@ -129,11 +129,11 @@ public class RouteRun extends Fragment {
 					// TODO add sticker and then once we move out, we would re-load the 
 					// the sticker list
 					
-					// added the new stickers
+					// updates the player's new monsters
 					DBManager db = new DBManager(getActivity());
 					db.addStickers(BattleInfo.found);
 					
-					// updating current monsters
+					// update player's current monsters
 					for (Monster monster : BattleInfo.partyList) {
 						if (monster != null && monster.level != 100) {
 							monster.exp += BattleInfo.exp / BattleInfo.partyMonstersSize;
@@ -154,14 +154,29 @@ public class RouteRun extends Fragment {
 							db.updateSticker(monster);
 						}					
 					}
+					
+					// updates the player's status
+					if (BattleInfo.finishEnabled) {
+						int newCity = Hub.currentRoute.to;
+						Hub.player.city = newCity;
+						Hub.setCurrentCity(Hub.refCities.get(newCity - 1));
+						Log.d("newCity", Hub.refCities.get(newCity - 1).cityName);
+						int resId = getActivity().getResources().getIdentifier("background" + (newCity - 1), "drawable", getActivity().getPackageName());
+						if (resId != 0)
+							Hub.hubContentContainer.setBackgroundResource(resId);
+					}
+					Hub.player.coin += BattleInfo.coins;
+					db.updatePlayer(Hub.player);
+					
 					BattleInfo.combatFinish();
 					// finishing the race and also updates the player info
-					if (BattleInfo.finishEnabled) {
+					Hub.goToResult();
+					/*if (BattleInfo.finishEnabled) {
 						Log.d("objective finish", "finish is enabled");
 						Hub.moveCity(Hub.currentRoute.to);
 					} else {
 						Hub.backToCity();
-					}
+					}*/
 				}
 			});         
 	        

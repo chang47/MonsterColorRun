@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 public class Result extends Fragment {
 
@@ -18,13 +19,12 @@ public class Result extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.result_activity, container, false);
-		Button done = (Button) view.findViewById(R.id.resultDone);
+		RelativeLayout done = (RelativeLayout) view.findViewById(R.id.overallResultContainer);
 		done.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Hub.backToCity();
-				
+				Hub.backToCity();				
 			}
 		});
 		

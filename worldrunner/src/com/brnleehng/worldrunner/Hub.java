@@ -418,8 +418,7 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, run).commit();
 	}
 	
-	public static void result() {
-		stickerList = db.getStickers();
+	public static void goToResult() {
 		FragmentTransaction ft = setFT();
 		Result result = new Result();
 		ft.replace(R.id.hub, result).commit();
@@ -429,11 +428,7 @@ public class Hub extends Activity {
 		sp.play(soundIds[1], 1, 1, 1, 0, 1);
 		FragmentTransaction ft = setFT();
 		
-		// updates the coin
-		player.coin += BattleInfo.coins;
 		DBManager db = new DBManager(context);
-		db.updatePlayer(player);
-		
 		getPlayerData(db);
 		CityHub townHub = new CityHub();
 		int musicId = context.getResources().getIdentifier("music" + (currentCity.cityId - 1), "raw", context.getPackageName());
@@ -446,6 +441,24 @@ public class Hub extends Activity {
 		ft.replace(R.id.footer, footer);
 		ft.replace(R.id.hub, townHub).commit();
 	}
+	
+	/**
+	 * Might not be needed anymore with new refactoring
+	 * Selects the new route to run towards
+	 * @param newCity - the city that the user is trying to run to.
+	 */
+/*	public static void moveCity(int newCity) {
+		//@TODO check if you need to subtract 1
+		
+		// updates the city
+		player.city = newCity;
+		setCurrentCity(refCities.get(newCity - 1));
+		Log.d("newCity", refCities.get(newCity - 1).cityName);
+		int resId = context.getResources().getIdentifier("background" + (newCity - 1), "drawable", context.getPackageName());
+		if (resId != 0)
+			hubContentContainer.setBackgroundResource(resId);
+		backToCity();
+	}*/
 	
 	public static void backToCity2() {
 		DBManager db = new DBManager(context);
@@ -511,7 +524,6 @@ public class Hub extends Activity {
 		ft.replace(R.id.hub, dunRun).commit();
 	}
 	
-	// TODO, not needed 
 	public static void startRouteRun(Route route) {
 		// to be filledetFT();
 		backgroundMusic.release();
@@ -523,8 +535,6 @@ public class Hub extends Activity {
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();
-		
-
 
 	}
 	
@@ -535,29 +545,6 @@ public class Hub extends Activity {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
-	
-	public static void addSticker(Monster monsterSticker) {
-		stickerList.add(monsterSticker);
-		db.addSticker(monsterSticker);
-	}
-	
-	/**
-	 * Selects the new route to run towards
-	 * @param newCity - the city that the user is trying to run to.
-	 */
-	public static void moveCity(int newCity) {
-		//@TODO check if you need to subtract 1
-		
-		// updates the city
-		player.city = newCity;
-		setCurrentCity(refCities.get(newCity - 1));
-		Log.d("newCity", refCities.get(newCity - 1).cityName);
-		int resId = context.getResources().getIdentifier("background" + (newCity - 1), "drawable", context.getPackageName());
-		if (resId != 0)
-			hubContentContainer.setBackgroundResource(resId);
-		backToCity();
-	}
-	
 	 
 	public static int partySize() {
 		int count = 0;

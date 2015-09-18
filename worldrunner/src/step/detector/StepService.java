@@ -42,6 +42,10 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	public static final String OBJECTIVE = "objective";
 	public static final String FINISHED = "finished";
 	public static final String CAUGHT = "caught";
+	public static final String CURRENT_STEP = "currentStep";
+	public static final String CURRENT_DISTANCE = "currentDistance";
+	public static final String CURRENT_TIME = "currentTime";
+	public static final String CURRENT_CALORIES = "currentCalories";	
 	
 	private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -133,7 +137,33 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	        }
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
-	    	BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
+	    	// not sure what the 0.91 is from
+	    	//BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
+	    	long newTime = System.currentTimeMillis();
+	    	Log.d("time", "" + newTime);
+	    	if ((newTime - BattleInfo.currentTime) / 5000 >= 1) {
+	    		// calculate the steps and their distance
+	    		BattleInfo.currentTime = newTime;
+	    		int stepsTaken = BattleInfo.steps - BattleInfo.currentStep;
+	    		BattleInfo.currentStep = BattleInfo.steps;
+	    		// assumption:
+	    		// Fact 1: average speed between running and walking is 4.5 MPH, which translates to 6.6 feet per second
+	    		// Fact 2: An average walking step is 2.2 feet (mine anyways)
+	    		// Conclusion: 3 steps will give 6.6 feet per second which is fast walk/running speed
+	    		// calorie = pounds / 2.2 * MET * 5 seconds / 60 seconds / 60 minutes /
+	    		// MET 3 for walking, 6 for running, good enough!
+	    		double met = 0;
+	    		if (stepsTaken >= 15) {
+	    			// running pace is 3 feet per step
+	    			met = 9;
+	    			BattleInfo.distance += (double) stepsTaken * (3.0 / 5280);
+	    		} else {
+	    			// running pace is 2.2 feet per step
+	    			met = 3.5;
+	    			BattleInfo.distance += (double) stepsTaken * (2.2  / 5280);	
+	    		}
+	    		BattleInfo.calories += 200 / 2.2 * met * 5 / 60 / 60;
+	    	}
 	    	
 	    	// prevents the possibility of running the code in an unexpected state
 			//if (BackgroundChecker.finishedCurrentBattle) {
@@ -238,6 +268,10 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		editor.putInt(OBJECTIVE, BattleInfo.fightObjective);
 		editor.putBoolean(FINISHED, BattleInfo.finishEnabled);
 		editor.putBoolean(CAUGHT, false); // since we're starting a new round
+		editor.putInt(CURRENT_STEP, BattleInfo.currentStep);
+		editor.putLong(CURRENT_DISTANCE, (long) BattleInfo.distance);
+		editor.putLong(CURRENT_TIME, BattleInfo.currentTime);
+		editor.putLong(CURRENT_CALORIES, (long) BattleInfo.calories);
 
 		editor.commit();// apply might seem better since it allows everything to be asynchronous so only need to be used once
 						// in the beginning, but might also save the null.
@@ -267,6 +301,10 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		BattleInfo.fightObjective = pref.getInt(OBJECTIVE, 0);
 		BattleInfo.finishEnabled = pref.getBoolean(FINISHED, false);
 		BattleInfo.caughtAlready = false;
+		BattleInfo.currentStep = pref.getInt(CURRENT_STEP, 0);
+		BattleInfo.distance = pref.getLong(CURRENT_DISTANCE, 0);
+		BattleInfo.currentTime = pref.getLong(CURRENT_TIME, 0);
+		BattleInfo.calories = pref.getLong (CURRENT_CALORIES, 0);
 	}
 	
 	/**

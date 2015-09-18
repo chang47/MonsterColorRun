@@ -39,7 +39,9 @@ public class BattleInfo {
     public static int coins;
     public static int iPartyAttacked;
     public static int battleSteps;
-    
+    public static long currentTime;
+    public static int currentStep;
+    public static double calories;
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
     private DBManager db;
@@ -105,6 +107,9 @@ public class BattleInfo {
 			battleSteps = 0;
 			exp = 0;
 			fightObjective = 0;
+			currentTime = System.currentTimeMillis();
+			currentStep = 0;
+			calories = 0;
 			finishEnabled = false;
 			caughtAlready = false;
 			found = new ArrayList<Monster>();
