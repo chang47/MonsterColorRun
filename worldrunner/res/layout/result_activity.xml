@@ -4,10 +4,61 @@
     android:layout_height="match_parent"
     android:id="@+id/overallResultContainer" >
     
+    <TextView
+     	android:id="@+id/resultCoins"
+     	android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_centerHorizontal="true"
+     	android:text="Coins earned: 0"
+     />
+    
+    <TextView
+     	android:id="@+id/resultTime"
+     	android:layout_below="@+id/resultCoins"
+        android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_centerHorizontal="true"
+     	android:text="Time spent running: "
+     	android:visibility="invisible"
+    />
+    
+    <TextView
+     	android:id="@+id/resultSteps"
+     	android:layout_below="@+id/resultTime"
+        android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_centerHorizontal="true"
+     	android:text="Steps Taken: "
+     	android:visibility="invisible"
+    />
+    
+    <TextView
+     	android:id="@+id/resultDistances1"
+     	android:layout_below="@+id/resultSteps"
+        android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_centerHorizontal="true"
+     	android:text="Distance travelled: "   
+     	android:visibility="invisible"
+     />
+    
+    <TextView
+     	android:id="@+id/resultCalories"
+     	android:layout_below="@+id/resultDistances1"
+        android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_centerHorizontal="true"
+     	android:text="Calories burned"
+     	android:visibility="invisible"
+     />
+    
     <Button 
         android:id="@+id/resultDone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click to finish"/>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Click to finish"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

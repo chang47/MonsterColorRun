@@ -133,7 +133,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 			// for testing multiple steps only
 			//stepCopy();
 			if (Math.random() < 0.5) {
-	            BattleInfo.coins++;
+	            BattleInfo.coins += 10;
 	        }
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
