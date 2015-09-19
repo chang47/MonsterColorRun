@@ -258,10 +258,31 @@ public class Hub extends Activity {
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
-        	backgroundMusic.start();
-        }
+		try {
+			super.onResume();
+			if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
+	        	backgroundMusic.start();
+	        }
+		} catch (Exception e) {
+			if (partyList == null) { Log.d("random hub crash", "partyList is null"); }
+			if (currentCity == null) { Log.d("random hub crash", "current City is null"); }
+			if (context == null) { Log.d("random hub crash", "context is null"); } 
+			if (BattleInfo.partyMonsterBattleList == null) {
+	    		Log.d("random crash2", "partyMonsterBattleList is null");
+	    		Log.d("random crash2", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
+	    		Log.d("random crash2", "has the combat started? " + BackgroundChecker.battleStarted);
+	    		Log.d("random crash2", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
+	    		Log.d("random crash2", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
+	    		Log.d("random crash2", "was in the background? " + BackgroundChecker.isBackground);
+	    		Log.d("random crash2", "Are there now new enemies? " + BackgroundChecker.newEnemies);
+	    		if (BattleInfo.partyList == null) {
+	    			Log.d("random crash", "partyList is null");
+	    		} else {
+	    			Log.d("random crash", "partyList is not null");	
+	    		}
+	    	}
+			Log.e("random hub crash", e.getClass().getName(), e);
+		}
 	}
 
     @Override

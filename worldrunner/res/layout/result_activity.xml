@@ -10,6 +10,7 @@
      	android:layout_height="wrap_content"
      	android:layout_centerHorizontal="true"
      	android:text="Coins earned: 0"
+     	style="@style/Results"
      />
     
     <TextView
@@ -20,6 +21,7 @@
      	android:layout_centerHorizontal="true"
      	android:text="Time spent running: "
      	android:visibility="invisible"
+     	style="@style/Results"
     />
     
     <TextView
@@ -30,6 +32,7 @@
      	android:layout_centerHorizontal="true"
      	android:text="Steps Taken: "
      	android:visibility="invisible"
+     	style="@style/Results"
     />
     
     <TextView
@@ -40,6 +43,7 @@
      	android:layout_centerHorizontal="true"
      	android:text="Distance travelled: "   
      	android:visibility="invisible"
+     	style="@style/Results"
      />
     
     <TextView
@@ -50,6 +54,7 @@
      	android:layout_centerHorizontal="true"
      	android:text="Calories burned"
      	android:visibility="invisible"
+     	style="@style/Results"
      />
     
     <Button 
