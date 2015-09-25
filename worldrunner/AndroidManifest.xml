@@ -30,6 +30,10 @@
             android:enabled="true" />
         <service android:name="step.detector.StepService"
             android:enabled="true"/>
+        <activity android:name="util.WalkThrough"
+            android:label="walkthrough">
+        </activity>
+        
         <activity android:name="Pregame"
                   android:label="@string/app_name">
         </activity>
@@ -38,6 +42,11 @@
                 android:name="Main"
                 android:label="@string/app_name"
                 android:parentActivityName="Pregame" >
+        </activity>
+        
+        <activity 
+            android:name="ScreenSlidePagerActivity"
+            android:label="Screen Slide Pager">
         </activity>
         
         <activity

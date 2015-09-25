@@ -127,7 +127,7 @@ public class Hub extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("onCreate", "ran hub create");
+		Log.d("notifTest", "ran hub create");
 		setContentView(R.layout.hub_activity);
 		
 		sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
@@ -263,22 +263,42 @@ public class Hub extends Activity {
 			if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
 	        	backgroundMusic.start();
 	        }
+			Intent intent = getIntent();
+			try {
+				int resumeValue = intent.getIntExtra("runmode", 0);
+				// 1 = dungeon run, 2 = route run, anything else = nothing
+				switch (resumeValue) {
+					case 1:
+						Log.d("notifTest", "route run");
+						break;
+					case 2:
+						Log.d("notifTest", "dungeon run");
+						break;
+					default:
+						Log.d("notifTest", "n/a");
+						break;
+				}
+			} catch (Exception e) {
+				Log.d("codeError", "failure in resuming game via notification from run");
+				Log.d("codeError",  e.getClass().getName(), e);
+			}
 		} catch (Exception e) {
-			if (partyList == null) { Log.d("random hub crash", "partyList is null"); }
-			if (currentCity == null) { Log.d("random hub crash", "current City is null"); }
-			if (context == null) { Log.d("random hub crash", "context is null"); } 
+    		Log.d("clutter crash", "random hub crash");
+			if (partyList == null) { Log.d("random hub crashes", "partyList is null"); }
+			if (currentCity == null) { Log.d("random hub crashes", "current City is null"); }
+			if (context == null) { Log.d("random hub crashes", "context is null"); } 
 			if (BattleInfo.partyMonsterBattleList == null) {
-	    		Log.d("random crash2", "partyMonsterBattleList is null");
-	    		Log.d("random crash2", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
-	    		Log.d("random crash2", "has the combat started? " + BackgroundChecker.battleStarted);
-	    		Log.d("random crash2", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
-	    		Log.d("random crash2", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
-	    		Log.d("random crash2", "was in the background? " + BackgroundChecker.isBackground);
-	    		Log.d("random crash2", "Are there now new enemies? " + BackgroundChecker.newEnemies);
+	    		Log.d("random hub crashes", "partyMonsterBattleList is null");
+	    		Log.d("random hub crashes", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
+	    		Log.d("random hub crashes", "has the combat started? " + BackgroundChecker.battleStarted);
+	    		Log.d("random hub crashes", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
+	    		Log.d("random hub crashes", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
+	    		Log.d("random hub crashes", "was in the background? " + BackgroundChecker.isBackground);
+	    		Log.d("random hub crashes", "Are there now new enemies? " + BackgroundChecker.newEnemies);
 	    		if (BattleInfo.partyList == null) {
 	    			Log.d("random crash", "partyList is null");
 	    		} else {
-	    			Log.d("random crash", "partyList is not null");	
+	    			Log.d("random hub crashes", "partyList is not null");	
 	    		}
 	    	}
 			Log.e("random hub crash", e.getClass().getName(), e);

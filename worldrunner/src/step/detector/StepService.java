@@ -2,12 +2,20 @@ package step.detector;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.lang.reflect.Type;
 
 import util.*;
 import step.detector.StepListener;
 import battleHelper.BackgroundChecker;
 import battleHelper.BattleInfo;
 import Abilities.Ability;
+import DB.Model.BattleMonster;
+import DB.Model.Monster;
+import Races.RouteRun;
+import android.R;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +26,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
+//TODO import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.brnleehng.worldrunner.Hub;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class StepService extends Service implements SensorEventListener, StepListener {
 	public static final String PREF_NAME = "RouteRunPref";
@@ -69,6 +81,16 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		mId = startId;
+		Intent notif = new Intent(getApplicationContext(), Hub.class);
+		// 1 = dungeon run, 2 = route run, anything else = nothing
+		intent.putExtra("runmode", 1);
+        PendingIntent pend = PendingIntent.getActivity(this, 0, notif, PendingIntent.FLAG_UPDATE_CURRENT /*Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP*/);
+        Notification notif2 = new Notification.Builder(this)
+        	.setSmallIcon(R.drawable.ic_btn_speak_now)
+        	.setContentText("My context text")
+        	.setContentIntent(pend).build();
+        startForeground(1337, notif2);
+		// this might also be the place to start the foreground service
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
@@ -83,7 +105,9 @@ public class StepService extends Service implements SensorEventListener, StepLis
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
+        
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+        // makes the service run in the foreground instead of the background
 	}
 	
 	// TODO Might be good to have in the future to save all of your monsters in
@@ -211,6 +235,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		} catch (Exception e) {
 			// TODO in actual prod code we would just restart everything, chances are, users
 			// won't be looking on the screen anyways and something probably went wrong anyways
+			Log.d("clutter crash", "step service");
 			if (BattleInfo.partyMonsterBattleList == null) {
 	    		Log.d("random crash2", "partyMonsterBattleList is null");
 	    		Log.d("random crash2", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
@@ -247,6 +272,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	 */
 	public void saveData() {
 		Log.d("crash data", "data is being saved in case of crash");
+		Log.d("crash data", "the steps are" + BattleInfo.steps);
 		GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Ability.class, new InterfaceAdapter<Ability>());
 		Gson gson = builder.create();
 		SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
@@ -283,17 +309,19 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	public void recoverFromLastPoint() {
 		GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Ability.class, new InterfaceAdapter<Ability>());
 		Gson gson = builder.create();
+		Type battleMonsterType = new TypeToken<List<BattleMonster>>(){}.getType();
+		Type monsterType = new TypeToken<List<Monster>>(){}.getType();
 		SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 		BattleInfo.exp = pref.getInt(EXP, 0);
 		BattleInfo.found = gson.fromJson(pref.getString(FOUND, null), ArrayList.class);
 		BattleInfo.coins = pref.getInt(COINS, 0);
 		BattleInfo.distance = pref.getLong(DISTANCE, 0);
 		BattleInfo.list = gson.fromJson(pref.getString(LIST, null), ArrayList.class);
-		BattleInfo.partyList = gson.fromJson(pref.getString(PLAYER_MONSTER, null), ArrayList.class);
-		BattleInfo.monsterList = gson.fromJson(pref.getString(ENEMY_MONSTER, null), ArrayList.class);
-		BattleInfo.enemyMonsterBattleList = gson.fromJson(pref.getString(ENEMY_BTATLEMONSTER, null), ArrayList.class);
-		BattleInfo.partyMonsterBattleList = gson.fromJson(pref.getString(PLAYER_BATTLEMONSTER, null), ArrayList.class);
-		BattleInfo.partyList = gson.fromJson(pref.getString(PLAYER_MONSTER, null), ArrayList.class);
+		BattleInfo.partyList = gson.fromJson(pref.getString(PLAYER_MONSTER, null), monsterType);
+		BattleInfo.monsterList = gson.fromJson(pref.getString(ENEMY_MONSTER, null), monsterType);
+		BattleInfo.enemyMonsterBattleList = gson.fromJson(pref.getString(ENEMY_BTATLEMONSTER, null), battleMonsterType);
+		BattleInfo.partyMonsterBattleList = gson.fromJson(pref.getString(PLAYER_BATTLEMONSTER, null), battleMonsterType);
+		BattleInfo.partyList = gson.fromJson(pref.getString(PLAYER_MONSTER, null), monsterType);
 		BattleInfo.deadPartyMonsters = pref.getInt(DEAD_PLAYER_MONSTER, 0);
 		BattleInfo.deadEnemies = 0; // sanitary reasons
 		BattleInfo.partyMonstersSize = pref.getInt(PARTY_MONSTERS_SIZE, 0); 

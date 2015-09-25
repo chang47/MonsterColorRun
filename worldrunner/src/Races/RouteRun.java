@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import step.detector.StepService;
 import step.detector.StepService.StepBinder;
+import Abilities.DamageAllAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
@@ -113,11 +114,16 @@ public class RouteRun extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					Bundle bundle = new Bundle();
+					/*Bundle bundle = new Bundle();
 					bundle.putStringArrayList("Log", BattleInfo.list);
 					RunLogDialog newFragment = new RunLogDialog();
 					newFragment.setArguments(bundle);
-					newFragment.show(getFragmentManager(), "Run Log");
+					newFragment.show(getFragmentManager(), "Run Log");*/
+					ArrayList<Monster> crashList = new ArrayList<Monster>();
+					while (true) {
+						crashList.add(new Monster(1, "Artic Babbit" , 100, 100, 125, 100, 0.0,2, 
+								new DamageAllAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1));
+					}
 				}
 			});
 			
@@ -201,24 +207,24 @@ public class RouteRun extends Fragment {
 	        stopWatch.start();
 	        return view;
     	} catch (Exception e) {
-    		Log.e("MonsterColorRun", e.getClass().getName(), e);
+    		Log.d("clutter crash", "route run create view crash");
     		if (Hub.partyList == null) { Log.d("random route run crash", "partyList is null"); }
 			if (Hub.currentCity == null) { Log.d("random route run crash", "current City is null"); }
 			if (BattleInfo.partyMonsterBattleList == null) {
-	    		Log.d("random route run crash", "partyMonsterBattleList is null");
-	    		Log.d("random route run crash", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
-	    		Log.d("random route run crash", "has the combat started? " + BackgroundChecker.battleStarted);
-	    		Log.d("random route run crash", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
-	    		Log.d("random route run crash", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
-	    		Log.d("random route run crash", "was in the background? " + BackgroundChecker.isBackground);
-	    		Log.d("random route run crash", "Are there now new enemies? " + BackgroundChecker.newEnemies);
+	    		Log.d("random route run crash on create view", "partyMonsterBattleList is null");
+	    		Log.d("random route run crash on create view", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
+	    		Log.d("random route run crash on create view", "has the combat started? " + BackgroundChecker.battleStarted);
+	    		Log.d("random route run crash on create view", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
+	    		Log.d("random route run crash on create view", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
+	    		Log.d("random route run crash on create view", "was in the background? " + BackgroundChecker.isBackground);
+	    		Log.d("random route run crash on create view", "Are there now new enemies? " + BackgroundChecker.newEnemies);
 	    		if (BattleInfo.partyList == null) {
-	    			Log.d("random route run crash", "partyList is null");
+	    			Log.d("random route run crash on create view", "partyList is null");
 	    		} else {
-	    			Log.d("random route run crash", "partyList is not null");	
+	    			Log.d("random route run crash on create view", "partyList is not null");	
 	    		}
 	    	}
-			Log.e("random hub crash", e.getClass().getName(), e);
+			Log.e("random route run crash on create view", e.getClass().getName(), e);
     		throw new Error(e);
     		//e.printStackTrace();
     		//return null;
@@ -250,6 +256,7 @@ public class RouteRun extends Fragment {
     	// TODO we don't really need to bind?
     	//getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     	getActivity().getApplicationContext().startService(intent);
+    	
     }
     
     @Override
@@ -299,6 +306,25 @@ public class RouteRun extends Fragment {
 			}
 			updateMonsterSteps();
     	} catch (Exception e) {  
+    		Log.d("clutter crash", "route run crash");
+    		if (Hub.partyList == null) { Log.d("random route run crash", "partyList is null"); }
+			if (Hub.currentCity == null) { Log.d("random route run crash", "current City is null"); }
+			if (BattleInfo.partyMonsterBattleList == null) {
+	    		Log.d("random route run crash", "partyMonsterBattleList is null");
+	    		Log.d("random route run crash", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
+	    		Log.d("random route run crash", "has the combat started? " + BackgroundChecker.battleStarted);
+	    		Log.d("random route run crash", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
+	    		Log.d("random route run crash", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
+	    		Log.d("random route run crash", "was in the background? " + BackgroundChecker.isBackground);
+	    		Log.d("random route run crash", "Are there now new enemies? " + BackgroundChecker.newEnemies);
+	    		if (BattleInfo.partyList == null) {
+	    			Log.d("random route run crash", "partyList is null");
+	    		} else {
+	    			Log.d("random route run crash", "partyList is not null");	
+	    		}
+	    	}
+			Log.e("random route run crash", e.getClass().getName(), e);
+			
     		Log.e("MonsterColorRun", e.getClass().getName(), e);
     		throw new Error(e);
     		//e.printStackTrace();
