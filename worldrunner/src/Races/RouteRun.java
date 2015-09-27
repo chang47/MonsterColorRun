@@ -119,11 +119,6 @@ public class RouteRun extends Fragment {
 					RunLogDialog newFragment = new RunLogDialog();
 					newFragment.setArguments(bundle);
 					newFragment.show(getFragmentManager(), "Run Log");*/
-					ArrayList<Monster> crashList = new ArrayList<Monster>();
-					while (true) {
-						crashList.add(new Monster(1, "Artic Babbit" , 100, 100, 125, 100, 0.0,2, 
-								new DamageAllAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2, 1), 0, 0, 0, 1, 0, 1));
-					}
 				}
 			});
 			
@@ -363,7 +358,6 @@ public class RouteRun extends Fragment {
     	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
 		enemyProgressBarList.clear();
-		Log.d("size of enemy", "" + BattleInfo.enemyMonsterBattleList.size());
 		for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
 			BattleMonster battleMonster = BattleInfo.enemyMonsterBattleList.get(i);
 			if (battleMonster != null) {
@@ -567,8 +561,6 @@ public class RouteRun extends Fragment {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			Log.d("disconnect", "on service connected");
-			StepBinder binder = (StepBinder) service;
-			//mService = binder.getService();
 			BackgroundChecker.boundStepService = true;
 		}
 

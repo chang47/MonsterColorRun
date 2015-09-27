@@ -1,6 +1,8 @@
 package util;
 
 import com.brnleehng.worldrunner.R;
+import com.viewpagerindicator.CirclePageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,15 +23,22 @@ public class WalkThrough extends Activity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.walkthrough_activity);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mViewPager.setAdapter(new WalkthroughPageAdapter());
+        int[] imageId = {R.drawable.background, R.drawable.background0, R.drawable.background1};
+        mViewPager.setAdapter(new WalkthroughPageAdapter(imageId));
+        CirclePageIndicator titleIndicator = (CirclePageIndicator)findViewById(R.id.titlesss);
+        titleIndicator.setViewPager(mViewPager);
         //mViewPager.setOnPageChangeListener(new WalkthroughPageChangeListener());
     }
     
     class WalkthroughPageAdapter extends PagerAdapter {
+    	int[] imageId;
+    	
+    	public WalkthroughPageAdapter(int[] imageId) {
+    		this.imageId = imageId;
+    	}
     	
     	@Override
     	public int getCount() {
@@ -47,22 +56,21 @@ public class WalkThrough extends Activity {
              LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
              View imageViewContainer = inflater.inflate(R.layout.walkthrough_single_view, null);
              ImageView imageView = (ImageView) imageViewContainer.findViewById(R.id.image_view);
-
-             switch(position) {
-             case 0:
-                 imageView.setImageResource(R.drawable.background);
-                 break;
-
-             case 1:
-                 imageView.setImageResource(R.drawable.background0);
-                 break;
-
-             case 2:
-                 imageView.setImageResource(R.drawable.background1);
-                 break;
-             }
-
-             ((ViewPager) container).addView(imageViewContainer, 0);
+             imageView.setImageResource(imageId[position]);
+/*             switch(position) {
+	             case 0:
+	                 imageView.setImageResource(R.drawable.background);
+	                 break;
+	
+	             case 1:
+	                 imageView.setImageResource(R.drawable.background0);
+	                 break;
+	
+	             case 2:
+	                 imageView.setImageResource(R.drawable.background1);
+	                 break;
+             }*/
+             ((ViewPager) container).addView(imageViewContainer);
              return imageViewContainer;
     	}
     	

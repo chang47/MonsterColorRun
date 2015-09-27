@@ -347,7 +347,7 @@ public class BattleInfo {
 		        		if (iEnemyAttack == -1) {
 		        			throw new Error("Damage ability attack index is -1, impossible!");
 		        		}
-		        		DamageAllAbility dAbility = (DamageAllAbility) partyMonsterBattleList.get(i).monster.activeAbility;
+		        		DamageAbility dAbility = (DamageAbility) partyMonsterBattleList.get(i).monster.activeAbility;
 	        			double damage = dAbility.damage * partyMonsterBattleList.get(i).monster.attack;
 	        			enemyMonsterBattleList.get(iEnemyAttack).currentHp -= damage;
 //	            		list.add(partyMonsterBattleList.get(i).monster.name + " Used Ability " +  partyMonsterBattleList.get(i).monster.ability.name + 

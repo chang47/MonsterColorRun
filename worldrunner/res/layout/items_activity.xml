@@ -13,7 +13,7 @@
     	    android:id="@+id/equipEquipment"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:text="Equip Equipment"/>
+    	    android:text="Edit Party"/>
     	
  	    <!-- <Button 
     	    android:id="@+id/sellEquipment"
@@ -25,7 +25,7 @@
     	    android:id="@+id/viewSticker"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:text="View Sticker"/>
+    	    android:text="View Monsters"/>
     	
     	<!-- <Button 
     	    android:id="@+id/equipSticker"
@@ -37,6 +37,6 @@
     	    android:id="@+id/sellSticker"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:text="Sell Sticker"/>
+    	    android:text="Sell Monsters"/>
     	  
 </LinearLayout>

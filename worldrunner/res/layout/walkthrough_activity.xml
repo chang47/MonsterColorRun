@@ -3,16 +3,24 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
+    <com.viewpagerindicator.CirclePageIndicator
+		android:id="@+id/titlesss"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+	/>
+    
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/titless"
         android:layout_above="@+id/screen_navigation_button" />
+   
 
     <!--  This TextView will not swipe when you swipe in the ViewPager -->
 
     <TextView
-        android:id="@id/screen_navigation_button"
+        android:id="@+id/screen_navigation_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

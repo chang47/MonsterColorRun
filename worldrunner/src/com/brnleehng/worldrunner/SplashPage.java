@@ -77,12 +77,11 @@ public class SplashPage extends Activity {
 			public void onClick(View v) {
 				DBManager db = new DBManager(getApplicationContext());
 				db.close();
-				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
+				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				sp.play(soundIds[1], 1, 1, 1, 0, 1);
 				startActivity(intent);
 			}
 		});
-		
 	}
 	
 	@Override
