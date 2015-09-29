@@ -1,7 +1,7 @@
 package com.brnleehng.worldrunner;
 
-import util.WalkThrough;
 import DB.DBManager;
+import Intro.WalkThrough;
 import android.R.anim;
 import android.app.Activity;
 import android.content.Intent;
@@ -77,7 +77,7 @@ public class SplashPage extends Activity {
 			public void onClick(View v) {
 				DBManager db = new DBManager(getApplicationContext());
 				db.close();
-				Intent intent = new Intent(getApplicationContext(), Hub.class);
+				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
 				sp.play(soundIds[1], 1, 1, 1, 0, 1);
 				startActivity(intent);
 			}

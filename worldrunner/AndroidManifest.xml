@@ -30,7 +30,7 @@
             android:enabled="true" />
         <service android:name="step.detector.StepService"
             android:enabled="true"/>
-        <activity android:name="util.WalkThrough"
+        <activity android:name="Intro.WalkThrough"
             android:label="walkthrough">
         </activity>
         
