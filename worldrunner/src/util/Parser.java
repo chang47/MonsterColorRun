@@ -163,7 +163,8 @@ public class Parser {
 	}
 	
 	/**
-	 * Converts a sticker to a route monster
+	 * Converts a sticker and the speicifc route monster to be a monster that will be used
+	 * uses sticker information and route monster's level and capture
 	 * @param sticker
 	 * @param routeMonster
 	 * @return
@@ -176,7 +177,8 @@ public class Parser {
 	}
 	
 	/**
-	 * Converts a sticker to a dungeon monster
+	 * Converts a sticker and the specific dungeon monster to be a monster that will be used
+	 * uses sticker information and dungeon monster's level and capture
 	 * @param sticker
 	 * @param dungeonMonster
 	 * @return

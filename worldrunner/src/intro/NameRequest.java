@@ -1,4 +1,4 @@
-package Intro;
+package intro;
 
 import com.brnleehng.worldrunner.R;
 
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class NameRequest extends Activity {
 	private EditText editText;
@@ -23,11 +24,16 @@ public class NameRequest extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				DBManager db = new DBManager(getApplicationContext());
-				db.close();
-				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
-				intent.putExtra("username", editText.getText());
-				startActivity(intent);
+				String username = editText.getText().toString();
+				if (username != "") {
+					DBManager db = new DBManager(getApplicationContext());
+					db.close();
+					Intent intent = new Intent(getApplicationContext(), SelectMonster.class);
+					intent.putExtra("username", username);
+					startActivity(intent);
+				} else {
+					Toast.makeText(getApplicationContext(), "Please enter a username", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}

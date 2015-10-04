@@ -201,6 +201,12 @@ public class DBManager extends SQLiteOpenHelper {
 		db.close();
 	}
 	
+	public void addStickerDirectly(Sticker sticker) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		StickerManager.addSticker(db, sticker);
+		db.close();
+	}
+	
 	public void deleteSticker(Monster monster) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		StickerManager.deleteSticker(db, monster.uid);

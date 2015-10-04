@@ -25,20 +25,17 @@ public class PlayerManager {
 	public static void create(SQLiteDatabase db) {
 		String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
                 + PID + " INTEGER PRIMARY KEY," + USERNAME + " TEXT,"
-                + FNAME + " TEXT," + LNAME + " TEXT," + LEVEL + " INTEGER," +
-                EXP +  " INTEGER, " + COIN + " INTEGER," + GEM + " INTEGER," +
+                + LEVEL + " INTEGER," +  EXP +  " INTEGER, " + COIN + " INTEGER," + GEM + " INTEGER," +
                 CURRENT_STICKER + " INTEGER," + MAX_STICKER + " INTEGER," +
                 CITY + " INTEGER" + ")";
 		db.execSQL(CREATE_PLAYER_TABLE);
-		// pid, username, fname, lname, level, exp, coin, gem, current, max, city
-		createInitial(db, new Player(1, "Coralbue", "Josh", "Chang", 1, 0, 0, 5, 0, 30, 1));
+		// pid, username, level, exp, coin, gem, current, max, city
+		createInitial(db, new Player(1, "fake", 1, 0, 0, 5, 0, 30, 1));
 	}
 	
 	private static void createInitial(SQLiteDatabase db, Player player) {
 		ContentValues values = new ContentValues();
 		values.put(USERNAME, player.username);
-		values.put(FNAME, player.fname);
-		values.put(LNAME, player.lname);
 		values = addContent(values, player);
 		db.insert(TABLE_PLAYER, null, values);
 	}
@@ -56,15 +53,13 @@ public class PlayerManager {
 				Player player = new Player();
 				player.pid = cursor.getInt(0);
 				player.username = cursor.getString(1);
-				player.fname = cursor.getString(2);
-				player.lname = cursor.getString(3);
-				player.level = cursor.getInt(4);
-				player.exp = cursor.getInt(5);
-				player.coin = cursor.getInt(6);
-				player.gem = cursor.getInt(7);
-				player.currentSticker = cursor.getInt(8);
-				player.maxSticker = cursor.getInt(9);
-				player.city = cursor.getInt(10);
+				player.level = cursor.getInt(2);
+				player.exp = cursor.getInt(3);
+				player.coin = cursor.getInt(4);
+				player.gem = cursor.getInt(5);
+				player.currentSticker = cursor.getInt(6);
+				player.maxSticker = cursor.getInt(7);
+				player.city = cursor.getInt(8);
 				list.add(player);
 			} while (cursor.moveToNext());
 		}
@@ -80,8 +75,6 @@ public class PlayerManager {
 	public static void addPlayer(SQLiteDatabase db, Player player) {
 		ContentValues values = new ContentValues();
 		values.put(USERNAME, player.username);
-		values.put(FNAME, player.fname);
-		values.put(LNAME, player.lname);
 		values = addContent(values, player);
 		db.insert(TABLE_PLAYER, null, values);
 	}

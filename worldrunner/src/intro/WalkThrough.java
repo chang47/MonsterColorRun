@@ -1,4 +1,4 @@
-package Intro;
+package intro;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;

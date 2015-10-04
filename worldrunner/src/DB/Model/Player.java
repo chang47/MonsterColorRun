@@ -4,8 +4,6 @@ package DB.Model;
 public class Player {
 	public int pid;
 	public String username;
-	public String fname;
-	public String lname;
 	public int level;
 	public int exp;
 	public int coin;
@@ -16,14 +14,10 @@ public class Player {
 	
 	public Player() { }
 	
-	public Player(int pid, String username, String fname, String lname,
-			int level, int exp, int coin, int gem, int currentSticker, int maxSticker,
-			int city) {
+	public Player(int pid, String username, int level, int exp, int coin, int gem, int currentSticker, int maxSticker, int city) {
 		super();
 		this.pid = pid;
 		this.username = username;
-		this.fname = fname;
-		this.lname = lname;
 		this.level = level;
 		this.exp = exp;
 		this.coin = coin;
