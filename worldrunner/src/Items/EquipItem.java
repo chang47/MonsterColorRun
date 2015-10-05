@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -36,13 +37,9 @@ public class EquipItem extends Fragment {
 	private ImageView equipment5;
 	private ImageView[] equipmentViews;
 	
-	private ImageView sticker1;
-	private ImageView sticker2;
-	private ImageView sticker3;
-	private ImageView sticker4;
-	private ImageView sticker5;
 	private ImageView[] stickerViews;
-	private Button equipStickerButton;
+	private TextView[] stickerLevelViews;
+	
 	
 	/**
 	 * The method that's called to create a View
@@ -58,6 +55,7 @@ public class EquipItem extends Fragment {
 		//equippedSticker = Hub.equippedStickers;
 		stickerViews = new ImageView[5];
 		equipmentViews = new ImageView[5];
+		stickerLevelViews = new TextView[5];
 		
 		// setup equipments
 	/*	equipment1 = (ImageView) view.findViewById(R.id.Equipment1);
@@ -72,6 +70,12 @@ public class EquipItem extends Fragment {
 		stickerViews[2] = (ImageView) view.findViewById(R.id.Sticker3);
 		stickerViews[3] = (ImageView) view.findViewById(R.id.Sticker4);
 		stickerViews[4] = (ImageView) view.findViewById(R.id.Sticker5);
+		
+		stickerLevelViews[0] = (TextView) view.findViewById(R.id.monsterLevel1);
+		stickerLevelViews[1] = (TextView) view.findViewById(R.id.monsterLevel2);
+		stickerLevelViews[2] = (TextView) view.findViewById(R.id.monsterLevel3);
+		stickerLevelViews[3] = (TextView) view.findViewById(R.id.monsterLevel4);
+		stickerLevelViews[4] = (TextView) view.findViewById(R.id.monsterLevel5);
 				
 		// Adds in sticker image
 		// TODO no need, but we need a default empty picture
@@ -80,6 +84,7 @@ public class EquipItem extends Fragment {
 				int resId = getResources().getIdentifier("head" + equippedMonsters.get(i).monsterId, "drawable", getActivity().getPackageName());
 	    		if (resId != 0) {
 	    			stickerViews[i].setImageResource(resId);
+	    			stickerLevelViews[i].setText("" + equippedMonsters.get(i).level);
 	    		}
 			}
 		}
@@ -92,6 +97,8 @@ public class EquipItem extends Fragment {
 				@Override
 				public void onClick(View v) {
 					// goes to EquipSticker
+					
+					// position is 1 index based
 					Hub.equipSticker(temp + 1, equippedMonsters.get(temp));
 				}
 			});

@@ -52,19 +52,10 @@ public class EquipSticker extends Fragment {
 		// Note: the first value is set to be null so that we can make the remove
 		// button in the gridview.
 		unequippedMonsters = Hub.unequippedMonster;
-		
 		// TODO temp that needs to be replace soon
 		equippedMonsters = Hub.equippedStickers;
 		//equippedSticker = Hub.equippedStickers;
 		
-		for (Monster monster: unequippedMonsters) {
-			if (monster != null) {
-				Log.d("unequipped sticker", monster.name);
-			} else {
-				Log.d("unequipped sticker", "empty");
-			}
-		}
-		// TODO is this the correct adapter? Need to reformat adapters to make sense
 		final StickerAdapter adapter = new StickerAdapter(getActivity(), R.layout.mylist, unequippedMonsters);
 		gridview = (GridView) view.findViewById(R.id.viewGridView);
 		gridview.setAdapter(adapter);

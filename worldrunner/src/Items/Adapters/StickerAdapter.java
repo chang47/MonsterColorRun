@@ -48,7 +48,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 	private class ViewHolder {
 		//TextView txtTitle;
 		ImageView imageView;
-		//TextView lvl;
+		TextView lvl;
 		//TextView exp;
 		//TextView rch;
 	}
@@ -65,7 +65,6 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
  			
  			//holder.txtTitle = (TextView) view.findViewById(R.id.item);
  			holder.imageView = (ImageView) view.findViewById(R.id.icon);
- 			//holder.lvl = (TextView) view.findViewById(R.id.textView1);
  			//holder.exp = (TextView) view.findViewById(R.id.textView2);
  			//holder.rch = (TextView) view.findViewById(R.id.textView3);
  			view.setTag(holder);
@@ -79,7 +78,8 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 		} else {
 			//holder.txtTitle.setText(monsterList.get(position).name);
 			int resId = context.getResources().getIdentifier("head" + monsterList.get(position).monsterId, "drawable", context.getPackageName());
-			
+ 			holder.lvl = (TextView) view.findViewById(R.id.listLevel);
+ 			holder.lvl.setText("" + monsterList.get(position).level);
 			if (resId != 0) {
 				holder.imageView.setImageResource(resId);
 			} else {

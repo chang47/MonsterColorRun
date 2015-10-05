@@ -42,16 +42,6 @@ public class ViewSticker extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Monster SelectedItem = list.get(position);
-				Toast.makeText(getActivity(). getApplicationContext(), SelectedItem.name, Toast.LENGTH_SHORT).show();
-			}
-		});
-		
-		gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			
-			@Override 
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
 				if (adapter.getItem(position) != null) {
 					Toast.makeText(getActivity(), adapter.getItem(position).name, Toast.LENGTH_LONG).show();
 			
@@ -61,9 +51,10 @@ public class ViewSticker extends Fragment {
 					newFragment.setStyle(DialogFragment.STYLE_NO_TITLE,android.R.style.Theme_Holo_Light);
 					newFragment.show(getFragmentManager(), "View Sticker");
 				}
-				return true;
 			}
 		});
+		
+		
 		return view;
 	}  
 }
