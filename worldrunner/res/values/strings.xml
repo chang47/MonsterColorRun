@@ -8,6 +8,10 @@
     <string name="mph">Current Speed: 0</string>
     <string name="reset">Reset</string>
     <string name="go">Go</string>
+    <string name="feet">feet</string>
+    <string name="inch">inch</string>
+    <string name="weight">weigth</string>
+    <string name="firstTime">firstTime</string>
     
     <string-array name="race_array">
         <item>10K</item>
@@ -31,4 +35,5 @@
         <item>Nike Gloves</item>
         <item>Nike Hat</item>
     </string-array>
+    
 </resources>

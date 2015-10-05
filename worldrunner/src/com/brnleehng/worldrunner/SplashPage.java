@@ -5,7 +5,9 @@ import intro.WalkThrough;
 import DB.DBManager;
 import android.R.anim;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -28,12 +30,16 @@ import android.media.SoundPool;
 public class SplashPage extends Activity {
 	
 	MediaPlayer backgroundMusic;
+	private boolean firstTime;
+	private SharedPreferences pref;
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		pref = getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		firstTime = pref.getBoolean(getString(R.string.firstTime), true);
 		// sets up the sound effects to be used 
 		final SoundPool sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
 		final int soundIds[] = new int[2];
@@ -76,9 +82,15 @@ public class SplashPage extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				DBManager db = new DBManager(getApplicationContext());
-				db.close();
-				Intent intent = new Intent(getApplicationContext(), NameRequest.class);
+				Intent intent;
+				if (firstTime) {
+					intent = new Intent(getApplicationContext(), NameRequest.class);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putBoolean(getString(R.string.firstTime), false);
+					editor.commit();
+				} else {
+					intent = new Intent(getApplicationContext(), Hub.class);
+				}
 				sp.play(soundIds[1], 1, 1, 1, 0, 1);
 				startActivity(intent);
 			}

@@ -585,7 +585,7 @@ public class RouteRun extends Fragment {
 			tvDistance.setText("" + (double) Math.round(BattleInfo.distance * 100) / 100);
 			tvCoin.setText("" + BattleInfo.coins + " coin");
 			// TODO improve the calculation by letting the user save their weight and height
-			tvCalories.setText("" + Math.round(BattleInfo.distance * 100));
+			tvCalories.setText("" + Math.round(BattleInfo.calories * 100) / 100);
 			updateUI();
 		}
 	};

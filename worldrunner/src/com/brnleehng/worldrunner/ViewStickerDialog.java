@@ -55,11 +55,12 @@ public class ViewStickerDialog extends DialogFragment {
         
         monster = Hub.viewSticker;
         
-        attack.setText("Atk: " + monster.attack);
-        defense.setText("Def: " + monster.defense);
-        speed.setText("Spd: " + monster.speed);
-        hp.setText("HP: " + monster.hp);
-        exp.setText("EXP to go: " + monster.exp);
+        attack.setText("Atk: " + monster.attack * 10 * monster.level / 100);
+        defense.setText("Def: " + monster.defense * 10 * monster.level / 100);
+        speed.setText("Spd: " + monster.speed * 10 * monster.level / 100);
+        hp.setText("HP: " + monster.hp * 15 * monster.level / 100);
+        int expToGo = (monster.level == 100) ? 0 : Hub.expTable.get(monster.level)[0] - monster.exp;
+        exp.setText("EXP to go: " + expToGo);
         level.setText("Level: " + monster.level);
         
         expBar.setProgress(10);

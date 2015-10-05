@@ -177,16 +177,24 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	    		// calorie = pounds / 2.2 * MET * 5 seconds / 60 seconds / 60 minutes /
 	    		// MET 3 for walking, 6 for running, good enough!
 	    		double met = 0;
+	    		double distanceTraveled = 0;
+	    		// formula for calories: CALORIES/MIN	
+	    		// walk: .03 x wt in lbs	
+	    		// run: .07 x wt in lbs
 	    		if (stepsTaken >= 15) {
 	    			// running pace is 3 feet per step
 	    			met = 9;
-	    			BattleInfo.distance += (double) stepsTaken * (3.0 / 5280);
+	    			distanceTraveled = (double) stepsTaken * (3.0 / 5280);
+	    			BattleInfo.distance += distanceTraveled;
+	    			BattleInfo.calories += 0.72 * Hub.weight * distanceTraveled; 
 	    		} else {
 	    			// running pace is 2.2 feet per step
 	    			met = 3.5;
-	    			BattleInfo.distance += (double) stepsTaken * (2.2  / 5280);	
+	    			distanceTraveled = (double) stepsTaken * (3.0 / 5280);
+	    			BattleInfo.distance += distanceTraveled;	
+	    			BattleInfo.calories += 0.57 * Hub.weight * distanceTraveled; 
 	    		}
-	    		BattleInfo.calories += 200 / 2.2 * met * 5 / 60 / 60;
+	    		//BattleInfo.calories += Hub.weight / 2.2 * met * 5 / 60 / 60;
 	    	}
 	    	
 	    	// prevents the possibility of running the code in an unexpected state

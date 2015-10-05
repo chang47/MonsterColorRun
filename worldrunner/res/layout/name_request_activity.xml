@@ -13,15 +13,6 @@
         android:text="Please enter a username!"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/nameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nameTxt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="76dp"
-        android:text="Done" />
-
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
@@ -32,5 +23,88 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName" />
+
+
+    <Button
+        android:id="@+id/nameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="19dp"
+        android:text="Done" />
+
+    <NumberPicker
+        android:id="@+id/weightPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nameTxt"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="19dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignRight="@+id/nameTxt"
+        android:text="Enter height:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <NumberPicker
+        android:id="@+id/feetPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nameButton"
+        android:layout_alignTop="@+id/weightPicker"
+        android:layout_marginLeft="18dp" />
+
+    <NumberPicker
+        android:id="@+id/inchPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/feetPicker"
+        android:layout_toRightOf="@+id/feetPicker" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/feetPicker"
+        android:layout_alignRight="@+id/nameButton"
+        android:text="ft"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameEditText"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_toLeftOf="@+id/textView2"
+        android:text="Enter Weight:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignLeft="@+id/nameEditText"
+        android:layout_marginLeft="18dp"
+        android:text="lb"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/nameEditText"
+        android:layout_below="@+id/textView2"
+        android:text="in"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

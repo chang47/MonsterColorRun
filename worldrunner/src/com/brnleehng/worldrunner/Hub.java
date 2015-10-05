@@ -37,6 +37,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -105,6 +106,10 @@ public class Hub extends Activity {
 	public static SoundPool sp;
 	static int soundIds[];
 	
+	public static int weight;
+	public static int feet;
+	public static int inch;
+	
 	//private static FragmentTransaction ft;
 	@Override
 	protected void onStart() {
@@ -130,6 +135,11 @@ public class Hub extends Activity {
 		Log.d("notifTest", "ran hub create");
 		setContentView(R.layout.hub_activity);
 		
+		SharedPreferences pref = getApplication().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		weight = pref.getInt(getString(R.string.weight), 150);
+		feet = pref.getInt(getString(R.string.feet), 5);
+		inch = pref.getInt(getString(R.string.inch), 7);
+		Log.d("playerInfo", "weight " + weight + " feet " + feet + " inch " + inch);
 		sp = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
 		soundIds = new int[2];
 		soundIds[0] = sp.load(getBaseContext(), R.raw.click, 1);
