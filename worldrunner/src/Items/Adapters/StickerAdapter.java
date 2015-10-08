@@ -79,7 +79,7 @@ public class StickerAdapter extends ArrayAdapter<Monster> {
 			//holder.txtTitle.setText(monsterList.get(position).name);
 			int resId = context.getResources().getIdentifier("head" + monsterList.get(position).monsterId, "drawable", context.getPackageName());
  			holder.lvl = (TextView) view.findViewById(R.id.listLevel);
- 			holder.lvl.setText("" + monsterList.get(position).level);
+ 			holder.lvl.setText("Lv." + monsterList.get(position).level);
 			if (resId != 0) {
 				holder.imageView.setImageResource(resId);
 			} else {

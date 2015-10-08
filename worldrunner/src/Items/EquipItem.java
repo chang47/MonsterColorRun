@@ -84,7 +84,7 @@ public class EquipItem extends Fragment {
 				int resId = getResources().getIdentifier("head" + equippedMonsters.get(i).monsterId, "drawable", getActivity().getPackageName());
 	    		if (resId != 0) {
 	    			stickerViews[i].setImageResource(resId);
-	    			stickerLevelViews[i].setText("" + equippedMonsters.get(i).level);
+	    			stickerLevelViews[i].setText("Lv." + equippedMonsters.get(i).level);
 	    		}
 			}
 		}

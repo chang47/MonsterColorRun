@@ -16,6 +16,8 @@ public class BackgroundChecker {
 	public static boolean boundStepService = false;
 	public static boolean endService = false;
 	public static boolean battleStarted = false;
+	public static String time = "";
+	public static String locationName = "";
 	
 	public static void init(){
 		 isBackground = false;
@@ -26,6 +28,6 @@ public class BackgroundChecker {
 		 boundStepService = false;
 		 endService = false;
 		 battleStarted = false;
-			
+		 
 	}
 }

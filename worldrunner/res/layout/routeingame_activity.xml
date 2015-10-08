@@ -186,14 +186,25 @@
 			   android:layout_gravity="top">
 			   
 			   <TextView  
-	           android:id="@+id/coinsEarned"
-	           android:layout_width="wrap_content"
-	           android:layout_height="wrap_content"
-	           android:layout_alignParentRight="true"
-	           android:layout_alignParentTop="true"
-	           android:text="0 coin"
-	           android:textColor="#000000"
-	           android:textSize="20sp" />
+		           android:id="@+id/coinsEarned"
+		           android:layout_width="wrap_content"
+		           android:layout_height="wrap_content"
+		           android:layout_alignParentRight="true"
+		           android:layout_alignParentTop="true"
+		           android:text="0 coin"
+		           android:textColor="#000000"
+		           android:textSize="20sp" />
+
+			   <TextView
+			       android:id="@+id/monstersToDefeat"
+			       android:layout_width="wrap_content"
+			       android:layout_height="wrap_content"
+			       android:layout_alignParentLeft="true"
+			       android:layout_centerVertical="true"
+			       android:text=""
+			       android:textSize="16sp"
+			       android:textColor="#000000" />
+
 		</RelativeLayout>
 	   	<LinearLayout
 	        android:id="@+id/enemyPartyLayout1"

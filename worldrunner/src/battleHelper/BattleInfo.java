@@ -42,6 +42,7 @@ public class BattleInfo {
     public static long currentTime;
     public static int currentStep;
     public static double calories;
+    public static int destinationObjective = 3;
     // shouldn't have since the DB technically should only be accessed via
     // the controller (Hub), but we'll just have it here anyways for now
     private DBManager db;
@@ -416,7 +417,7 @@ public class BattleInfo {
     		if (list.size() < 100)
     			list.add("Defeated all enemies");
 			fightObjective++;	
-			if (fightObjective > 2) {
+			if (fightObjective >= destinationObjective) {
 				finishEnabled = true;
 			}
 			generateEnemies();

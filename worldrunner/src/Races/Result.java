@@ -1,5 +1,6 @@
 package Races;
 
+import battleHelper.BackgroundChecker;
 import battleHelper.BattleInfo;
 
 import com.brnleehng.worldrunner.Hub;
@@ -47,14 +48,25 @@ public class Result extends Fragment {
 		backgroundMusic.start();
 		View view = inflater.inflate(R.layout.result_activity, container, false);
 		coin = (TextView) view.findViewById(R.id.resultCoins);
+		coin.setText("Coins earned: " + BattleInfo.coins);
+		
 		time = (TextView) view.findViewById(R.id.resultTime);
+		Log.d("mytime", BackgroundChecker.time);
+		time.setText("Time spent running: " + BackgroundChecker.time);
+		
 		steps = (TextView) view.findViewById(R.id.resultSteps);
+		steps.setText("Steps Taken: " + BattleInfo.steps);
+		
 		distance = (TextView) view.findViewById(R.id.resultDistances1);
+		distance.setText("Distance travelled: " + BattleInfo.distance);
+		
 		calories = (TextView) view.findViewById(R.id.resultCalories);
+		calories.setText("Calories burned: " + BattleInfo.calories);
+		
 		button = (Button) view.findViewById(R.id.resultDone);
 		RelativeLayout done = (RelativeLayout) view.findViewById(R.id.overallResultContainer);
 		
-		coin.setText("Coins earned: " + BattleInfo.coins);
+		
 		done.setOnClickListener(new OnClickListener() {
 			
 			@Override

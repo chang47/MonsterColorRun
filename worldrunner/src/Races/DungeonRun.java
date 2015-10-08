@@ -105,6 +105,8 @@ public class DungeonRun extends Fragment {
 	        txtRouteName.setText(Hub.currentDungeon.dungeonName);
 	        tvDistance.setText("0.00");
 	        
+	        BackgroundChecker.locationName = Hub.currentDungeon.dungeonName;
+	        
 	        // Once you're done with your run you can save all of the
 	        // new monsters that you've caught. Ignore for now
 	        btnLog.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +156,8 @@ public class DungeonRun extends Fragment {
 					}
 					
 					// updates the player's status
-
+					BackgroundChecker.time = tvTime.getText().toString();
+					
 					Hub.player.coin += BattleInfo.coins;
 					db.updatePlayer(Hub.player);
 					

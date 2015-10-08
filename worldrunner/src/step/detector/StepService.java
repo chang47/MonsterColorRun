@@ -84,10 +84,11 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		Intent notif = new Intent(getApplicationContext(), Hub.class);
 		// 1 = dungeon run, 2 = route run, anything else = nothing
 		intent.putExtra("runmode", 1);
-        PendingIntent pend = PendingIntent.getActivity(this, 0, notif, PendingIntent.FLAG_UPDATE_CURRENT /*Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP*/);
+        PendingIntent pend = PendingIntent.getActivity(this, 0, notif, /*PendingIntent.FLAG_UPDATE_CURRENT*/ Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         Notification notif2 = new Notification.Builder(this)
-        	.setSmallIcon(R.drawable.ic_btn_speak_now)
-        	.setContentText("My context text")
+        	.setSmallIcon(com.brnleehng.worldrunner.R.drawable.icon)
+        	.setContentTitle("Monster Color Run")
+        	.setContentText("Running in " + BackgroundChecker.locationName)
         	.setContentIntent(pend).build();
         startForeground(1337, notif2);
 		// this might also be the place to start the foreground service

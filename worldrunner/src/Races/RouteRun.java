@@ -50,6 +50,7 @@ public class RouteRun extends Fragment {
     private TextView tvPace;
     private TextView tvCalories;
     private TextView tvCoin;
+    private TextView monsterSet;
     private Button stopMission;
     private Button btnLog;
     private LinearLayout enemyPartyLayout;
@@ -91,7 +92,7 @@ public class RouteRun extends Fragment {
 	        tvCalories = (TextView) view.findViewById(R.id.routeRunCaloriesTxt);
 	        tvCoin = (TextView) view.findViewById(R.id.coinsEarned);
 	        txtRouteName = (TextView) view.findViewById(R.id.CurrentRouteText);
-	        
+	        monsterSet = (TextView) view.findViewById(R.id.monstersToDefeat);
 	        //monsterList = Hub.monsterList;
 	        enemyProgressBarList = new ArrayList<ProgressBar>();
 	        playerProgressBarList = new ProgressBar[5];
@@ -107,6 +108,8 @@ public class RouteRun extends Fragment {
 	        steps = 0;
 	        txtRouteName.setText(Hub.currentRoute.name);
 	        tvDistance.setText("0.00");
+	        
+	        BackgroundChecker.locationName = Hub.currentRoute.name;
 	        
 	        // Once you're done with your run you can save all of the
 	        // new monsters that you've caught. Ignore for now
@@ -155,7 +158,8 @@ public class RouteRun extends Fragment {
 							db.updateSticker(monster);
 						}					
 					}
-					
+					BackgroundChecker.time = tvTime.getText().toString();
+					Log.d("mytime", tvTime.getText().toString() + BackgroundChecker.time);
 					// updates the player's status
 					if (BattleInfo.finishEnabled) {
 						int newCity = Hub.currentRoute.to;
@@ -584,6 +588,13 @@ public class RouteRun extends Fragment {
 			tvPace.setText("steps: " + steps);
 			tvDistance.setText("" + (double) Math.round(BattleInfo.distance * 100) / 100);
 			tvCoin.setText("" + BattleInfo.coins + " coin");
+			int monstersToGo = BattleInfo.destinationObjective - BattleInfo.fightObjective;
+			// TODO not very efficient as we have to recalculate forever
+			if (monstersToGo <= 0) {
+				monsterSet.setText("Arrived at destination");
+			} else {
+				monsterSet.setText("" + monstersToGo + " More Sets");
+			}
 			// TODO improve the calculation by letting the user save their weight and height
 			tvCalories.setText("" + Math.round(BattleInfo.calories * 100) / 100);
 			updateUI();
