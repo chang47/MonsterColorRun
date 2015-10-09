@@ -146,7 +146,7 @@ public class BattleInfo {
 		BackgroundChecker.monsterWasAttacked = false;
     	caughtAlready = false;
     	deadEnemies = 0;
-    	enemyPartySize = (int) ((Math.random() * 3) + 3); // originally 3 and 1
+    	enemyPartySize = (int) ((Math.random() * 3) + 1); // originally 3 and 1
     	Log.d("size of enemy", "generated " + enemyPartySize);
     	// TODO remove
     	if (list.size() < 100)
@@ -175,7 +175,7 @@ public class BattleInfo {
     			partyMonsterBattleList.add(null);
     		} else {
     			partyMonstersSize++;
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), true));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
     		}
     	}
     }
@@ -391,6 +391,8 @@ public class BattleInfo {
 			Log.d("dead check", enemyMonsterBattleList.get(iPartyAttack).monster.name + " is dead");
 			// TODO add to other
 			exp += enemyMonsterBattleList.get(iPartyAttack).monster.exp * enemyMonsterBattleList.get(iPartyAttack).monster.level / 2;
+			Log.d("monster defeat", "defeated enemy gained " + enemyMonsterBattleList.get(iPartyAttack).monster.exp +
+					" at level " + enemyMonsterBattleList.get(iPartyAttack).monster.level);
     		//list.add(enemyMonsterBattleList.get(iPartyAttack).monster.name + " has been defeated!");
     		deadEnemies++;
     		captureMonster(iPartyAttack);

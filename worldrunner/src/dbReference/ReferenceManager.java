@@ -140,10 +140,10 @@ public class ReferenceManager extends SQLiteOpenHelper {
 	
 	public SparseArray<List<DungeonMonsters>> getDungeonMonstersList() {
 		List<DungeonMonsters> monsters = new ArrayList<DungeonMonsters>();
-		//int id, int monsterId, int routeId, int capture, int level, int monsterRouteId
-		monsters.add(new DungeonMonsters(1, 4, 1, 5, 2));
-		monsters.add(new DungeonMonsters(2, 5, 1, 5, 2));
-		monsters.add(new DungeonMonsters(3, 6, 1, 5, 2));
+		//int id, int monsterId, int routeId, int capture, int level
+		monsters.add(new DungeonMonsters(1, 4, 1, 5, 1));
+		monsters.add(new DungeonMonsters(2, 5, 1, 5, 1));
+		monsters.add(new DungeonMonsters(3, 6, 1, 5, 1));
 		monsters.add(new DungeonMonsters(4, 5, 2, 5, 5));
 		monsters.add(new DungeonMonsters(5, 6, 2, 5, 5));
 		monsters.add(new DungeonMonsters(6, 7, 2, 5, 5));

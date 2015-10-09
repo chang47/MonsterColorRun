@@ -29,5 +29,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="Test using free run with super class" />
+    
+    <Button 
+        android:id="@+id/makeNewPlayer"
+        android:text="Make New Player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/freeRunTest"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"/>
 
 </RelativeLayout>

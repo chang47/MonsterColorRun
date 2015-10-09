@@ -184,8 +184,9 @@ public class Parser {
 	 * @return
 	 */
 	public static Monster convertEnemyStickerToMonster(Sticker sticker, DungeonMonsters dungeonMonster) {
+		Log.d("monsterexp", "" + dungeonMonster.level + " base exp " + sticker.current_exp);
 		return new Monster(-1, sticker.name, sticker.hp, sticker.attack, sticker.defense, sticker.speed, dungeonMonster.capture, sticker.element,
-				getAbility(sticker), -1, -1, 0, dungeonMonster.level, sticker.evolve, sticker.sid);
+				getAbility(sticker), -1, -1, sticker.current_exp, dungeonMonster.level, sticker.evolve, sticker.sid);
 	}
 	
 	/**

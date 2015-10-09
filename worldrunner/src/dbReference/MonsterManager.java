@@ -38,11 +38,11 @@ public class MonsterManager {
         // id, name, element, spaid, saaid, evolve, hp, atk, def, spd, exp
         createInitial(db, createReferenceMonster(1, "Firtin", 0, 1, 1, 1, 45, 60, 50, 55, 20));
         createInitial(db, createReferenceMonster(2, "Artabbit", 1, 2, 2, 1, 50, 55, 55, 60, 20));
-        createInitial(db, createReferenceMonster(3, "Roseer", 2, 3, 3, 1, 55, 50, 60, 50, 20));
-        createInitial(db, createReferenceMonster(4, "Roly", 3, 4, 4, 1, 60, 45, 50, 60, 20));
-        createInitial(db, createReferenceMonster(5, "Barat", 4, 5, 5, 1, 50, 65, 65, 50, 20));
-        createInitial(db, createReferenceMonster(6, "Aqurtle", 1, 6, 6, 1, 45, 30, 65, 40, 14));
-        createInitial(db, createReferenceMonster(7, "Grake", 2, 7, 7, 1, 40, 50, 45, 65, 16));
+        createInitial(db, createReferenceMonster(3, "Roseer", 2, 3, 3, 1, 55, 50, 60, 50, 20)); 
+        createInitial(db, createReferenceMonster(4, "Roly", 3, 4, 4, 1, 40, 25, 30, 40, 20)); // original 60, 45, 50, 60, 20));
+        createInitial(db, createReferenceMonster(5, "Barat", 4, 5, 5, 1, 30, 45, 45, 30, 20)); // original 50, 65, 65, 50, 20
+        createInitial(db, createReferenceMonster(6, "Aqurtle", 1, 6, 6, 1, 45, 30, 45, 40, 14)); // 45, 30, 65, 40, 14
+        createInitial(db, createReferenceMonster(7, "Grake", 2, 7, 7, 1, 40, 50, 45, 65, 16)); // 40, 50, 45, 65, 16
         createInitial(db, createReferenceMonster(8, "Serse", 1, 8, 8, 1, 35, 65, 35, 40, 18));
         createInitial(db, createReferenceMonster(9, "Pyrig", 0, 9, 9, 1, 40, 50, 50, 50, 20));
 	}

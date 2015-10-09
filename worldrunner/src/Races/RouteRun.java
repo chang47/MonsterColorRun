@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -192,7 +193,7 @@ public class RouteRun extends Fragment {
 	            	// does time reset in event of crash? 
 	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
 	                String asText = (countUp / 3600) + ":"; 
-	                if (countUp / 60 < 10) {
+	                if (countUp % 3600 / 60 < 10) {
 	                	asText += "0";
 	                }
 	                asText += (countUp / 60 % 60) + ":";	                		
@@ -396,11 +397,13 @@ public class RouteRun extends Fragment {
 	    		
 	    		txt.setText(battleMonster.monster.name);
 	    		txt.setTextColor(Color.RED);
+	    		txt.setTypeface(null, Typeface.BOLD);
 	    		txt.setGravity(Gravity.CENTER);
 	    		
 	    		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
 	    		monsterStep.setText("" + toGo);
 	    		monsterStep.setTextColor(Color.BLACK);
+	    		monsterStep.setTypeface(null, Typeface.BOLD);
 	    		enemyMonsterStepCounters[i] = monsterStep;
 	    		
 	    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1));
@@ -462,6 +465,7 @@ public class RouteRun extends Fragment {
     		// assigns text
     		txt.setTextColor(Color.BLACK);
     		txt.setGravity(Gravity.CENTER);
+    		txt.setTypeface(null, Typeface.BOLD);
     		
     		//monsterStep.setTextColor(Color.BLACK);
     		//monsterStep.setGravity(Gravity.CENTER);

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
 public class CityRoute extends Fragment{
 	public City city;
@@ -33,9 +34,12 @@ public class CityRoute extends Fragment{
 				
 				@Override
 				public void onClick(View v) {
-					if (Hub.partySize() > 0)
+					if (Hub.partySize() > 0) {
 						// RouteRun
 						Hub.startRouteRun(route);
+					} else {
+						Toast.makeText(getActivity(), "Add one monster to your team before you start!", Toast.LENGTH_SHORT).show();
+					}
 				}
 			});
 			
