@@ -99,11 +99,13 @@
         android:layout_below="@+id/stickerStats"
         android:orientation="vertical">
         <TextView 
+            android:id="@+id/activeSkillName"
             android:height="20dp"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="skill name"/>
         <TextView 
+			android:id="@+id/activeSkillDescription"
             android:height="40dp"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

@@ -61,14 +61,14 @@ public class FooterBar extends Fragment {
 			}
 		});
 		
-		friends = (Button) view.findViewById(R.id.menuFriends);
+		/*friends = (Button) view.findViewById(R.id.menuFriends);
 		friends.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Hub.friends();
 			}
-		});
+		})*/;
 		
 		db = (Button) view.findViewById(R.id.menuDB);
 		db.setOnClickListener(new OnClickListener() {

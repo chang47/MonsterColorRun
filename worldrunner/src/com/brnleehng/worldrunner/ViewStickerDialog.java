@@ -36,6 +36,8 @@ public class ViewStickerDialog extends DialogFragment {
 	public Monster monster;
 	public ImageView portrait;
 	public ImageView headImage;
+	public TextView activeSkillName;
+	public TextView activeSkillDescription;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class ViewStickerDialog extends DialogFragment {
         expBar = (ProgressBar) view.findViewById(R.id.expProgress);
         exp = (TextView) view.findViewById(R.id.stickerExp);
         level = (TextView) view.findViewById(R.id.stickerLevel);
+        activeSkillName = (TextView) view.findViewById(R.id.activeSkillName);
+        activeSkillDescription = (TextView) view.findViewById(R.id.activeSkillDescription);
         
         monster = Hub.viewSticker;
         
@@ -62,8 +66,10 @@ public class ViewStickerDialog extends DialogFragment {
         int expToGo = (monster.level == 100) ? 0 : Hub.expTable.get(monster.level)[0] - monster.exp;
         exp.setText("EXP to go: " + expToGo);
         level.setText("Level: " + monster.level);
+        activeSkillName.setText(monster.activeAbility.name);
+        activeSkillDescription.setText(monster.activeAbility.description);
         
-        expBar.setProgress(10);
+        expBar.setProgress(100 * expToGo / Hub.expTable.get(monster.level)[1]);
         
         int portraitResId = getResources().getIdentifier("monster" + monster.monsterId, "drawable", getActivity().getPackageName());
         Log.d("imageId2", "monster " + monster.name + " id is: " + portraitResId + " actual is: " + R.drawable.monster2);

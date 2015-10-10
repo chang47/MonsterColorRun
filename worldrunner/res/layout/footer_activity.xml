@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
-        android:text="Items" />
+        android:text="Team" />
 
     <Button
         android:id="@+id/menuStore"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
-        android:text="Friends" />
+        android:text="Friend" />
     <Button
         android:id="@+id/menuDB"
         android:layout_width="match_parent"

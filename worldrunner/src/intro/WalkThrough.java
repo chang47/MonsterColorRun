@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class WalkThrough extends Activity {
-	private static final int MAX_VIEWS = 6;
+	private static final int MAX_VIEWS = 13;
 	private int currentIndex = 0;
 	ViewPager mViewPager;
 	WalkthroughPageAdapter adapter;
@@ -37,8 +37,9 @@ public class WalkThrough extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.walkthrough_activity);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        int[] imageId = {R.drawable.walkthrough1, R.drawable.walkthrough2, R.drawable.walkthrough3,
-        		R.drawable.walkthrough4, R.drawable.walkthrough5, R.drawable.walkthrough6};
+        int[] imageId = {R.drawable.walkthrough0, R.drawable.walkthrough1, R.drawable.walkthrough2, R.drawable.walkthrough3,
+        		R.drawable.walkthrough4, R.drawable.walkthrough5, R.drawable.walkthrough6, R.drawable.walkthrough7,
+        		R.drawable.walkthrough8, R.drawable.walkthrough9, R.drawable.walkthrough10, R.drawable.walkthrough11, R.drawable.walkthrough12};
        	adapter = new WalkthroughPageAdapter(imageId);
         mViewPager.setAdapter(adapter);
         CirclePageIndicator titleIndicator = (CirclePageIndicator)findViewById(R.id.titlesssss);
