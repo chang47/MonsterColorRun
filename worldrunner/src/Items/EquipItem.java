@@ -2,13 +2,18 @@ package Items;
 
 import java.util.ArrayList;
 
+import util.TutorialTest;
+
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,22 +29,15 @@ import android.widget.Toast;
  * Equip sticker and equipment fragment from the Item Hub
  */
 public class EquipItem extends Fragment {
-	private ArrayList<Equipment> equippedEquipment;
-	private ArrayList<Equipment> equipmentMapping;
-	
 	private ArrayList<Monster> equippedMonsters;
-	private ArrayList<Monster> stickerMapping;
-	
-	private ImageView equipment1;
-	private ImageView equipment2;
-	private ImageView equipment3;
-	private ImageView equipment4;
-	private ImageView equipment5;
-	private ImageView[] equipmentViews;
-	
+	private SharedPreferences pref;
+	private boolean firstTime;
+	private boolean secondTime;
 	private ImageView[] stickerViews;
 	private TextView[] stickerLevelViews;
-	
+	private ShowcaseView equipMonster;
+	private ShowcaseView showSpecific;
+	private ShowcaseView showReturn;
 	
 	/**
 	 * The method that's called to create a View
@@ -49,21 +47,11 @@ public class EquipItem extends Fragment {
 	        Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = inflater.inflate(R.layout.equippeditem_activity, container, false);
-		equippedEquipment = Hub.getEquippedEquipment();
 
 		equippedMonsters = Hub.equippedStickers;
 		//equippedSticker = Hub.equippedStickers;
 		stickerViews = new ImageView[5];
-		equipmentViews = new ImageView[5];
 		stickerLevelViews = new TextView[5];
-		
-		// setup equipments
-	/*	equipment1 = (ImageView) view.findViewById(R.id.Equipment1);
-		equipment2 = (ImageView) view.findViewById(R.id.Equipment2);
-		equipment3 = (ImageView) view.findViewById(R.id.Equipment3);
-		equipment4 = (ImageView) view.findViewById(R.id.Equipment4);
-		equipment5 = (ImageView) view.findViewById(R.id.Equipment5);
-		*/
 
 		stickerViews[0] = (ImageView) view.findViewById(R.id.Sticker1);
 		stickerViews[1] = (ImageView) view.findViewById(R.id.Sticker2);
@@ -103,6 +91,87 @@ public class EquipItem extends Fragment {
 				}
 			});
 		}
+		
+		//firstTime = pref.getBoolean(getString(R.string.equipMonster), true);
+		firstTime = TutorialTest.equipItem;
+		//secondTime = pref.getBoolean(getString(R.string.equipMonsterSecond), true);
+		secondTime = TutorialTest.equipItem2;
+		
+		view.post(new Runnable() {
+			public void run() {
+				if (firstTime) {
+					
+					equipMonster = new ShowcaseView.Builder(getActivity())
+					.setTarget(new ViewTarget(R.id.Sticker1, getActivity()))
+					.setContentText("Showcase View")
+					.setContentText("Click edit party to edit your party")
+					.build();
+					
+					
+					
+					equipMonster.overrideButtonClick(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							equipMonster.hide();
+							commonHide(equipMonster);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(equipMonster);
+							
+							showSpecific = new ShowcaseView.Builder(getActivity())
+							.setTarget(new ViewTarget(R.id.Sticker1, getActivity()))
+							.setContentText("Showcase View")
+							.setContentText("Click edit party to edit your party")
+							.build();
+							
+							showSpecific.hideButton();
+							
+							showSpecific.setOnClickListener(new View.OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									showSpecific.hide();
+									commonHide(showSpecific);
+									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showSpecific);
+									//pref.edit().putBoolean(getString(R.string.equipMonster), false).apply();
+									TutorialTest.equipItem = false;
+									Hub.equipSticker(1, equippedMonsters.get(1)); // is it right?
+								}
+							});
+							
+						}
+					});
+				} else if (secondTime) {
+					showReturn = new ShowcaseView.Builder(getActivity())
+					.setTarget(new ViewTarget(R.id.menuCity, getActivity()))
+					.setContentText("Showcase View")
+					.setContentText("Click edit party to edit your party")
+					.build();
+					
+					showReturn.hideButton();
+					
+					showReturn.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							showReturn.hide();
+							commonHide(showReturn);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showReturn);
+							// turn on second visit for city hub
+							TutorialTest.equipItem2 = false;
+							TutorialTest.cityHub2 = true;
+							Hub.cityHub();
+						}
+					});;
+				}
+			}
+		});
+		
 		return view;
+	}
+	
+	public static void commonHide(ShowcaseView scv) {
+		scv.setOnClickListener(null);
+		scv.setOnShowcaseEventListener(null);
+		scv.setOnTouchListener(null);
 	}
 }

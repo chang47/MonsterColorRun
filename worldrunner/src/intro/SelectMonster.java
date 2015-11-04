@@ -41,7 +41,7 @@ public class SelectMonster extends Activity {
 				db.updatePlayer(players.get(0));
 				db.addStickerDirectly(new Sticker(-1, players.get(0).pid, 1, "Firtin", 0, 1, 0, 1, 1, 0, 0, 0, 45, 60, 50, 55, 0));
 				db.close();
-				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
+				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				startActivity(intent);
 			}
 		});
@@ -55,7 +55,7 @@ public class SelectMonster extends Activity {
 				db.updatePlayer(players.get(0));
 				db.addStickerDirectly(new Sticker(-1, players.get(0).pid, 2, "Artabbit", 1, 1, 0, 2, 2, 0, 0, 0, 50, 55, 55, 60, 0));
 				db.close();
-				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
+				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				startActivity(intent);
 			}
 		});
@@ -69,7 +69,7 @@ public class SelectMonster extends Activity {
 				db.updatePlayer(players.get(0));
 				db.addStickerDirectly(new Sticker(-1, players.get(0).pid, 3, "Roseer", 2, 1, 0, 3, 3, 0, 0, 0, 55, 50, 60, 50, 0));
 				db.close();
-				Intent intent = new Intent(getApplicationContext(), WalkThrough.class);
+				Intent intent = new Intent(getApplicationContext(), Hub.class);
 				startActivity(intent);
 			}
 		});

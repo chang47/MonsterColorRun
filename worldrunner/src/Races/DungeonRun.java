@@ -1,9 +1,11 @@
 package Races;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import step.detector.StepService;
 import step.detector.StepService.StepBinder;
+import util.TutorialTest;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,7 +27,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
@@ -40,6 +47,8 @@ import battleHelper.BattleInfo;
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 import com.brnleehng.worldrunner.RunLogDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 public class DungeonRun extends Fragment {
 	// setup the step detectors
@@ -59,6 +68,9 @@ public class DungeonRun extends Fragment {
     public ProgressBar[] playerProgressBarList;
     public TextView[] playerMonsterStepCounters;
     public TextView[] enemyMonsterStepCounters;
+    public List<ImageView> playerMonsterImage;
+    public List<ImageView> enemyMonsterImage;
+    
     // calculate running metrics
     private int steps;
     Intent intent;
@@ -67,6 +79,16 @@ public class DungeonRun extends Fragment {
     StepService mService;
     boolean mBound = false;
     
+    private boolean firstTime;
+    private SharedPreferences pref;
+    private ShowcaseView showIntro;
+    private ShowcaseView showEnemy;
+    private ShowcaseView showParty;
+    private ShowcaseView showStep;
+    private ShowcaseView showHealth;
+    private ShowcaseView showFinish;
+    private View view;
+    
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
@@ -74,7 +96,7 @@ public class DungeonRun extends Fragment {
 			super.onCreate(savedInstanceState);
 			
 			//TODO seperated routes!!!!
-			View view = inflater.inflate(R.layout.routeingame_activity, container, false);
+			view = inflater.inflate(R.layout.routeingame_activity, container, false);
 			
 			// initializes the game
 			BattleInfo.combatStart();
@@ -161,7 +183,6 @@ public class DungeonRun extends Fragment {
 					
 					Hub.player.coin += BattleInfo.coins;
 					db.updatePlayer(Hub.player);
-					
 					BattleInfo.combatFinish();
 					// finishing the race
 					Hub.goToResult(); // might need some sort of check for dungeons vs routes
@@ -187,6 +208,115 @@ public class DungeonRun extends Fragment {
 	            }
 	        });
 	        stopWatch.start();
+	        //firstTime = TutorialTest.showBattle;
+	        firstTime = false;
+	        view.post(new Runnable() {
+
+				@Override
+				public void run() {
+					if (firstTime) {
+						showIntro = new ShowcaseView.Builder(getActivity())
+						.setTarget(new ViewTarget(view.findViewById(R.id.stopMission)))
+						.setContentText("Showcase View")
+						.setContentText("Equip party!@#!@#FSJ TGKOLR JWELGJLGJ AWLJTLAWJGLJ RTLAWJERFLS JGLAJETGLJW WEJT LWJLSDG JWET LWJ")
+						.build();
+						
+						showIntro.overrideButtonClick(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								showIntro.hide();
+								commonHide(showIntro);
+								((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showIntro);
+				
+								showEnemy = new ShowcaseView.Builder(getActivity())
+								.setTarget(new ViewTarget(view.findViewById(10)))
+								.setContentText("Showcase View")
+								.setContentText("Equip party")
+								.build();
+								
+								showEnemy.overrideButtonClick(new View.OnClickListener() {
+									
+									@Override
+									public void onClick(View v) {
+										showEnemy.hide();
+										commonHide(showEnemy);
+										((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showEnemy);
+										
+										showParty = new ShowcaseView.Builder(getActivity())
+										.setTarget(new ViewTarget(view.findViewById(11)))
+										.setContentText("Showcase View")
+										.setContentText("Equip party")
+										.build();
+										
+										showParty.overrideButtonClick(new View.OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												showParty.hide();
+												commonHide(showParty);
+												((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showParty);
+												
+												showStep = new ShowcaseView.Builder(getActivity())
+												.setTarget(new ViewTarget(view.findViewById(1000)))
+												.setContentText("Showcase View")
+												.setContentText("Equip party")
+												.build();
+												
+												showStep.overrideButtonClick(new View.OnClickListener() {
+													
+													@Override
+													public void onClick(View v) {
+														showStep.hide();
+														commonHide(showStep);
+														((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showStep);
+														
+														showHealth = new ShowcaseView.Builder(getActivity())
+														.setTarget(new ViewTarget(view.findViewById(100)))
+														.setContentText("Showcase View")
+														.setContentText("Equip party")
+														.build();
+														
+														showHealth.overrideButtonClick(new View.OnClickListener() {
+															
+															@Override
+															public void onClick(View v) {
+																showHealth.hide();
+																commonHide(showHealth);
+																((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showHealth);
+																
+																showFinish = new ShowcaseView.Builder(getActivity())
+																.setTarget(new ViewTarget(view.findViewById(R.id.stopMission)))
+																.setContentText("Showcase View")
+																.setContentText("Equip party")
+																.build();
+																
+																showFinish.overrideButtonClick(new View.OnClickListener() {
+																	
+																	@Override
+																	public void onClick(View v) {
+																		showFinish.hide();
+																		commonHide(showFinish);
+																		((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showFinish);
+																		TutorialTest.showDungeon = false;
+																	}
+																});
+																
+															}
+														});
+													}
+												});
+											}
+										});
+									}
+								});
+								
+							}
+						});
+					}
+				}
+	        	
+	        });
 	        return view;
     	} catch (Exception e) {
     		Log.e("MonsterColorRun", e.getClass().getName(), e);
@@ -241,7 +371,9 @@ public class DungeonRun extends Fragment {
     	// adds new monsters
 		try {
 	    	if (BackgroundChecker.newEnemies) {
-				createNewMonsters();
+	    		BackgroundChecker.newEnemies = false;
+	    		animateEnemyDefeat();
+				//createNewMonsters();
 			}
 			
 			// changes the hp
@@ -268,7 +400,11 @@ public class DungeonRun extends Fragment {
     			Log.d("size of battle list", "" + monster.step);
     			Log.d("enemy health", "index " + i + "monster" + monster.monster.name + " health " + monster.currentHp);
     			int toGo = monster.step - (BattleInfo.battleSteps % monster.step);
-    			enemyMonsterStepCounters[i].setText("" + toGo);
+    			
+    			// TODO bug here, random null
+    			if (enemyMonsterStepCounters[i] != null) {
+    				enemyMonsterStepCounters[i].setText("" + toGo);
+    			}
     		}
     	}
     	
@@ -281,6 +417,42 @@ public class DungeonRun extends Fragment {
     	}
     }
     
+    public void animateEnemyDefeat() {
+		Animation normalAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.defeat);
+		Log.d("defeatanim", "has been called");
+		for (TextView txt : enemyMonsterStepCounters) {
+			if (txt != null) {
+				txt.setText("");
+			}
+		}
+		for (ProgressBar prog : enemyProgressBarList) {
+			if (prog != null) {
+				prog.setProgress(0);
+			}
+		}
+    	for (int i = 0; i < enemyMonsterImage.size(); i++) {
+    		if (i != enemyMonsterImage.size() - 1) {
+        		enemyMonsterImage.get(i).startAnimation(normalAnim);
+    		} else {
+    			Animation endAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.defeat);
+    			endAnim.setAnimationListener(new AnimationListener() {
+					
+					@Override
+					public void onAnimationStart(Animation animation) { }
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) { }
+					
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						createNewMonsters();
+					}
+				});
+        		enemyMonsterImage.get(i).startAnimation(endAnim);
+    		}
+    	}
+    }
+    
     /**
      * 1. Creates a new view of monster for the user when they first load the app, 
      * 2. defeat an enemy when they're either in the background and came back 
@@ -288,6 +460,7 @@ public class DungeonRun extends Fragment {
      */
     private void createNewMonsters() {
     	enemyMonsterStepCounters = new TextView[5];
+    	enemyMonsterImage = new ArrayList<ImageView>();
     	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
 		enemyProgressBarList.clear();
@@ -317,10 +490,12 @@ public class DungeonRun extends Fragment {
 	    		txt.setId((i + 1));
 	    		ImageView imgView = new ImageView(getActivity());
 	    		imgView.setId((i + 1) * 10 );
+	    		enemyMonsterImage.add(imgView);
+	    		
 	    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
 	    		progBar.setId((i + 1) * 100);
 	    		TextView monsterStep = new TextView(getActivity());
-	    		
+	    		monsterStep.setId((i + 1) * 1000);
 	    		txt.setText(battleMonster.monster.name);
 	    		txt.setTextColor(Color.RED);
 	    		txt.setTypeface(null, Typeface.BOLD);
@@ -365,6 +540,7 @@ public class DungeonRun extends Fragment {
      */
     private void createPartyMonsters() {
     	playerMonsterStepCounters = new TextView[5];
+    	playerMonsterImage = new ArrayList<ImageView>();
     	playerPartyLayout.removeAllViews();
     	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
     		RelativeLayout relLayout = new RelativeLayout(getActivity());
@@ -383,9 +559,10 @@ public class DungeonRun extends Fragment {
     		
     		// Assign ui id for monsters
     		TextView txt = new TextView(getActivity());
-    		txt.setId((i + 10));
+    		txt.setId((i + 1 + 11));
     		ImageView imgView = new ImageView(getActivity());
     		imgView.setId((i + 1) * 11 );
+    		playerMonsterImage.add(imgView);
     		TextView monsterStep = new TextView(getActivity());
     		
     		// assigns text
@@ -397,7 +574,7 @@ public class DungeonRun extends Fragment {
     		//monsterStep.setGravity(Gravity.CENTER);
     		
     		// assigns the rule for pictures
-    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 10));
+    		relLayoutParamImg.addRule(RelativeLayout.BELOW, (i + 1 + 11));
     		
        		txt.setLayoutParams(relLayoutParamTxt);
     		imgView.setLayoutParams(relLayoutParamImg);
@@ -419,14 +596,6 @@ public class DungeonRun extends Fragment {
         		
         		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
         		txt.setText("" + toGo);
-        		
-        		// TODO if this doesn't work, let's just get rid of the monster name and 
-        		// replace it with the steps. Because we all know what our own monsters are
-        		//relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
-        		
-    			//monsterStep.setText("hi " + toGo);
-        		//monsterStep.setLayoutParams(relLayoutParamTxtStep);
-        		//relLayout.addView(monsterStep);
         		playerMonsterStepCounters[i] = txt;
         		
         		
@@ -521,4 +690,10 @@ public class DungeonRun extends Fragment {
 			updateUI();
 		}
 	};
+	
+	public static void commonHide(ShowcaseView scv) {
+		scv.setOnClickListener(null);
+		scv.setOnShowcaseEventListener(null);
+		scv.setOnTouchListener(null);
+	}
 }

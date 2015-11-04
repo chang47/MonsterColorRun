@@ -3,6 +3,7 @@ package Items;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.TutorialTest;
 import DB.DBManager;
 import DB.Model.Equipment;
 import DB.Model.Monster;
@@ -10,6 +11,7 @@ import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 import com.brnleehng.worldrunner.RunLogDialog;
 import com.brnleehng.worldrunner.ViewStickerDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 /**
  * Fragment to equip stickers. Very similar to EquipEquipment
@@ -34,6 +38,9 @@ public class EquipSticker extends Fragment {
 	ArrayList<Monster> equippedMonsters;
 	Monster currentSticker;
 	int currentPosition;
+	private boolean firstTime;
+	private SharedPreferences pref;
+	private ShowcaseView showPickMonster;
 	
 	/**
 	 * Creates the sticker equipment screen. Allows user to equip any stickers that
@@ -60,6 +67,7 @@ public class EquipSticker extends Fragment {
 		gridview = (GridView) view.findViewById(R.id.viewGridView);
 		gridview.setAdapter(adapter);
 		gridview.setOnItemClickListener(new OnItemClickListener() {
+			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -113,8 +121,47 @@ public class EquipSticker extends Fragment {
 				return true;
 			}
 		});
+		
 
+		//firstTime = pref.getBoolean(getString(R.string.equipMonster), true);
+		firstTime = TutorialTest.equipsticker;
+		view.post(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (firstTime) {
+					showPickMonster = new ShowcaseView.Builder(getActivity())
+					.setTarget(new ViewTarget(R.id.viewGridView, getActivity()))
+					.setContentText("Showcase View")
+					.setContentText("Click edit party to edit your party")
+					.build();
+					
+					showPickMonster.overrideButtonClick(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							showPickMonster.hide();
+							commonHide(showPickMonster);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showPickMonster);
+							TutorialTest.equipsticker = false;
+							TutorialTest.equipItem2 = true;
+							
+							
+						}
+					});
+
+				}
+			}
+			
+		});
 
 		return view;
+	}
+	
+	public static void commonHide(ShowcaseView scv) {
+		scv.setOnClickListener(null);
+		scv.setOnShowcaseEventListener(null);
+		scv.setOnTouchListener(null);
 	}
 }

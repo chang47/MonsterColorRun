@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+
 import battleHelper.BackgroundChecker;
 import battleHelper.BattleInfo;
 import test.TestRun;
@@ -33,6 +35,7 @@ import Races.Result;
 import Races.RouteRun;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -45,6 +48,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
+
 
 /**
  * Central Hub activity that manages everything the user does in
@@ -151,7 +155,7 @@ public class Hub extends Activity {
 		
 		hubContentContainer = (FrameLayout) findViewById(R.id.hubContentLayout);
 
-		BackgroundChecker.init();
+		BackgroundChecker.finish();
 		
 		refDb = new ReferenceManager(getApplicationContext());
 		
@@ -166,9 +170,6 @@ public class Hub extends Activity {
 		expTable = refDb.getExp();
 		refMonsters = refDb.monstersList();
 		refAbilities = refDb.abilitiesList();
-		for (Sticker sticker : refMonsters) {
-			Log.d("monster name:", sticker.name + " with uid: " + sticker.pstid + " with sid " + sticker.sid);
-		}
 		
 		// setup the user's data into the app
 		getPlayerData(db);
@@ -221,8 +222,10 @@ public class Hub extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		Log.d("back button", "the condition is " + BackgroundChecker.battleStarted);
-		if (!BackgroundChecker.battleStarted) {
+		if (BackgroundChecker.inResult && !BackgroundChecker.battleStarted) {
+			BackgroundChecker.inResult = false;
+			Hub.backToCity();
+		} else if (!BackgroundChecker.battleStarted) {
 			finish();
 			Intent intent = new Intent(this, SplashPage.class);
 			startActivity(intent);
@@ -260,8 +263,6 @@ public class Hub extends Activity {
 			if (monster.equipped == 0)
 				unequippedMonster.add(monster);
 		}
-		Log.d("unequip size", "" + unequippedMonster.size());
-		Log.d("total size", "" + stickerList.size());
 	}
 
 	
@@ -318,7 +319,8 @@ public class Hub extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (backgroundMusic != null && !BackgroundChecker.battleStarted) {
+        if (backgroundMusic != null && !BackgroundChecker.battleStarted && !BackgroundChecker.inResult) {
+        	Log.d("showInfoStuff", "is being called " + BackgroundChecker.inResult);
         	backgroundMusic.pause();
         }
     }

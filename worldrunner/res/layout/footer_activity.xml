@@ -6,40 +6,25 @@
 
     <Button
         android:id="@+id/menuCity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
+		style="@style/footerStyle"
         android:text="City" />
     <Button
         android:id="@+id/menuItems"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
+		style="@style/footerStyle"
         android:text="Team" />
 
     <Button
         android:id="@+id/menuStore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
+		style="@style/footerStyle"
         android:text="Store" />
 
     <Button
         android:id="@+id/menuFriends"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
+		style="@style/footerStyle"
         android:text="Friend" />
     <Button
         android:id="@+id/menuDB"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
+		style="@style/footerStyle"
         android:text="DB" />
 
 

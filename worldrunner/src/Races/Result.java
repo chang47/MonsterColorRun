@@ -71,8 +71,8 @@ public class Result extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
+				BackgroundChecker.inResult = false;
 				Hub.backToCity();		
-				backgroundMusic.release();
 			}
 		});
 
@@ -169,5 +169,11 @@ public class Result extends Fragment {
 		    }
 		});
 		valueAnimator.start();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		backgroundMusic.release();
 	}
 }

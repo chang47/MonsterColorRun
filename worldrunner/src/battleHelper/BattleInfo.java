@@ -129,7 +129,8 @@ public class BattleInfo {
 			found.clear();
 			// TODO probably source of null pointer exception, to be discovered 
 			//found = null;
-			BackgroundChecker.init();
+			BackgroundChecker.finish();
+			
 			//BackgroundChecker.battleStarted = false;
 		}
 	}
@@ -175,7 +176,7 @@ public class BattleInfo {
     			partyMonsterBattleList.add(null);
     		} else {
     			partyMonstersSize++;
-    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i)));
+    			partyMonsterBattleList.add(new BattleMonster(partyList.get(i), true));
     		}
     	}
     }
@@ -271,19 +272,15 @@ public class BattleInfo {
 	        			Map.Entry<Integer, Buff> pair = (Entry<Integer, Buff>) iterator.next();
 	        			int attribute = pair.getKey();
 	        			Buff buff = pair.getValue();
-	        			//Log.d("buff with duration at: ", "" + buff.duration);
 	        			buff.duration--;
 	        			Log.d("duration", "" + partyMonsterBattleList.get(i).monster.name + " buff " + buff.name + " has duration " + buff.duration);
-	        			//partyBattleList.get(i).buffs.get(iterator).duration--;
+
 	        			//Check if above code actually decreases
 	        			if (buff.duration <= 0) {
-	        				//Log.d("removed attribute", "" + iterator);
-	        				// partyBattleList.get(b).buffs.get(3).duration
 	        				
 	        				// important to be after, because recalculate checks for the attribute key
 	        				if (attribute == 3) {
 	        					partyMonsterBattleList.get(i).RecalculateSpeed();
-	        	        		//Log.d("Speed","New Speed Calculated (Buff Removed): " + partyMonsterBattleList.get(i).currentStep);
 	        				}
 	        				iterator.remove();
 	        				//partyBattleList.get(i).buffs.remove(iterator);

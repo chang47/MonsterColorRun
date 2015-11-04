@@ -1,14 +1,12 @@
 package Races;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import step.detector.StepService;
-import step.detector.StepService.StepBinder;
-import Abilities.DamageAllAbility;
 import DB.DBManager;
 import DB.Model.BattleMonster;
 import DB.Model.Monster;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -23,10 +21,12 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -63,6 +63,8 @@ public class RouteRun extends Fragment {
     public ProgressBar[] playerProgressBarList;
     public TextView[] playerMonsterStepCounters;
     public TextView[] enemyMonsterStepCounters;
+    private List<ImageView> playerMonsterImage;
+    private List<ImageView> enemyMonsterImage;
     // calculate running metrics
     private int steps;
     Intent intent;
@@ -293,7 +295,8 @@ public class RouteRun extends Fragment {
     		
     		//updateMonsterSteps();
 			if (BackgroundChecker.newEnemies) {
-				createNewMonsters();
+	    		BackgroundChecker.newEnemies = false;
+				animateEnemyDefeat();
 			}
 			
 			// changes the hp
@@ -331,6 +334,42 @@ public class RouteRun extends Fragment {
     	}
     }
     
+    public void animateEnemyDefeat() {
+		Animation normalAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.defeat);
+		Log.d("defeatanim", "has been called");
+		for (TextView txt : enemyMonsterStepCounters) {
+			if (txt != null) {
+				txt.setText("");
+			}
+		}
+		for (ProgressBar prog : enemyProgressBarList) {
+			if (prog != null) {
+				prog.setProgress(0);
+			}
+		}
+    	for (int i = 0; i < enemyMonsterImage.size(); i++) {
+    		if (i != enemyMonsterImage.size() - 1) {
+        		enemyMonsterImage.get(i).startAnimation(normalAnim);
+    		} else {
+    			Animation endAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.defeat);
+    			endAnim.setAnimationListener(new AnimationListener() {
+					
+					@Override
+					public void onAnimationStart(Animation animation) { }
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) { }
+					
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						createNewMonsters();
+					}
+				});
+        		enemyMonsterImage.get(i).startAnimation(endAnim);
+    		}
+    	}
+    }
+    
     private void updateMonsterSteps() {
     	for (int i = 0; i < BattleInfo.enemyMonsterBattleList.size(); i++) {
     		BattleMonster monster = BattleInfo.enemyMonsterBattleList.get(i);
@@ -360,6 +399,7 @@ public class RouteRun extends Fragment {
      */
     private void createNewMonsters() {
     	enemyMonsterStepCounters = new TextView[5];
+    	enemyMonsterImage = new ArrayList<ImageView>();
     	enemyPartyLayout.removeAllViews();
 		BackgroundChecker.newEnemies = false;
 		enemyProgressBarList.clear();
@@ -390,6 +430,7 @@ public class RouteRun extends Fragment {
 	    		TextView txt = new TextView(getActivity());
 	    		txt.setId((i + 1));
 	    		ImageView imgView = new ImageView(getActivity());
+	    		enemyMonsterImage.add(imgView);
 	    		imgView.setId((i + 1) * 10 );
 	    		ProgressBar progBar = new ProgressBar(getActivity(),null,android.R.attr.progressBarStyleHorizontal);
 	    		progBar.setId((i + 1) * 100);
@@ -440,6 +481,7 @@ public class RouteRun extends Fragment {
     private void createPartyMonsters() {
     	playerMonsterStepCounters = new TextView[5];
     	playerPartyLayout.removeAllViews();
+    	playerMonsterImage = new ArrayList<ImageView>();
     	for (int i = 0; i < BattleInfo.partyMonsterBattleList.size(); i++) {
     		RelativeLayout relLayout = new RelativeLayout(getActivity());
 			
@@ -459,6 +501,7 @@ public class RouteRun extends Fragment {
     		TextView txt = new TextView(getActivity());
     		txt.setId((i + 10));
     		ImageView imgView = new ImageView(getActivity());
+    		playerMonsterImage.add(imgView);
     		imgView.setId((i + 1) * 11 );
     		TextView monsterStep = new TextView(getActivity());
     		
@@ -494,13 +537,6 @@ public class RouteRun extends Fragment {
         		int toGo = battleMonster.step - (BattleInfo.battleSteps % battleMonster.step);
         		txt.setText("" + toGo);
         		
-        		// TODO if this doesn't work, let's just get rid of the monster name and 
-        		// replace it with the steps. Because we all know what our own monsters are
-        		//relLayoutParamTxtStep.addRule(RelativeLayout.ABOVE, (i + 10));
-        		
-    			//monsterStep.setText("hi " + toGo);
-        		//monsterStep.setLayoutParams(relLayoutParamTxtStep);
-        		//relLayout.addView(monsterStep);
         		playerMonsterStepCounters[i] = txt;
         		
         		

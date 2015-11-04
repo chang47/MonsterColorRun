@@ -2,10 +2,17 @@ package com.brnleehng.worldrunner;
 
 import java.util.ArrayList;
 
+import util.TutorialTest;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import metaModel.City;
 import metaModel.Route;
 import DB.Model.MapGraph;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -19,11 +26,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CityHub extends Fragment {
 	public SparseArray<ArrayList<Route>> cityRoutes;
 	private Button dungeon;
 	private Button move;
+	private SharedPreferences pref;
+	private boolean firstTime; 
+	private boolean secondTime;
+	private ShowcaseView showMoveout;
+	private ShowcaseView showDungeon;
+	private ShowcaseView showTeam;
+	
+	private ShowcaseView showExplain;
+	private ShowcaseView showPickDungeon;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +79,128 @@ public class CityHub extends Fragment {
 				Hub.selectRoute();
 			}
 		});
+		
+		
+		// first time interactive tutorial
+		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		firstTime = pref.getBoolean(getString(R.string.firstTime), true);
+		secondTime = pref.getBoolean(getString(R.string.secondTime), false);
+		firstTime = TutorialTest.cityHub;
+		secondTime = TutorialTest.cityHub2;
+		
+		//firstTime = false;
+		//secondTime = true;
+		
+		
+		// needed so that the app won't crash when SV targets something that 
+		// doesn't exist
+		/*view.post(new Runnable() {
+			@Override
+			public void run() {
+				if (firstTime) {
+					ViewTarget target = new ViewTarget(R.id.moveBut, getActivity());
+					showMoveout = new ShowcaseView.Builder(getActivity())
+						.setTarget(target)
+						.setContentText("Showcase View")
+						.setContentText("this is highlighting the home button")
+						.build();
+					
+					showMoveout.hideButton();
+				
+					showMoveout.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							showMoveout.hide();
+							commonHide(showMoveout);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showMoveout);
+							ViewTarget target = new ViewTarget(R.id.dungeonBut, getActivity());
+							showDungeon = new ShowcaseView.Builder(getActivity())
+								.setTarget(target)
+								.setContentText("Showcase View")
+								.setContentText("this is highlighting the home button")
+								.build();
+							
+							showDungeon.hideButton();
+							
+							showDungeon.setOnClickListener(new View.OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									showDungeon.hide();
+									commonHide(showDungeon);
+									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showDungeon);
+									ViewTarget target = new ViewTarget(R.id.menuItems, getActivity());
+									showTeam = new ShowcaseView.Builder(getActivity())
+										.setTarget(target)
+										.setContentText("Showcase View")
+										.setContentText("this is highlighting the home button")
+										.build();
+									
+									showTeam.hideButton();
+									
+									showTeam.setOnClickListener(new View.OnClickListener() {
+										
+										@Override
+										public void onClick(View v) {
+											showTeam.hide();
+											commonHide(showTeam);
+											((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showTeam);
+											pref.edit().putBoolean(getString(R.string.firstTime), false).apply();
+											TutorialTest.cityHub = false;
+											Hub.items();
+										}
+									});
+								}
+							});
+						}
+					});
+				} else if (secondTime && Hub.partySize() > 0) {
+					showExplain = new ShowcaseView.Builder(getActivity())
+					.setTarget(new ViewTarget(R.id.dungeonBut, getActivity()))
+					.setContentText("Showcase View")
+					.setContentText("this is highlighting the home button")
+					.build();
+					
+					showExplain.overrideButtonClick(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							showExplain.hide();
+							commonHide(showExplain);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showExplain);
+							showPickDungeon = new ShowcaseView.Builder(getActivity())
+							.setTarget(new ViewTarget(R.id.dungeonBut, getActivity()))
+							.setContentText("Showcase View")
+							.setContentText("this is highlighting the home button")
+							.build();
+							
+							showPickDungeon.hideButton();
+							
+							showPickDungeon.setOnClickListener(new View.OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									showPickDungeon.hide();
+									commonHide(showPickDungeon);
+									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showPickDungeon);
+									Hub.selectDungeons();
+								}
+							});
+						}
+					});
+				}
+			}
+		});
+		*/
+		
 		return view;
 	}  
+	
+	public static void commonHide(ShowcaseView scv) {
+		scv.setOnClickListener(null);
+		scv.setOnShowcaseEventListener(null);
+		scv.setOnTouchListener(null);
+	}
 	
 }

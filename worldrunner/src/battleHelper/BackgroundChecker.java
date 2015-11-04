@@ -19,7 +19,9 @@ public class BackgroundChecker {
 	public static String time = "";
 	public static String locationName = "";
 	
-	public static void init(){
+	public static boolean inResult = false;
+	
+	public static void finish(){
 		 isBackground = false;
 		 monsterWasAttacked = false;
 		 newEnemies = false;
@@ -28,6 +30,6 @@ public class BackgroundChecker {
 		 boundStepService = false;
 		 endService = false;
 		 battleStarted = false;
-		 
+		 inResult = true;
 	}
 }

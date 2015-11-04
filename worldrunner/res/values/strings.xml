@@ -12,7 +12,13 @@
     <string name="inch">inch</string>
     <string name="weight">weigth</string>
     <string name="firstTime">firstTime</string>
-    
+    <string name="secondTime">secondtime</string>
+    <string name="viewMonster">viewMonster</string>
+    <string name="equipMonster">equipMonster</string>
+    <string name="equipMonsterSecond">equipMonsterSecond</string>
+    <string name="chooseMonster">chooseMonster</string>
+    <string name="showDungeon">showDungeon</string>
+    <string name="showBattle">showBattle</string>
     <string-array name="race_array">
         <item>10K</item>
         <item>5K</item>

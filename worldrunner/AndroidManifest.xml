@@ -41,6 +41,9 @@
         <activity android:name="intro.WalkThrough"
             android:label="Walkthrough" />
         
+        <activity android:name="ShowcaseActivity"
+            android:label="ShowcaseActivity" />
+        
         <activity android:name="Pregame"
                   android:label="@string/app_name">
         </activity>

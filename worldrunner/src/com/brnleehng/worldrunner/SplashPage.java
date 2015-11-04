@@ -83,6 +83,9 @@ public class SplashPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent;
+				//intent = new Intent(getApplicationContext(), ShowcaseActivity.class);
+				intent = new Intent(getApplicationContext(), NameRequest.class);
+				/*
 				if (firstTime) {
 					intent = new Intent(getApplicationContext(), NameRequest.class);
 					SharedPreferences.Editor editor = pref.edit();
@@ -92,6 +95,7 @@ public class SplashPage extends Activity {
 					intent = new Intent(getApplicationContext(), Hub.class);
 				}
 				sp.play(soundIds[1], 1, 1, 1, 0, 1);
+				*/
 				startActivity(intent);
 			}
 		});
@@ -100,7 +104,7 @@ public class SplashPage extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d("destroy", "destroyed is call on splash");
+		backgroundMusic = null;
 	}
 	
 	@Override
