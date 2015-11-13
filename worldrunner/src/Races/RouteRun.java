@@ -379,7 +379,11 @@ public class RouteRun extends Fragment {
     			Log.d("size of battle list", "" + monster.step);
     			Log.d("enemy health", "index " + i + "monster" + monster.monster.name + " health " + monster.currentHp);
     			int toGo = monster.step - (BattleInfo.battleSteps % monster.step);
-    			enemyMonsterStepCounters[i].setText("" + toGo);
+    			
+    			// TODO bug introduced by making animation not end. Random null
+    			if (enemyMonsterStepCounters[i] != null) {
+    				enemyMonsterStepCounters[i].setText("" + toGo);
+    			}
     		}
     	}
     	

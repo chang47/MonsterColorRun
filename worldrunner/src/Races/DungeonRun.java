@@ -209,7 +209,8 @@ public class DungeonRun extends Fragment {
 	        });
 	        stopWatch.start();
 	        //firstTime = TutorialTest.showBattle;
-	        firstTime = false;
+			pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+	        firstTime = pref.getBoolean(getString(R.string.showBattle), true);
 	        view.post(new Runnable() {
 
 				@Override
@@ -298,6 +299,7 @@ public class DungeonRun extends Fragment {
 																		showFinish.hide();
 																		commonHide(showFinish);
 																		((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showFinish);
+																		pref.edit().putBoolean(getString(R.string.showBattle), false).apply();
 																		TutorialTest.showDungeon = false;
 																	}
 																});

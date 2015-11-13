@@ -45,6 +45,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
@@ -55,6 +56,13 @@ import android.widget.FrameLayout;
  * the game and uses Fragment to help move players around
  */
 public class Hub extends Activity {
+	public static final String PREF_NAME = "RouteRunPref";
+	private static String IS_RUNNING;
+	private static String RACE_TYPE;
+	private static String RACE_ID;
+	
+	private static SharedPreferences pref;
+	
 	private static MediaPlayer backgroundMusic;
 	private static FragmentManager fm;
 	//Access to the game's DB
@@ -90,6 +98,7 @@ public class Hub extends Activity {
 	public static Route currentRoute;
 	public static Dungeon currentDungeon;
 	public static List<Monster> enemyList;
+	
 	
 	//public static ArrayList<Monster> tempEquippedSticker;
 	
@@ -139,7 +148,7 @@ public class Hub extends Activity {
 		Log.d("notifTest", "ran hub create");
 		setContentView(R.layout.hub_activity);
 		
-		SharedPreferences pref = getApplication().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		pref = getApplication().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
 		weight = pref.getInt(getString(R.string.weight), 150);
 		feet = pref.getInt(getString(R.string.feet), 5);
 		inch = pref.getInt(getString(R.string.inch), 7);
@@ -149,6 +158,9 @@ public class Hub extends Activity {
 		soundIds[0] = sp.load(getBaseContext(), R.raw.click, 1);
 		soundIds[1] = sp.load(getBaseContext(), R.raw.enterbattle, 1);
 		
+		IS_RUNNING = getString(R.string.isRunning);
+		RACE_TYPE = getString(R.string.raceType);
+		RACE_ID = getString(R.string.raceId);
 		
 		context = getApplicationContext();
 		db = new DBManager(getApplicationContext());
@@ -217,6 +229,32 @@ public class Hub extends Activity {
 			ft.replace(R.id.footer, footer);
 			ft.replace(R.id.hub, cityHub);
 			ft.commit();
+		}
+		
+		if (pref.getBoolean(IS_RUNNING, false)) {
+			int raceType = pref.getInt(RACE_TYPE, -1);
+			int raceId = pref.getInt(RACE_ID, -1);
+			if (raceType == -1 || raceId == -1) {
+				// something went wrong, clean up and set run to false
+				throw new Error("continue racing incorrect");
+/*				SharedPreferences.Editor edit = pref.edit();
+				edit.putBoolean(IS_RUNNING, false);
+				edit.apply();*/
+			} else if (raceType == 0) {
+				for (Dungeon dungeon : refDungeons.get(currentCity.cityId)) {
+					if (dungeon.dungeonId == raceId) {
+						startDungeonRun(dungeon);
+						break;
+					}
+				}
+			} else if (raceType == 1) {
+				for (Route route : refRoutes.get(currentCity.cityId)) {
+					if (route.id == raceId) {
+						startRouteRun(route);
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -490,28 +528,11 @@ public class Hub extends Activity {
 			backgroundMusic.setLooping(true);
 			backgroundMusic.start();
 		}
+		pref.edit().putBoolean(IS_RUNNING, false).apply();
 		ft.replace(R.id.header, header);
 		ft.replace(R.id.footer, footer);
 		ft.replace(R.id.hub, townHub).commit();
 	}
-	
-	/**
-	 * Might not be needed anymore with new refactoring
-	 * Selects the new route to run towards
-	 * @param newCity - the city that the user is trying to run to.
-	 */
-/*	public static void moveCity(int newCity) {
-		//@TODO check if you need to subtract 1
-		
-		// updates the city
-		player.city = newCity;
-		setCurrentCity(refCities.get(newCity - 1));
-		Log.d("newCity", refCities.get(newCity - 1).cityName);
-		int resId = context.getResources().getIdentifier("background" + (newCity - 1), "drawable", context.getPackageName());
-		if (resId != 0)
-			hubContentContainer.setBackgroundResource(resId);
-		backToCity();
-	}*/
 	
 	public static void backToCity2() {
 		DBManager db = new DBManager(context);
@@ -572,6 +593,11 @@ public class Hub extends Activity {
 		DungeonRun dunRun = new DungeonRun();
 		currentDungeon = dungeon;
 		enemyList = util.Parser.enemyDungeonStickersToEnemyMonsters(refMonsters, refDungeonMonsters.get(dungeon.dungeonId));
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean(IS_RUNNING, true);
+		editor.putInt(RACE_TYPE, 0);
+		editor.putInt(RACE_ID, dungeon.dungeonId);
+		editor.apply();
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, dunRun).commit();
@@ -581,10 +607,16 @@ public class Hub extends Activity {
 		// to be filledetFT();
 		backgroundMusic.release();
 		FragmentTransaction ft = setFT();
-		sp.play(soundIds[1], 1, 1, 1, 0, 1);
+		sp.play(soundIds[1], 1, 1, 1, 0, 1); 
 		RouteRun cityRun = new RouteRun();
-				currentRoute = route;
+		currentRoute = route;
+		// TODO need to save enemy list?
 		enemyList = util.Parser.enemyRouteStickersToEnemyMonsters(refMonsters, refRouteMonsters.get(route.monsterRouteId));
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean(IS_RUNNING, true);
+		editor.putInt(RACE_TYPE, 1);
+		editor.putInt(RACE_ID, route.id);
+		editor.apply();
 		ft.remove(header);
 		ft.remove(footer);
 		ft.replace(R.id.hub, cityRun).commit();

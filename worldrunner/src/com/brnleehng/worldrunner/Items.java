@@ -82,46 +82,46 @@ public class Items extends Fragment {
 		});
 		
 		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
-		//firstTime = pref.getBoolean(getString(R.string.viewMonster), true);
-		firstTime = TutorialTest.items;
+		firstTime = pref.getBoolean(getString(R.string.viewMonsters), true);
 
-		showItems = new ShowcaseView.Builder(getActivity())
-			.setTarget(new ViewTarget(view.findViewById(R.id.sellSticker)))
-			.setContentText("Showcase View")
-			.setContentText("Click edit party to edit your party")
-			.build();
-		
-		showItems.overrideButtonClick(new View.OnClickListener() {
-			 
-			@Override
-			public void onClick(View v) {
-				showItems.hide();
-				commonHide(showItems);
-				((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showItems);
-				ViewTarget target = new ViewTarget(R.id.equipEquipment, getActivity());
-				showEquip = new ShowcaseView.Builder(getActivity())
-				.setTarget(target)
+		if (firstTime) {
+			showItems = new ShowcaseView.Builder(getActivity())
+				.setTarget(new ViewTarget(view.findViewById(R.id.sellSticker)))
 				.setContentText("Showcase View")
-				.setContentText("Equip party")
+				.setContentText("Click edit party to edit your party")
 				.build();
-				
-				showEquip.hideButton();
-				
-				showEquip.setOnClickListener(new View.OnClickListener() {
+			
+			showItems.overrideButtonClick(new View.OnClickListener() {
+				 
+				@Override
+				public void onClick(View v) {
+					showItems.hide();
+					commonHide(showItems);
+					((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showItems);
+					ViewTarget target = new ViewTarget(R.id.equipEquipment, getActivity());
+					showEquip = new ShowcaseView.Builder(getActivity())
+					.setTarget(target)
+					.setContentText("Showcase View")
+					.setContentText("Equip party")
+					.build();
 					
-					@Override
-					public void onClick(View v) {
-						showEquip.hide();
-						commonHide(showEquip);
-						((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showEquip);
-						//pref.edit().putBoolean(getString(R.string.viewMonster), false).apply();
-						TutorialTest.items = false;
-						Hub.equipItems();
-					}
-				});
-			}
-		});
+					showEquip.hideButton();
 					
+					showEquip.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							showEquip.hide();
+							commonHide(showEquip);
+							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showEquip);
+							pref.edit().putBoolean(getString(R.string.viewMonsters), false).apply();
+							Hub.equipItems();
+						}
+					});
+				}
+			});
+		}
+						
 		return view;
 	}  
 	

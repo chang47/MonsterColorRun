@@ -85,16 +85,10 @@ public class CityHub extends Fragment {
 		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
 		firstTime = pref.getBoolean(getString(R.string.firstTime), true);
 		secondTime = pref.getBoolean(getString(R.string.secondTime), false);
-		firstTime = TutorialTest.cityHub;
-		secondTime = TutorialTest.cityHub2;
-		
-		//firstTime = false;
-		//secondTime = true;
-		
 		
 		// needed so that the app won't crash when SV targets something that 
 		// doesn't exist
-		/*view.post(new Runnable() {
+		view.post(new Runnable() {
 			@Override
 			public void run() {
 				if (firstTime) {
@@ -184,6 +178,8 @@ public class CityHub extends Fragment {
 									showPickDungeon.hide();
 									commonHide(showPickDungeon);
 									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showPickDungeon);
+									pref.edit().putBoolean(getString(R.string.secondTime), false).apply();
+									pref.edit().putBoolean(getString(R.string.showDungeon), true).apply();
 									Hub.selectDungeons();
 								}
 							});
@@ -192,7 +188,7 @@ public class CityHub extends Fragment {
 				}
 			}
 		});
-		*/
+		
 		
 		return view;
 	}  

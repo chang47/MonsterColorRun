@@ -9,6 +9,7 @@ import metaModel.City;
 import metaModel.Dungeon;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,9 +60,10 @@ public class CityDungeon extends Fragment {
 			layout.addView(button);
 			
 		}
-		
-		// firstTime = pref.getBoolean(getString(R.string.showDungeon), true);
-		firstTime = TutorialTest.showDungeon;
+
+		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		firstTime = pref.getBoolean(getString(R.string.showDungeon), true);
+		//firstTime = TutorialTest.showDungeon;
 		view.post(new Runnable() {
 
 			@Override
@@ -96,6 +98,8 @@ public class CityDungeon extends Fragment {
 									commonHide(showSelectDungeon);
 									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showSelectDungeon);
 									TutorialTest.showDungeon = false;
+									pref.edit().putBoolean(getString(R.string.showDungeon), false).apply();
+									pref.edit().putBoolean(getString(R.string.showBattle), true).apply();
 									Hub.startDungeonRun(Hub.refDungeons.get(1).get(0));
 								}
 							});

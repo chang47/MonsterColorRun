@@ -58,6 +58,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	public static final String CURRENT_DISTANCE = "currentDistance";
 	public static final String CURRENT_TIME = "currentTime";
 	public static final String CURRENT_CALORIES = "currentCalories";	
+	public static final String IS_RUNNING = "isRunning";	
 	
 	private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -108,7 +109,14 @@ public class StepService extends Service implements SensorEventListener, StepLis
         simpleStepDetector.registerListener(this);
         
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-        // makes the service run in the foreground instead of the background
+        
+        // Starts the run so we know what to do when resuming
+		SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        if (pref.getBoolean(IS_RUNNING, false)) {
+        	recoverFromLastPoint();
+        } else {
+        	getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit().putBoolean(IS_RUNNING, true).apply();
+        }
 	}
 	
 	// TODO Might be good to have in the future to save all of your monsters in
@@ -124,6 +132,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		simpleStepDetector = null;
 	    sensorManager = null;
 	    accel = null;
+        getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit().putBoolean(IS_RUNNING, false).apply();
 	}
 	
 	// Gives access to other services so that they can access
@@ -162,8 +171,6 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	        }
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
-	    	// not sure what the 0.91 is from
-	    	//BattleInfo.distance = (BattleInfo.steps * .91) / 1000;
 	    	long newTime = System.currentTimeMillis();
 	    	Log.d("time", "" + newTime);
 	    	if ((newTime - BattleInfo.currentTime) / 5000 >= 1) {
@@ -342,6 +349,13 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		BattleInfo.distance = pref.getLong(CURRENT_DISTANCE, 0);
 		BattleInfo.currentTime = pref.getLong(CURRENT_TIME, 0);
 		BattleInfo.calories = pref.getLong (CURRENT_CALORIES, 0);
+		Log.d("recover", "calories " + BattleInfo.calories);
+		Log.d("recover", "current time " + BattleInfo.currentTime);
+		Log.d("recover", "current step " + BattleInfo.currentStep);
+		Log.d("recover", "exp " + BattleInfo.exp);
+		Log.d("recover", "coin" + BattleInfo.coins);
+		Log.d("recover", "distance " + BattleInfo.distance);
+		
 	}
 	
 	/**

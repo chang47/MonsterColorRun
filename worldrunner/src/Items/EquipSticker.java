@@ -11,6 +11,7 @@ import DB.Model.Sticker;
 import Items.Adapters.StickerAdapter;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -122,9 +123,9 @@ public class EquipSticker extends Fragment {
 			}
 		});
 		
-
-		//firstTime = pref.getBoolean(getString(R.string.equipMonster), true);
-		firstTime = TutorialTest.equipsticker;
+		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		firstTime = pref.getBoolean(getString(R.string.chooseMonster), true);
+		//firstTime = TutorialTest.equipsticker;
 		view.post(new Runnable() {
 
 			@Override
@@ -144,6 +145,8 @@ public class EquipSticker extends Fragment {
 							showPickMonster.hide();
 							commonHide(showPickMonster);
 							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showPickMonster);
+							pref.edit().putBoolean(getString(R.string.chooseMonster), false).apply();
+							pref.edit().putBoolean(getString(R.string.equipMonsterSecond), true).apply();
 							TutorialTest.equipsticker = false;
 							TutorialTest.equipItem2 = true;
 							

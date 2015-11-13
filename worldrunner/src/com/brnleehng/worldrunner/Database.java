@@ -70,9 +70,25 @@ public class Database extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				
+				/*
+				     <string name="firstTime">firstTime</string>
+    <string name="secondTime">secondtime</string>
+    <string name="viewMonster">viewMonster</string>
+    <string name="equipMonster">equipMonster</string>
+    <string name="equipMonsterSecond">equipMonsterSecond</string>
+    <string name="chooseMonster">chooseMonster</string>
+    <string name="showDungeon">showDungeon</string>
+    <string name="showBattle">showBattle</string>
+				 */
 				SharedPreferences.Editor editor = pref.edit();
 				editor.putBoolean(getString(R.string.firstTime), true);
+				editor.putBoolean(getString(R.string.secondTime), false);
+				editor.putBoolean(getString(R.string.viewMonsters), true);
+				editor.putBoolean(getString(R.string.equipMonsters), true);
+				editor.putBoolean(getString(R.string.equipMonsterSecond), false);
+				editor.putBoolean(getString(R.string.chooseMonster), true);
+				editor.putBoolean(getString(R.string.showDungeon), false);
+				editor.putBoolean(getString(R.string.showBattle), false);
 				editor.commit();
 			}
 		});

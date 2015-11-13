@@ -13,12 +13,18 @@
     <string name="weight">weigth</string>
     <string name="firstTime">firstTime</string>
     <string name="secondTime">secondtime</string>
-    <string name="viewMonster">viewMonster</string>
-    <string name="equipMonster">equipMonster</string>
+    <string name="viewMonsters">viewMonster</string>
+    <string name="equipMonsters">equipMonster</string>
     <string name="equipMonsterSecond">equipMonsterSecond</string>
     <string name="chooseMonster">chooseMonster</string>
     <string name="showDungeon">showDungeon</string>
     <string name="showBattle">showBattle</string>
+    
+    <!-- Status Saving  -->
+    <string name="isRunning">isRunning</string>
+    <string name="raceType">raceType</string>
+    <string name="raceId">raceId</string>
+    
     <string-array name="race_array">
         <item>10K</item>
         <item>5K</item>

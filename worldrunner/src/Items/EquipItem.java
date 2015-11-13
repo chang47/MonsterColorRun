@@ -13,6 +13,7 @@ import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Sticker;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,11 +92,11 @@ public class EquipItem extends Fragment {
 				}
 			});
 		}
-		
-		//firstTime = pref.getBoolean(getString(R.string.equipMonster), true);
-		firstTime = TutorialTest.equipItem;
-		//secondTime = pref.getBoolean(getString(R.string.equipMonsterSecond), true);
-		secondTime = TutorialTest.equipItem2;
+		pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+		firstTime = pref.getBoolean(getString(R.string.equipMonsters), true);
+		//firstTime = TutorialTest.equipItem;
+		secondTime = pref.getBoolean(getString(R.string.equipMonsterSecond), false);
+		//secondTime = TutorialTest.equipItem2;
 		
 		view.post(new Runnable() {
 			public void run() {
@@ -132,7 +133,7 @@ public class EquipItem extends Fragment {
 									showSpecific.hide();
 									commonHide(showSpecific);
 									((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showSpecific);
-									//pref.edit().putBoolean(getString(R.string.equipMonster), false).apply();
+									pref.edit().putBoolean(getString(R.string.equipMonsters), false).apply();
 									TutorialTest.equipItem = false;
 									Hub.equipSticker(1, equippedMonsters.get(1)); // is it right?
 								}
@@ -156,7 +157,8 @@ public class EquipItem extends Fragment {
 							showReturn.hide();
 							commonHide(showReturn);
 							((ViewGroup)getActivity().getWindow().getDecorView()).removeView(showReturn);
-							// turn on second visit for city hub
+							pref.edit().putBoolean(getString(R.string.equipMonsterSecond), false).apply();
+							pref.edit().putBoolean(getString(R.string.secondTime), true).apply();
 							TutorialTest.equipItem2 = false;
 							TutorialTest.cityHub2 = true;
 							Hub.cityHub();
