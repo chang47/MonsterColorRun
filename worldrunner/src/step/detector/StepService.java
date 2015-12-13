@@ -35,10 +35,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class StepService extends Service implements SensorEventListener, StepListener {
-	public static final String PREF_NAME = "RouteRunPref";
+	public static final String PREF_NAME = "RouteRunPref"; // should be monster color run 
 	public static final String EXP = "exp";
 	public static final String FOUND = "found";
-	public static final String STEPS = "steps";
+	public static final String STEPS = "steps";  
 	public static final String COINS = "coins";
 	public static final String DISTANCE = "distance";
 	public static final String BATTLESTEPS = "battlesteps";
@@ -55,7 +55,6 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	public static final String FINISHED = "finished";
 	public static final String CAUGHT = "caught";
 	public static final String CURRENT_STEP = "currentStep";
-	public static final String CURRENT_DISTANCE = "currentDistance";
 	public static final String CURRENT_TIME = "currentTime";
 	public static final String CURRENT_CALORIES = "currentCalories";	
 	public static final String IS_RUNNING = "isRunning";	
@@ -71,6 +70,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	
 	int mId;
     
+	private SharedPreferences pref;
+	
 	// Creates a binder that gives access to Test Step Service that we can
 	// access anywhere from the acitivities
 	public class StepBinder extends Binder {
@@ -111,7 +112,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
         
         // Starts the run so we know what to do when resuming
-		SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+		pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+		Log.d("recover", "status: " + pref.getBoolean(IS_RUNNING, false));
         if (pref.getBoolean(IS_RUNNING, false)) {
         	recoverFromLastPoint();
         } else {
@@ -169,8 +171,15 @@ public class StepService extends Service implements SensorEventListener, StepLis
 			if (Math.random() < 0.5) {
 	            BattleInfo.coins += 10;
 	        }
+			/*Log.d("recover", "post calories " + BattleInfo.calories);
+			Log.d("recover", "post current time " + BattleInfo.currentTime);
+			Log.d("recover", "post current step " + BattleInfo.currentStep);
+			Log.d("recover", "post exp " + BattleInfo.exp);
+			Log.d("recover", "post coin" + BattleInfo.coins);
+			Log.d("recover", "post distance " + BattleInfo.distance);*/
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
+	    	Log.d("recover", "post steps " + BattleInfo.steps);
 	    	long newTime = System.currentTimeMillis();
 	    	Log.d("time", "" + newTime);
 	    	if ((newTime - BattleInfo.currentTime) / 5000 >= 1) {
@@ -193,8 +202,10 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	    			// running pace is 3 feet per step
 	    			met = 9;
 	    			distanceTraveled = (double) stepsTaken * (3.0 / 5280);
-	    			BattleInfo.distance += distanceTraveled;
-	    			BattleInfo.calories += 0.72 * Hub.weight * distanceTraveled; 
+	    			// TODO test
+	    			BattleInfo.distance += distanceTraveled * 1000;
+	    			// TODO test
+	    			BattleInfo.calories += 0.72 * Hub.weight * distanceTraveled * 1000; 
 	    		} else {
 	    			// running pace is 2.2 feet per step
 	    			met = 3.5;
@@ -296,7 +307,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		editor.putString(FOUND, gson.toJson(BattleInfo.found));
 		editor.putInt(STEPS, BattleInfo.steps);
 		editor.putInt(COINS, BattleInfo.coins);
-		editor.putLong(DISTANCE, (long) BattleInfo.distance);
+		editor.putLong(DISTANCE, (long) (BattleInfo.distance * 100));
 		editor.putInt(BATTLESTEPS, 0); // should be 0, because we just finished a battleeditor.putInt(, BattleInfo);
 		editor.putString(LIST, gson.toJson(BattleInfo.list));
 		editor.putString(PLAYER_MONSTER, gson.toJson(BattleInfo.partyList)); // probably only needs to be saved once in the beginning
@@ -311,9 +322,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		editor.putBoolean(FINISHED, BattleInfo.finishEnabled);
 		editor.putBoolean(CAUGHT, false); // since we're starting a new round
 		editor.putInt(CURRENT_STEP, BattleInfo.currentStep);
-		editor.putLong(CURRENT_DISTANCE, (long) BattleInfo.distance);
 		editor.putLong(CURRENT_TIME, BattleInfo.currentTime);
-		editor.putLong(CURRENT_CALORIES, (long) BattleInfo.calories);
+		editor.putLong(CURRENT_CALORIES, (long) (BattleInfo.calories * 100));
 
 		editor.commit();// apply might seem better since it allows everything to be asynchronous so only need to be used once
 						// in the beginning, but might also save the null.
@@ -327,11 +337,11 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		Gson gson = builder.create();
 		Type battleMonsterType = new TypeToken<List<BattleMonster>>(){}.getType();
 		Type monsterType = new TypeToken<List<Monster>>(){}.getType();
-		SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+		pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 		BattleInfo.exp = pref.getInt(EXP, 0);
-		BattleInfo.found = gson.fromJson(pref.getString(FOUND, null), ArrayList.class);
+		BattleInfo.found = gson.fromJson(pref.getString(FOUND, null), monsterType);
 		BattleInfo.coins = pref.getInt(COINS, 0);
-		BattleInfo.distance = pref.getLong(DISTANCE, 0);
+		BattleInfo.distance = (double) pref.getLong(DISTANCE, 0) / 100.0;
 		BattleInfo.list = gson.fromJson(pref.getString(LIST, null), ArrayList.class);
 		BattleInfo.partyList = gson.fromJson(pref.getString(PLAYER_MONSTER, null), monsterType);
 		BattleInfo.monsterList = gson.fromJson(pref.getString(ENEMY_MONSTER, null), monsterType);
@@ -345,18 +355,18 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		BattleInfo.fightObjective = pref.getInt(OBJECTIVE, 0);
 		BattleInfo.finishEnabled = pref.getBoolean(FINISHED, false);
 		BattleInfo.caughtAlready = false;
-		BattleInfo.currentStep = pref.getInt(CURRENT_STEP, 0);
-		BattleInfo.distance = pref.getLong(CURRENT_DISTANCE, 0);
+		BattleInfo.currentStep = pref.getInt(STEPS, 0);//pref.getInt(CURRENT_STEP, 0);
+		BattleInfo.steps = pref.getInt(STEPS, 0);
 		BattleInfo.currentTime = pref.getLong(CURRENT_TIME, 0);
-		BattleInfo.calories = pref.getLong (CURRENT_CALORIES, 0);
+		BattleInfo.calories = (double) pref.getLong (CURRENT_CALORIES, 0) / 100.0;
 		Log.d("recover", "calories " + BattleInfo.calories);
 		Log.d("recover", "current time " + BattleInfo.currentTime);
 		Log.d("recover", "current step " + BattleInfo.currentStep);
 		Log.d("recover", "exp " + BattleInfo.exp);
 		Log.d("recover", "coin" + BattleInfo.coins);
 		Log.d("recover", "distance " + BattleInfo.distance);
-		
-	}
+		Log.d("recover", "real current time" + pref.getLong(CURRENT_TIME, 0));
+ 	}
 	
 	/**
 	 * Only to be used to test and speed up battles

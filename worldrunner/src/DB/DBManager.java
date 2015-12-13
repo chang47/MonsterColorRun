@@ -28,6 +28,9 @@ import java.util.List;
 
 
 
+
+import java.util.Random;
+
 import metaModel.City;
 import metaModel.Dungeon;
 import metaModel.Route;
@@ -36,6 +39,7 @@ import org.xml.sax.Parser;
 
 import dbReference.CityManager;
 import dbReference.DungeonManager;
+import dbReference.ReferenceManager;
 import dbReference.RouteManager;
 import Abilities.Ability;
 import Abilities.DamageAllAbility;
@@ -46,6 +50,7 @@ import DB.Model.Monster;
 import DB.Model.Player;
 import DB.Model.Sticker;
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -117,7 +122,8 @@ public class DBManager extends SQLiteOpenHelper {
 		return list;
 	}*/
 	
-	
+	// TODO needs to be changed so that player id is
+	// stored in shared preference and that it is requested
 	public List<Player> getPlayer() {
 		SQLiteDatabase db2 = this.getWritableDatabase();
 		return PlayerManager.getPlayer(db2);
@@ -132,6 +138,24 @@ public class DBManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		PlayerManager.addPlayer(db, player);
 		db.close();
+	}
+	
+	public int[] buyMonster(Player player) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		int res[] = new int[2];
+		int status = PlayerManager.buyMonster(db, player);
+		if (status != 0) {
+			return res;
+		}
+		res[0] = status;
+		// TODO so bad code, how to seperate, same one DB?
+		ReferenceManager refDb = new ReferenceManager(context);
+		int max = refDb.getNumMonsters();
+		Random rn = new Random();
+		int monsterId = rn.nextInt(max);
+		res[1] = monsterId; // verify if sql start at 0 or 1
+		// add the monster into the user's db
+		return res;
 	}
 	
 	/**

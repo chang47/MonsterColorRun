@@ -35,7 +35,7 @@ public class PlayerManager {
 	
 	private static void createInitial(SQLiteDatabase db, Player player) {
 		ContentValues values = new ContentValues();
-		values.put(USERNAME, player.username);
+		values.put(USERNAME, player.username); // any reason why we can't have username in the values?
 		values = addContent(values, player);
 		db.insert(TABLE_PLAYER, null, values);
 	}
@@ -77,6 +77,16 @@ public class PlayerManager {
 		values.put(USERNAME, player.username);
 		values = addContent(values, player);
 		db.insert(TABLE_PLAYER, null, values);
+	}
+	
+	public static int buyMonster(SQLiteDatabase db, Player player) {
+		if (player.gem < 5) {
+			return 0;
+		}
+		ContentValues values = new ContentValues();
+		//values = addContent(values, player);
+		values.put(GEM, player.gem - 5);
+		return db.update(TABLE_PLAYER, values, PID + " = ?", new String[] { String.valueOf(player.pid) });
 	}
 	
 	private static ContentValues addContent(ContentValues values, Player player) {

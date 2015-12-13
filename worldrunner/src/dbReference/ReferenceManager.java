@@ -12,6 +12,7 @@ import java.util.List;
 
 
 
+
 import metaModel.City;
 import metaModel.Dungeon;
 import metaModel.DungeonMonsters;
@@ -31,6 +32,7 @@ import DB.Model.Monster;
 import DB.Model.Player;
 import DB.Model.Sticker;
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -300,6 +302,12 @@ public class ReferenceManager extends SQLiteOpenHelper {
 		map.put(2, dungeon2Monsters);
 		return map;
 	}*/
+	
+	public int getNumMonsters() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		return (int) DatabaseUtils.queryNumEntries(db, "monstersReference"); // TODO need to be changed to use the rare monster list
+
+	}
 
 	
 }

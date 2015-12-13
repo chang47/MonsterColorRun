@@ -56,7 +56,7 @@ import android.widget.FrameLayout;
  * the game and uses Fragment to help move players around
  */
 public class Hub extends Activity {
-	public static final String PREF_NAME = "RouteRunPref";
+	public static final String PREF_NAME = "RouteRunPref"; // should be Monster Color Run
 	private static String IS_RUNNING;
 	private static String RACE_TYPE;
 	private static String RACE_ID;

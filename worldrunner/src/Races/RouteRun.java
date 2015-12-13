@@ -87,6 +87,7 @@ public class RouteRun extends Fragment {
 			
 			// initializes the game
 			BattleInfo.combatStart();
+			Log.d("recover", "combat started");
 			
 	        // setup intitial objects
 	        tvDistance = (TextView) view.findViewById(R.id.routeRunDistanceTxt);

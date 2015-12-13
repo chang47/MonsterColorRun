@@ -51,6 +51,9 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 public class DungeonRun extends Fragment {
+	public static final String IS_RUNNING = "isRunning";
+	public static final String CURRENT_TIME = "currentTime";
+	
 	// setup the step detectors
 	private TextView tvDistance;
     private TextView tvTime;
@@ -100,6 +103,7 @@ public class DungeonRun extends Fragment {
 			
 			// initializes the game
 			BattleInfo.combatStart();
+			Log.d("recover", "combat started");
 			
 	        // setup intitial objects
 			tvDistance = (TextView) view.findViewById(R.id.routeRunDistanceTxt);
@@ -188,12 +192,17 @@ public class DungeonRun extends Fragment {
 					Hub.goToResult(); // might need some sort of check for dungeons vs routes
 				}
 			});         
-	        
+			pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
 			Chronometer stopWatch = (Chronometer) view.findViewById(R.id.chronometer);
-	        stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
+			if (pref.getBoolean(IS_RUNNING, false)) {
+        		SystemClock.setCurrentTimeMillis(pref.getLong(CURRENT_TIME, 0));
+        		Log.d("recover", "time set " + pref.getLong("currentTime", 0));
+        	}
+			stopWatch.setOnChronometerTickListener(new OnChronometerTickListener(){
 	            @Override
 	            public void onChronometerTick(Chronometer chronometer) {
 	            	// does time reset in event of crash? 
+	            	//Log.d("recover", "" + chronometer.getBase());
 	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
 	                String asText = (countUp / 3600) + ":"; 
 	                if (countUp % 3600 / 60 < 10) {
@@ -209,7 +218,7 @@ public class DungeonRun extends Fragment {
 	        });
 	        stopWatch.start();
 	        //firstTime = TutorialTest.showBattle;
-			pref = getActivity().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+			
 	        firstTime = pref.getBoolean(getString(R.string.showBattle), true);
 	        view.post(new Runnable() {
 

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/buyMonster"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
