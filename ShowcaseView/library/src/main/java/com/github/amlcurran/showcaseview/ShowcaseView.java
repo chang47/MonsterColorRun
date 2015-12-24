@@ -24,6 +24,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.os.Build;
+import android.provider.Settings.Global;
 import android.text.Layout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -72,11 +74,15 @@ public class ShowcaseView extends RelativeLayout
     private boolean hideOnTouch = false;
     private OnShowcaseEventListener mEventListener = OnShowcaseEventListener.NONE;
 
+    private CalculateTextOnPreDraw draw=null;
+    private UpdateOnGlobalLayout globalLayout=null;
+    
     private boolean hasAlteredText = false;
     private boolean hasNoTarget = false;
     private boolean shouldCentreText;
     private Bitmap bitmapBuffer;
-
+    private Activity mActivity=null;
+    
     // Animation items
     private long fadeInMillis;
     private long fadeOutMillis;
@@ -86,20 +92,33 @@ public class ShowcaseView extends RelativeLayout
 
     protected ShowcaseView(Context context, boolean newStyle) {
         this(context, null, R.styleable.CustomTheme_showcaseViewStyle, newStyle);
+        if(context instanceof Activity){
+            mActivity = (Activity) context;
+        }
     }
 
     protected ShowcaseView(Context context, AttributeSet attrs, int defStyle, boolean newStyle) {
         super(context, attrs, defStyle);
-
+        if(context instanceof Activity){
+            mActivity=(Activity)context;
+        }
         ApiUtils apiUtils = new ApiUtils();
         animationFactory = new AnimatorAnimationFactory();
         showcaseAreaCalculator = new ShowcaseAreaCalculator();
         shotStateStore = new ShotStateStore(context);
 
         apiUtils.setFitsSystemWindowsCompat(this);
-        getViewTreeObserver().addOnPreDrawListener(new CalculateTextOnPreDraw());
-        getViewTreeObserver().addOnGlobalLayoutListener(new UpdateOnGlobalLayout());
+        //getViewTreeObserver().addOnPreDrawListener(new CalculateTextOnPreDraw());
+        //getViewTreeObserver().addOnGlobalLayoutListener(new UpdateOnGlobalLayout());
+        
 
+        // memory fix
+        apiUtils.setFitsSystemWindowsCompat(this);
+        draw=new CalculateTextOnPreDraw();
+        getViewTreeObserver().addOnPreDrawListener(draw);
+        globalLayout=new UpdateOnGlobalLayout();
+        getViewTreeObserver().addOnGlobalLayoutListener(globalLayout);
+        
         // Get the attributes for the ShowcaseView
         final TypedArray styled = context.getTheme()
                 .obtainStyledAttributes(attrs, R.styleable.ShowcaseView, R.attr.showcaseViewStyle,
@@ -192,8 +211,10 @@ public class ShowcaseView extends RelativeLayout
 
     private void updateBitmap() {
         if (bitmapBuffer == null || haveBoundsChanged()) {
-            if(bitmapBuffer != null)
+            if(bitmapBuffer != null) {
         		bitmapBuffer.recycle();
+            	bitmapBuffer = null;
+    		}
             bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
 
         }
@@ -231,6 +252,7 @@ public class ShowcaseView extends RelativeLayout
      */
     public void overrideButtonClick(OnClickListener listener) {
         if (shotStateStore.hasShot()) {
+        	hide();
             return;
         }
         if (mEndButton != null) {
@@ -297,11 +319,18 @@ public class ShowcaseView extends RelativeLayout
         shotStateStore.storeShot();
         mEventListener.onShowcaseViewHide(this);
         fadeOutShowcase();
-    
+        getViewTreeObserver().removeOnPreDrawListener(draw);
+        if(Build.VERSION.SDK_INT > 15){
+            getViewTreeObserver().removeOnGlobalLayoutListener(globalLayout);
+        }
+        else {
+            getViewTreeObserver().removeGlobalOnLayoutListener(globalLayout);
+        }
+        ((ViewGroup)mActivity.getWindow().getDecorView()).removeView(ShowcaseView.this);
     }
 
     private void clearBitmap() {
-        if (bitmapBuffer != null && !bitmapBuffer.isRecycled()) {
+    	if (bitmapBuffer != null && !bitmapBuffer.isRecycled()) {
             bitmapBuffer.recycle();
             bitmapBuffer = null;
         }
@@ -367,6 +396,7 @@ public class ShowcaseView extends RelativeLayout
     private void hideImmediate() {
         isShowing = false;
         setVisibility(GONE);
+        ((ViewGroup) mActivity.getWindow().getDecorView()).removeView(ShowcaseView.this);
     }
 
     @Override
@@ -385,6 +415,7 @@ public class ShowcaseView extends RelativeLayout
 
     public void hideButton() {
         mEndButton.setVisibility(GONE);
+        
     }
 
     public void showButton() {
