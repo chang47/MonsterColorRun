@@ -1,9 +1,9 @@
 package intro;
 
 import com.brnleehng.worldrunner.Hub;
-import com.brnleehng.worldrunner.R;
+import com.brnleehng.worldrunner.R;/*
 import com.viewpagerindicator.CirclePageIndicator;
-import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;*/
 
 import DB.DBManager;
 import android.app.Activity;
@@ -35,7 +35,7 @@ public class WalkThrough extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.walkthrough_activity);
+       /* setContentView(R.layout.walkthrough_activity);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         int[] imageId = {R.drawable.walkthrough0, R.drawable.walkthrough1, R.drawable.walkthrough2, R.drawable.walkthrough3,
         		R.drawable.walkthrough4, R.drawable.walkthrough5, R.drawable.walkthrough6, R.drawable.walkthrough7,
@@ -84,7 +84,7 @@ public class WalkThrough extends Activity {
 				}
 			}
 		});
-    }
+*/    }
     
     class WalkthroughPageAdapter extends PagerAdapter {
     	int[] imageId;
