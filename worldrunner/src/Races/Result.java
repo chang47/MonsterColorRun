@@ -72,6 +72,7 @@ public class Result extends Fragment {
 			@Override
 			public void onClick(View v) {
 				BackgroundChecker.inResult = false;
+				// in Hub we want to load the data.
 				Hub.backToCity();		
 			}
 		});

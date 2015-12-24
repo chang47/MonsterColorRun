@@ -186,6 +186,9 @@ public class Hub extends Activity {
 		// setup the user's data into the app
 		getPlayerData(db);
 
+		// logging
+		Log.d("playerGem", "at the hub on load" + player.gem);
+		
 		currentCity = refCities.get(player.city - 1);
 		db.close(); // necessary to close the db?
 		refDb.close();
@@ -260,6 +263,8 @@ public class Hub extends Activity {
 	
 	@Override
 	public void onBackPressed() {
+		
+		// maybe just have one varialbe that is used to determine.
 		if (BackgroundChecker.inResult && !BackgroundChecker.battleStarted) {
 			BackgroundChecker.inResult = false;
 			Hub.backToCity();
@@ -510,6 +515,12 @@ public class Hub extends Activity {
 	}
 	
 	public static void goToResult() {
+		// server version, we would make and send a request
+		final int REWARD = 1;
+		if (BattleInfo.steps >= REWARD) {
+			db = new DBManager(context);
+			db.addGem(Hub.player, BattleInfo.steps);
+		}
 		FragmentTransaction ft = setFT();
 		Result result = new Result();
 		ft.replace(R.id.hub, result).commit();
@@ -521,6 +532,7 @@ public class Hub extends Activity {
 		
 		DBManager db = new DBManager(context);
 		getPlayerData(db);
+		Log.d("playerGem", "back to city " + player.gem);
 		CityHub townHub = new CityHub();
 		int musicId = context.getResources().getIdentifier("music" + (currentCity.cityId - 1), "raw", context.getPackageName());
 		if (musicId != 0) {
@@ -529,6 +541,10 @@ public class Hub extends Activity {
 			backgroundMusic.start();
 		}
 		pref.edit().putBoolean(IS_RUNNING, false).apply();
+		
+		// need to update, otherwise we would have the same old information
+		header = new HeaderBar();
+		footer = new FooterBar();
 		ft.replace(R.id.header, header);
 		ft.replace(R.id.footer, footer);
 		ft.replace(R.id.hub, townHub).commit();

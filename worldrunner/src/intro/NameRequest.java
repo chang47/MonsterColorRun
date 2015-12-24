@@ -25,6 +25,10 @@ public class NameRequest extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.name_request_activity);
 		editText = (EditText) findViewById(R.id.nameEditText);
+		
+		// TODO for my sanity
+		editText.setText("todo get rid of me");
+		
 		Button button = (Button) findViewById(R.id.nameButton);
 		pref = getApplication().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
 		

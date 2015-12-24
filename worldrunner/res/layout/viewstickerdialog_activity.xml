@@ -8,19 +8,22 @@
         android:id="@+id/portraitContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+        
         <ImageView
             android:id="@+id/monsterImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
 		    android:src="@drawable/land"
+		    android:adjustViewBounds="true"
+		    android:scaleType="centerCrop"
             android:contentDescription="Displays the image"/>
-        
+    	    
     </RelativeLayout>
     
     <LinearLayout
         android:id="@+id/stickerStats"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/portraitContainer">
@@ -141,4 +144,13 @@
 	        android:text="Exit"/>
     </LinearLayout>
 
+    <Button 
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button"
+            android:layout_height="wrap_content"
+            android:text="hello"
+            />
+    
 </RelativeLayout>

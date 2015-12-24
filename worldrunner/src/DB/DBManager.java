@@ -144,7 +144,7 @@ public class DBManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		int res[] = new int[2];
 		int status = PlayerManager.buyMonster(db, player);
-		if (status != 0) {
+		if (status != 1) {
 			return res;
 		}
 		res[0] = status;
@@ -156,6 +156,20 @@ public class DBManager extends SQLiteOpenHelper {
 		res[1] = monsterId; // verify if sql start at 0 or 1
 		// add the monster into the user's db
 		return res;
+	}
+	
+	public int addGem(Player player, int steps) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		// TODO in the server we would use the steps and do start and end date 
+		// calculation to ensure that the players didn't try to cheat
+		int gems = 0;
+		if (steps > 1) {
+			gems = 5;
+		}
+		int result = PlayerManager.addGem(db, player, gems);
+		Log.d("playerGem", "finish results " + result);
+		return result;
 	}
 	
 	/**

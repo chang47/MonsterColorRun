@@ -3,41 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-   <!--  	<Button 
-    	    android:id="@+id/viewEquipment"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:text="View Equipment"/>
-    --> 	
+
+    <LinearLayout style="@style/buttonLayout"
+        android:layout_marginTop="50dp">
     	<Button 
-    	    android:layout_marginTop="180dp"
+    	    style="@style/button"
     	    android:id="@+id/equipEquipment"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
     	    android:text="Edit Party"/>
-    	
- 	    <!-- <Button 
-    	    android:id="@+id/sellEquipment"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:text="Sell Equipment"/>
-    	 -->
+    </LinearLayout>
+    
+	<LinearLayout style="@style/buttonLayout"
+	    >
     	<Button 
     	    android:id="@+id/viewSticker"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
+    	    style="@style/button"
     	    android:text="View Monsters"/>
-    	
-    	<!-- <Button 
-    	    android:id="@+id/equipSticker"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:text="Equip Sticker"/>
-    	 -->
+    </LinearLayout>
+
+	<LinearLayout style="@style/buttonLayout"
+	    android:layout_marginBottom="50dp">
     	<Button 
     	    android:id="@+id/sellSticker"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
+    	    style="@style/button"
     	    android:text="Sell Monsters"/>
-    	  
+    </LinearLayout>	  
 </LinearLayout>

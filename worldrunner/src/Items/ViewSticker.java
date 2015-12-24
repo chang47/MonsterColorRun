@@ -20,7 +20,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
-import com.brnleehng.worldrunner.ViewStickerDialog;
 
 // Not used?
 public class ViewSticker extends Fragment {

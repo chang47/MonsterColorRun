@@ -1,6 +1,12 @@
-package com.brnleehng.worldrunner;
+package Items;
 
 import java.util.ArrayList;
+
+import com.brnleehng.worldrunner.Hub;
+import com.brnleehng.worldrunner.R;
+import com.brnleehng.worldrunner.R.drawable;
+import com.brnleehng.worldrunner.R.id;
+import com.brnleehng.worldrunner.R.layout;
 
 import DB.Model.Monster;
 import DB.Model.Sticker;
@@ -71,7 +77,7 @@ public class ViewStickerDialog extends DialogFragment {
         
         expBar.setProgress(100 * expToGo / Hub.expTable.get(monster.level)[1]);
         
-        int portraitResId = getResources().getIdentifier("monster" + monster.monsterId, "drawable", getActivity().getPackageName());
+        int portraitResId = getResources().getIdentifier("portrait" + monster.monsterId, "drawable", getActivity().getPackageName());
         Log.d("imageId2", "monster " + monster.name + " id is: " + portraitResId + " actual is: " + R.drawable.monster2);
         if (portraitResId != 0) {
         	portrait.setImageResource(portraitResId);

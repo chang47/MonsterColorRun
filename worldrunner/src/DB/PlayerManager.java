@@ -7,6 +7,7 @@ import DB.Model.Player;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class PlayerManager {
 	private static final String TABLE_PLAYER = "Player";
@@ -84,9 +85,12 @@ public class PlayerManager {
 			return 0;
 		}
 		ContentValues values = new ContentValues();
+		Log.d("playerGem", "before transaction player gem: " + player.gem);
 		//values = addContent(values, player);
 		values.put(GEM, player.gem - 5);
-		return db.update(TABLE_PLAYER, values, PID + " = ?", new String[] { String.valueOf(player.pid) });
+		int result = db.update(TABLE_PLAYER, values, PID + " = ?", new String[] { String.valueOf(player.pid) });
+		Log.d("playerGem", "result of buying " + result);
+		return result;
 	}
 	
 	private static ContentValues addContent(ContentValues values, Player player) {
@@ -98,6 +102,13 @@ public class PlayerManager {
 		values.put(MAX_STICKER, player.maxSticker);
 		values.put(CITY, player.city);
 		return values;
+	}
+	
+	public static int addGem(SQLiteDatabase db, Player player, int gems) {
+		ContentValues values = new ContentValues();
+		//values = addContent(values, player);
+		values.put(GEM, player.gem + gems);
+		return db.update(TABLE_PLAYER, values, PID + " = ?", new String[] { String.valueOf(player.pid) });		
 	}
 	
 }

@@ -41,8 +41,8 @@ public class CityDungeon extends Fragment {
 		// lists dungeons
 		for (final Dungeon dungeon : Hub.refDungeons.get(city.cityId)) {
 			Log.v("showInfoStuff", "city Id" + city.cityId + " dungeon id " + dungeon.dungeonId + " dungeon name " + dungeon.dungeonName);
-			Button button = new Button(getActivity());
-			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+			Button button = (Button) inflater.inflate(R.layout.template_button, container, false);
+			//button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			button.setId(dungeon.dungeonId);
 			button.setText(dungeon.dungeonName);
 			button.setOnClickListener(new View.OnClickListener() {

@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
 import com.brnleehng.worldrunner.RunLogDialog;
-import com.brnleehng.worldrunner.ViewStickerDialog;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 

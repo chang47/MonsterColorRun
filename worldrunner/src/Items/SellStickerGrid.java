@@ -26,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.brnleehng.worldrunner.Hub;
 import com.brnleehng.worldrunner.R;
-import com.brnleehng.worldrunner.ViewStickerDialog;
 
 public class SellStickerGrid extends Fragment {
 	GridView gridview;
