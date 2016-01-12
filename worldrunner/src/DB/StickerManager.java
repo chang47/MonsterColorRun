@@ -3,13 +3,10 @@ package DB;
 import java.util.ArrayList;
 import java.util.List;
 
-import Abilities.DamageAllAbility;
-import DB.Model.Equipment;
 import DB.Model.Sticker;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class StickerManager {
 	//TODO needs ability level

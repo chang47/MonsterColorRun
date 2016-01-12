@@ -14,7 +14,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -46,6 +48,9 @@ import com.brnleehng.worldrunner.RunLogDialog;
 
 public class RouteRun extends Fragment {
 	// setup the step detectors
+	public static final String PREF_NAME = "RouteRunPref";
+	public static final String IS_RUNNING = "isRunning";	
+			
 	private TextView tvDistance;
     private TextView tvTime;
     private TextView tvPace;
@@ -107,10 +112,9 @@ public class RouteRun extends Fragment {
 	        // loads the screens for the user
 	        createNewMonsters();
 	        createPartyMonsters();
-	        
+	        txtRouteName.setText(Hub.currentRoute.name);
 	        // initialize fields
 	        steps = 0;
-	        txtRouteName.setText(Hub.currentRoute.name);
 	        tvDistance.setText("0.00");
 	        
 	        BackgroundChecker.locationName = Hub.currentRoute.name;
@@ -194,6 +198,7 @@ public class RouteRun extends Fragment {
 	            @Override
 	            public void onChronometerTick(Chronometer chronometer) {
 	            	// does time reset in event of crash? 
+	            	// TODO for time rest, we have a counter for the tim
 	                countUp = (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000;
 	                String asText = (countUp / 3600) + ":"; 
 	                if (countUp % 3600 / 60 < 10) {
@@ -210,27 +215,7 @@ public class RouteRun extends Fragment {
 	        stopWatch.start();
 	        return view;
     	} catch (Exception e) {
-    		Log.d("clutter crash", "route run create view crash");
-    		if (Hub.partyList == null) { Log.d("random route run crash", "partyList is null"); }
-			if (Hub.currentCity == null) { Log.d("random route run crash", "current City is null"); }
-			if (BattleInfo.partyMonsterBattleList == null) {
-	    		Log.d("random route run crash on create view", "partyMonsterBattleList is null");
-	    		Log.d("random route run crash on create view", "finished current battle status: " + BackgroundChecker.finishedCurrentBattle);
-	    		Log.d("random route run crash on create view", "has the combat started? " + BackgroundChecker.battleStarted);
-	    		Log.d("random route run crash on create view", "was the monster attacked? " + BackgroundChecker.monsterWasAttacked);
-	    		Log.d("random route run crash on create view", "was the player monster attacked? " + BackgroundChecker.playerMonsterWasAttacked);
-	    		Log.d("random route run crash on create view", "was in the background? " + BackgroundChecker.isBackground);
-	    		Log.d("random route run crash on create view", "Are there now new enemies? " + BackgroundChecker.newEnemies);
-	    		if (BattleInfo.partyList == null) {
-	    			Log.d("random route run crash on create view", "partyList is null");
-	    		} else {
-	    			Log.d("random route run crash on create view", "partyList is not null");	
-	    		}
-	    	}
-			Log.e("random route run crash on create view", e.getClass().getName(), e);
-    		throw new Error(e);
-    		//e.printStackTrace();
-    		//return null;
+    		return null;
     	}
     }
     
@@ -259,7 +244,6 @@ public class RouteRun extends Fragment {
     	// TODO we don't really need to bind?
     	//getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     	getActivity().getApplicationContext().startService(intent);
-    	
     }
     
     @Override
@@ -628,21 +612,27 @@ public class RouteRun extends Fragment {
 		
 		@Override
 		public void onReceive(Context context, Intent newIntent) {
-			Log.d("disconnect", "added new steps " + BattleInfo.steps);
-			steps = BattleInfo.steps;
-			tvPace.setText("steps: " + steps);
-			tvDistance.setText("" + (double) Math.round(BattleInfo.distance * 100) / 100);
-			tvCoin.setText("" + BattleInfo.coins + " coin");
-			int monstersToGo = BattleInfo.destinationObjective - BattleInfo.fightObjective;
-			// TODO not very efficient as we have to recalculate forever
-			if (monstersToGo <= 0) {
-				monsterSet.setText("Arrived at destination");
-			} else {
-				monsterSet.setText("" + monstersToGo + " More Sets");
-			}
-			// TODO improve the calculation by letting the user save their weight and height
-			tvCalories.setText("" + Math.round(BattleInfo.calories * 100) / 100);
+			//Log.d("disconnect", "added new steps " + BattleInfo.steps);
+			updateRunningStats();
 			updateUI();
+			
+			// TODO might need to do something to update the monster's ui
 		}
 	};
+	
+	private void updateRunningStats() {
+		steps = BattleInfo.steps;
+		tvPace.setText("steps: " + steps);
+		tvDistance.setText("" + (double) Math.round(BattleInfo.distance * 100) / 100);
+		tvCoin.setText("" + BattleInfo.coins + " coin");
+		int monstersToGo = BattleInfo.destinationObjective - BattleInfo.fightObjective;
+		// TODO not very efficient as we have to recalculate forever
+		if (monstersToGo <= 0) {
+			monsterSet.setText("Arrived at destination");
+		} else {
+			monsterSet.setText("" + monstersToGo + " More Sets");
+		}
+		// TODO improve the calculation by letting the user save their weight and height
+		tvCalories.setText("" + Math.round(BattleInfo.calories * 100) / 100);
+	}
 }

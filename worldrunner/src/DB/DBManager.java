@@ -48,6 +48,7 @@ import DB.Model.BattleMonster;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
+import DB.Model.RunningLog;
 import DB.Model.Sticker;
 import android.content.Context;
 import android.database.DatabaseUtils;
@@ -94,6 +95,7 @@ public class DBManager extends SQLiteOpenHelper {
 		EquipmentManager.create(db);
 		StickerManager.create(db);
 		CityMappingManager.create(db);
+		TimeManager.create(db);
 	}
 
 	@Override
@@ -103,6 +105,7 @@ public class DBManager extends SQLiteOpenHelper {
 		EquipmentManager.drop(db);
 		StickerManager.drop(db);
 		CityMappingManager.drop(db);
+		TimeManager.drop(db);
 		onCreate(db);
 	}
 	
@@ -262,16 +265,9 @@ public class DBManager extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	public ArrayList<Monster> getEquippedStickers() {
+	public List<RunningLog> getTimes() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ArrayList<Monster> monsters = new ArrayList<Monster>();
-		for (Sticker sticker : StickerManager.getEquippedStickers(db)) {
-			if (sticker != null)
-				monsters.add(util.Parser.stickerToMonster(sticker));
-			else 
-				monsters.add(null);
-		}
-		return monsters;
+		return TimeManager.getTimes(db);
 	}
 
 /*	Not used anymore, it's a ui thing in how things get sorted.	
@@ -321,5 +317,31 @@ public class DBManager extends SQLiteOpenHelper {
 		return list;
 	}*/
 	
+	/**
+	 * 
+	 * 
+	 * TIME
+	 * 
+	 * 
+	 */
+	
+	public void addTime(RunningLog run) {
+		// TODO you need to reload the player sticker so they have the accurate information
+		SQLiteDatabase db = this.getWritableDatabase();
+		TimeManager.addTime(db, run);
+		db.close();
+	}
+	
+	public ArrayList<Monster> getEquippedStickers() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ArrayList<Monster> monsters = new ArrayList<Monster>();
+		for (Sticker sticker : StickerManager.getEquippedStickers(db)) {
+			if (sticker != null)
+				monsters.add(util.Parser.stickerToMonster(sticker));
+			else 
+				monsters.add(null);
+		}
+		return monsters;
+	}
 
 }

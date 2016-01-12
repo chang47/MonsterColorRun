@@ -1,59 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/header" >
+	<RelativeLayout 
+	    android:id="@+id/rlUsername"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="4dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+		<TextView
+		    android:id="@+id/tvUsername"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginBottom="3dp"
+		    android:layout_marginLeft="10dp"
+		    android:paddingBottom="3dp"
+		    android:text="Username"
+		    android:textSize="16sp" />
+	    
+	</RelativeLayout>
+	
+    <RelativeLayout
+        android:id="@+id/rlExp"
+        android:layout_below="@id/rlUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:layout_marginBottom="2dp" >
 
         <TextView 
             android:id="@+id/expText"
             android:text="EXP"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"/>
 
         <ProgressBar
             android:id="@+id/expBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="114dp"
+            android:progress="50"			
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+			android:layout_toRightOf="@id/expText"
             android:layout_marginLeft="10dp"  />
 
         <TextView 
             android:id="@+id/Rank"
             android:text="Rank 0"
+			android:layout_toRightOf="@id/expBar"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"/>
         
         <TextView
             android:id="@+id/headerGem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
-            android:text="Gem: 0" />
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="10dp"
+            android:text="Gem: 0"
+            android:textSize="16sp" />
         
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+    <RelativeLayout
+        android:id="@+id/rlStamina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlExp"
+        android:layout_marginBottom="2dp"
+        android:paddingBottom="5dp" >
 
         <TextView 
             android:id="@+id/staText"
             android:text="STA"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"/>
 
         <ProgressBar
             android:id="@+id/staBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="114dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+			android:layout_toRightOf="@id/staText"
             android:layout_marginLeft="10dp" />
 
         <TextView 
@@ -61,15 +97,20 @@
             android:text="10/10"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="5dp"
+			android:layout_toRightOf="@id/staBar"
+            android:textSize="16sp"/>
         
         <TextView
             android:id="@+id/headerCoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-			android:layout_marginLeft="70dp"
-            android:text="Money: 0" />
+			android:layout_marginRight="10dp"
+			android:layout_alignParentRight="true"
+			
+            android:text="Money: 0" 
+            android:textSize="16sp"/>
         
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

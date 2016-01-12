@@ -1,9 +1,12 @@
 package com.brnleehng.worldrunner;	
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 
@@ -22,6 +25,7 @@ import DB.DBManager;
 import DB.Model.Equipment;
 import DB.Model.Monster;
 import DB.Model.Player;
+import DB.Model.RunningLog;
 import DB.Model.Sticker;
 import Items.EquipEquipment;
 import Items.EquipItem;
@@ -45,10 +49,12 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 /**
@@ -119,9 +125,15 @@ public class Hub extends Activity {
 	public static SoundPool sp;
 	static int soundIds[];
 	
+	// the player's stats
 	public static int weight;
 	public static int feet;
 	public static int inch;
+	
+	// timer code
+	Timer timer;
+	TimerTask timerTask;
+	final Handler handler = new Handler();
 	
 	//private static FragmentTransaction ft;
 	@Override
@@ -187,14 +199,12 @@ public class Hub extends Activity {
 		getPlayerData(db);
 
 		// logging
-		Log.d("playerGem", "at the hub on load" + player.gem);
 		
 		currentCity = refCities.get(player.city - 1);
 		db.close(); // necessary to close the db?
 		refDb.close();
 		
 		int resId = getResources().getIdentifier("background" + (currentCity.cityId - 1), "drawable", getPackageName());
-		Log.d("background res", "" + resId);
 		if (resId != 0) {
 			hubContentContainer.setBackgroundResource(resId);
 		}
@@ -216,6 +226,8 @@ public class Hub extends Activity {
 		}
 		
 		enemyList = null;
+		
+		startTimer();
 		
 		// prevents re-making hub if already made
 		if (findViewById(R.id.hub) != null) {
@@ -259,6 +271,68 @@ public class Hub extends Activity {
 				}
 			}
 		}
+		
+	}
+	
+	/**
+	 * Creates the timer that will add the steps into the log whenever
+	 * there is a new day
+	 */
+	public void startTimer() {
+		timer = new Timer();
+		initializeTimerTask();
+		Calendar now = Calendar.getInstance();
+		int hoursLeft = now.get(Calendar.HOUR_OF_DAY) % 24;
+		int minutesLeft = now.get(Calendar.MINUTE) % 60;
+		int millisecondsLeft = (minutesLeft * 60 + hoursLeft * 60 * 60) * 1000;
+		millisecondsLeft += 1000 * 60 * 5; // in case something happens with the phone, update on 12;05
+		timer.schedule(timerTask, 0, millisecondsLeft);
+	}
+	
+	/**
+	 * Creates the task that will check whenever there is a new day and adds the previous day
+	 * that was saved into the log
+	 */
+	public void initializeTimerTask() {
+		timerTask = new TimerTask() {
+
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						pref = getApplicationContext().getSharedPreferences("MonsterColorRun", Context.MODE_PRIVATE);
+						int oldDay = pref.getInt("day", 0);
+						int oldMonth = pref.getInt("month", 0);
+						int oldYear = pref.getInt("year", 0);
+						Calendar now = Calendar.getInstance();
+						int currentDay = now.get(Calendar.DAY_OF_MONTH);
+						
+						// resets the step and time
+						if (currentDay != oldDay) {
+							if (oldDay != 0 && oldMonth != 0 && oldYear != 0) {
+								db = new DBManager(getApplicationContext());
+								int steps = 0;
+								for (int i = 0; i < 24; i++) {
+									steps += pref.getInt("" + i, 0);
+								}
+								RunningLog run = new RunningLog(steps, oldDay, oldMonth, oldYear);
+								db.addTime(run);
+							}
+							
+							SharedPreferences.Editor edit = pref.edit();
+							edit.putInt("day", currentDay);
+							edit.putInt("month", now.get(Calendar.MONTH) + 1); // months start at 0
+							edit.putInt("year", now.get(Calendar.YEAR));
+							for (int i = 0; i < 24; i++) {
+								edit.putInt("" + i, 0);
+							}
+							edit.commit();
+						}
+					}
+				});
+			}
+		};
 	}
 	
 	@Override
@@ -362,10 +436,22 @@ public class Hub extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (backgroundMusic != null && !BackgroundChecker.battleStarted && !BackgroundChecker.inResult) {
+        /*if (backgroundMusic != null && !BackgroundChecker.battleStarted && !BackgroundChecker.inResult) {
         	Log.d("showInfoStuff", "is being called " + BackgroundChecker.inResult);
         	backgroundMusic.pause();
+        } else if (backgroundMusic != null) {
+        	Log.d("music1", "paused");
+        	backgroundMusic.pause();
+        }*/
+        try {
+	        if (backgroundMusic != null && 
+	        		backgroundMusic.isPlaying()) {
+	        	backgroundMusic.pause();
+	        }
+        } catch (IllegalStateException ise) {
+        	
         }
+        
     }
     
     /**

@@ -7,8 +7,11 @@ import DB.Model.Player;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +30,10 @@ public class HeaderBar extends Fragment {
 		super.onCreate(savedInstance);
 		View view = inflate.inflate(R.layout.header_activity, container, false);
 		
+		ProgressBar prog1 = (ProgressBar) view.findViewById(R.id.expBar);
+		/*prog1.getIndeterminateDrawable().setColorFilter(Color.RED, Mode.MULTIPLY);
+		*/
+		Log.d("progress1", "" + prog1.getProgress());
 		Player player = Hub.getPlayer();
 		TextView rank = (TextView) view.findViewById(R.id.Rank);
 		rank.setText("Rank: " + player.level);

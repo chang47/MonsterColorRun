@@ -2,6 +2,7 @@ package step.detector;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.lang.reflect.Type;
 
@@ -35,7 +36,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class StepService extends Service implements SensorEventListener, StepListener {
-	public static final String PREF_NAME = "RouteRunPref"; // should be monster color run 
+	public static final String PREF_NAME = "RouteRunPref"; // should be all refactored to monster color run 
 	public static final String EXP = "exp";
 	public static final String FOUND = "found";
 	public static final String STEPS = "steps";  
@@ -71,6 +72,7 @@ public class StepService extends Service implements SensorEventListener, StepLis
 	int mId;
     
 	private SharedPreferences pref;
+	private Calendar now;
 	
 	// Creates a binder that gives access to Test Step Service that we can
 	// access anywhere from the acitivities
@@ -116,6 +118,8 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		Log.d("recover", "status: " + pref.getBoolean(IS_RUNNING, false));
         if (pref.getBoolean(IS_RUNNING, false)) {
         	recoverFromLastPoint();
+        	//TODO might need to do something to update the existing monster health
+        	sendBroadcast(intent);
         } else {
         	getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit().putBoolean(IS_RUNNING, true).apply();
         }
@@ -168,15 +172,16 @@ public class StepService extends Service implements SensorEventListener, StepLis
 		try {
 			// for testing multiple steps only
 			//stepCopy();
+			now = Calendar.getInstance();
+			
+			int step = pref.getInt("" + now.get(Calendar.HOUR_OF_DAY), 0);
+			pref.edit().putInt("" + now.get(Calendar.HOUR_OF_DAY), ++step).apply();
+			Log.d("a1s2", "lol");
+			Log.d("steps1", "" + step);
 			if (Math.random() < 0.5) {
 	            BattleInfo.coins += 10;
 	        }
-			/*Log.d("recover", "post calories " + BattleInfo.calories);
-			Log.d("recover", "post current time " + BattleInfo.currentTime);
-			Log.d("recover", "post current step " + BattleInfo.currentStep);
-			Log.d("recover", "post exp " + BattleInfo.exp);
-			Log.d("recover", "post coin" + BattleInfo.coins);
-			Log.d("recover", "post distance " + BattleInfo.distance);*/
+			
 			BattleInfo.battleSteps++;
 	    	BattleInfo.steps++;
 	    	Log.d("recover", "post steps " + BattleInfo.steps);
