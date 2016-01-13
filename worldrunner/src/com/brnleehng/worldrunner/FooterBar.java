@@ -24,6 +24,7 @@ public class FooterBar extends Fragment {
 	private Button store;
 	private Button friends;
 	private Button db;
+	private Button log;
 
 	
 	
@@ -72,6 +73,16 @@ public class FooterBar extends Fragment {
 		
 		db = (Button) view.findViewById(R.id.menuDB);
 		db.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// Database.java
+				Hub.databaseOptions();
+			}
+		});
+		
+		log = (Button) view.findViewById(R.id.menuLog);
+		log.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

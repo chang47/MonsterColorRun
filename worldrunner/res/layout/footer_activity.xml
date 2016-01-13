@@ -26,6 +26,10 @@
         android:id="@+id/menuDB"
 		style="@style/footerStyle"
         android:text="DB" />
+    <Button
+        android:id="@+id/menuLog"
+		style="@style/footerStyle"
+        android:text="Log" />
 
 
 </LinearLayout>

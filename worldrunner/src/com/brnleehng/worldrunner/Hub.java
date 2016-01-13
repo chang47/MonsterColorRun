@@ -585,6 +585,13 @@ public class Hub extends Activity {
     	ft.replace(R.id.hub, database).commit();
 	}
 	
+	public static void showLogFragment() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
+		FragmentTransaction ft = setFT();
+		LogFragment lf = new LogFragment();
+    	ft.replace(R.id.hub, lf).commit();
+	}
+	
 	public static void createDB() {
 		FragmentTransaction ft = setFT();
 		CreateDB createDB = new CreateDB();
