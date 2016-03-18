@@ -30,7 +30,7 @@ public class LogFragment extends Fragment {
 		if (RunningLogList.getList() != null) {
 			list = RunningLogList.getList();
 		}
-		
+		 
 		// TODO need to make simple array adapter.
 
 		return view;

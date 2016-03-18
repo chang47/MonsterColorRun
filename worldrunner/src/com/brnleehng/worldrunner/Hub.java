@@ -548,6 +548,13 @@ public class Hub extends Activity {
     	ft.replace(R.id.hub, store).commit();
     }
     
+    public static void goToLog() {
+		sp.play(soundIds[0], 1, 1, 1, 0, 1);
+		FragmentTransaction ft = setFT();
+		LogFragment log = new LogFragment();
+		ft.replace(R.id.hub, log).commit();
+    }
+    
     public static void selectFriend() {
     	FragmentTransaction ft = setFT();
     	Pregame pregame = new Pregame();

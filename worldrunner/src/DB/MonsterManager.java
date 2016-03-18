@@ -20,12 +20,6 @@ public class MonsterManager {
 				"PRIMARY KEY (" + ROUTE_ID + "," + MONSTER_ID + "))";
 		db.execSQL(CREATE_ROUTE_MONSTER_TABLE);
 		
-		/*
-		createInitialRoute(db, 1, 2);
-		createInitialRoute(db, 2, 1);
-		createInitialDungeon(db, 1, 1);
-		createInitialDungeon(db, 2, 2);
-		*/
 	}
 	
 	public static void drop(SQLiteDatabase db) {

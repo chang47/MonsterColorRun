@@ -87,7 +87,7 @@ public class FooterBar extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// Database.java
-				Hub.databaseOptions();
+				Hub.goToLog();
 			}
 		});
 		

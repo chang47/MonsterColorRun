@@ -30,11 +30,6 @@ public class TimeManager {
                 + DAY + " INTEGER," + MONTH + " INTEGER," + YEAR + " INTEGER"
                 + ")";
         db.execSQL(CREATE_TIMER_TABLE);
-        /*createInitial(db, new Sticker(1, 1, 7, "Red Rock", 1, 1, 0, 100, 100, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0,0,
-        		new DamageAbility("Damage all", "Does moderate damage to all enemies", 1, 10, 200.0, 2)));*/
-        // active ability can't be 0 or crash
-        //createInitial(db, new Sticker(1, 1, 2, "Artic Babbit", 1, 1, 0, 1, 1, 1, 0, 0, 2000, 150, 125, 100, 0.0));
-		
 	}
 	
 	/**
